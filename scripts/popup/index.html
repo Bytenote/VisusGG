@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>FACE-M</title>
+	</head>
+
+	<body>
+		<main id="main">
+			<div class="heading">
+				<span>FACE-M</span>
+				<span id="FACE-M-creators">
+					<span style="font-weight: 400">by</span>
+					x3picF4ilx
+					<span style="font-weight: 400">&</span>
+					MrMaxim
+				</span>
+				<div class="info">Limited to the most recent 2000 matches</div>
+			</div>
+
+			<div class="content-container">
+				<div class="sub-heading" id="FACE-M-heading">
+					Select button to edit
+				</div>
+				<div id="FACE-M-button-group"></div>
+			</div>
+
+			<div class="content-container">
+				<form id="FACE-M-form" autocomplete="off">
+					<div style="padding-bottom: 20px">
+						<div class="sub-heading">Select time frame</div>
+						<div class="FACE-M-form-div" id="FACE-M-form-edit">
+							<input id="FACE-M-input" name="input" disabled />
+							<select id="FACE-M-select" name="select" disabled>
+								<option value="days">Days</option>
+								<option value="weeks">Weeks</option>
+								<option value="months">Months</option>
+								<option value="years">Years</option>
+							</select>
+							<button
+								class="FACE-M-submit-btn"
+								id="FACE-M-add-btn"
+								type="submit"
+								name="edit"
+								disabled
+							>
+								edit
+							</button>
+						</div>
+					</div>
+
+					<div>
+						<div class="sub-heading">Reset time frame</div>
+						<div class="FACE-M-form-div" id="FACE-M-form-reset">
+							<span class="FACE-M-form-desc">
+								Loads the default values
+							</span>
+							<button
+								class="FACE-M-submit-btn"
+								id="FACE-M-reset-btn"
+								type="submit"
+								name="reset"
+							>
+								reset
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</main>
+
+		<script scr="popup.js"></script>
+	</body>
+</html>
