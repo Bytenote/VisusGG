@@ -2,7 +2,7 @@ import { DEFAULT_AGE, DEFAULT_TOGGLES } from './constants';
 
 const syncStorage = new Map();
 
-export const createLocalStorage = async () => {
+export const initStorage = async () => {
 	const isEmpty = await hasStorage();
 	if (isEmpty) {
 		await setStorage('timeFrame', DEFAULT_AGE);
@@ -40,7 +40,7 @@ export const setSyncStorage = (key, val) => {
 
 export const setStorage = (key, val) =>
 	new Promise((resolve) => {
-		chrome.storage.sync
+		chrome.storage.local
 			.set({ [key]: val })
 			.then(async () => resolve(true))
 			.catch((err) => {
@@ -51,7 +51,7 @@ export const setStorage = (key, val) =>
 
 export const getStorage = (key) =>
 	new Promise((resolve) => {
-		chrome.storage.sync
+		chrome.storage.local
 			.get(key)
 			.then((res) => resolve(key === null ? res : res?.[key]))
 			.catch((err) => {
@@ -62,7 +62,7 @@ export const getStorage = (key) =>
 
 export const clearStorage = () =>
 	new Promise((resolve) => {
-		chrome.storage.sync
+		chrome.storage.local
 			.clear()
 			.then(() => resolve(true))
 			.catch((err) => {

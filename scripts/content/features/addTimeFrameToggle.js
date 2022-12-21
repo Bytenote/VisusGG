@@ -9,6 +9,7 @@ import {
 	hasToggleElements,
 	isPlayerOfMatch,
 } from '../helpers/matchroom';
+import { addMapStats } from './addMapStats';
 
 export const addTimeFrameToggle = (parent) => {
 	const matchRoomElem = parent?.getElementById('MATCHROOM-OVERVIEW');
@@ -33,6 +34,15 @@ export const updateTimeFrame = async (changes) => {
 			const matchInfo = (await getMatchInfo(roomId)) ?? {};
 			if (matchInfo && isPlayerOfMatch(matchInfo.teams)) {
 				const toggles = await getStorage('toggles');
+				const foundToggle =
+					(await toggles.find(
+						async (toggle) =>
+							toggle.maxAge === (await getStorage('timeFrame'))
+					)) || toggles[0];
+
+				if (foundToggle) {
+					setSyncStorage('timeFrame', foundToggle.maxAge);
+				}
 				setSyncStorage('toggles', toggles);
 
 				removeTimeFrameToggle(shadowElem);
@@ -41,6 +51,7 @@ export const updateTimeFrame = async (changes) => {
 					matchInfo.state,
 					matchInfo.matchCustom
 				);
+				await addMapStats(shadowElem, matchInfo);
 			}
 		}
 	}

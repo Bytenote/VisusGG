@@ -25,26 +25,26 @@ const submitters = {
 
 const editHandler = async (input, select) => {
 	let toggles = getSyncStorage('toggles');
-	const newToggle = {
-		label: `${input}${select[0]}`,
-		name: `${input} ${
-			input > 1 ? select : select.slice(0, select.length - 1)
-		}`,
-		amount: input,
-		type: select,
-		maxAge: getAge(input, select),
-	};
 	const activeLabel = document.querySelector(
 		`.${EXTENSION_NAME}-toggle-active`
 	)?.textContent;
 
-	toggles = toggles.map((toggle) => {
-		if (toggle.label === activeLabel) {
-			toggle = newToggle;
-		}
+	const toggleIndex = toggles.findIndex(
+		(toggle) => toggle.label === activeLabel
+	);
+	if (toggleIndex >= 0) {
+		const newToggle = {
+			label: `${input}${select[0]}`,
+			name: `${input} ${
+				input > 1 ? select : select.slice(0, select.length - 1)
+			}`,
+			amount: input,
+			type: select,
+			maxAge: getAge(input, select),
+		};
 
-		return toggle;
-	});
+		toggles[toggleIndex] = newToggle;
+	}
 
 	await setStorage(
 		'toggles',

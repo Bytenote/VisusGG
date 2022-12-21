@@ -6,7 +6,7 @@ import {
 	updateTimeFrame,
 } from './features/addTimeFrameToggle';
 import { getMatchInfo } from './helpers/api';
-import { createLocalStorage } from '../shared/storage';
+import { initStorage } from '../shared/storage';
 import {
 	getMatchroomRoot,
 	getRoomId,
@@ -57,10 +57,10 @@ const domObserver = () => {
 
 (async () => {
 	if (isLoggedIn()) {
-		await createLocalStorage();
+		await initStorage();
 
-		chrome.storage.sync.onChanged.removeListener(updateTimeFrame);
-		chrome.storage.sync.onChanged.addListener(updateTimeFrame);
+		chrome.storage.local.onChanged.removeListener(updateTimeFrame);
+		chrome.storage.local.onChanged.addListener(updateTimeFrame);
 
 		domObserver();
 	}

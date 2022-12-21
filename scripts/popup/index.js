@@ -6,7 +6,7 @@ import {
 	updateTimeFrame,
 } from './features/updateTimeFrameToggle';
 import { submitHandler } from './helpers/form';
-import { createLocalStorage } from '../shared/storage';
+import { initStorage } from '../shared/storage';
 
 const initPopupElements = async () => {
 	const inputElem = document.querySelector(`#${EXTENSION_NAME}-input`);
@@ -19,10 +19,10 @@ const initPopupElements = async () => {
 };
 
 (async () => {
-	await createLocalStorage();
+	await initStorage();
 
-	chrome.storage.sync.onChanged.removeListener(updateTimeFrame);
-	chrome.storage.sync.onChanged.addListener(updateTimeFrame);
+	chrome.storage.local.onChanged.removeListener(updateTimeFrame);
+	chrome.storage.local.onChanged.addListener(updateTimeFrame);
 
 	await initPopupElements();
 })();
