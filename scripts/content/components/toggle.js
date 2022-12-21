@@ -16,21 +16,18 @@ export const insertTimeFrameToggle = (parent) => {
 		buttonGroup.append(button);
 	}
 
+	setActiveToggle(buttonGroup, toggles);
+
 	parent.insertAdjacentElement('beforebegin', buttonGroup);
 };
 
 const createButton = (label, maxAge) => {
 	const button = document.createElement('button');
-	const isActive = getSyncStorage('timeFrame') === maxAge;
 
 	button.classList.add(`${EXTENSION_NAME}-toggle`);
 	button.addEventListener('click', (e) => clickHandler(e, maxAge));
 
 	button.textContent = label;
-
-	if (isActive) {
-		button.classList.add(`${EXTENSION_NAME}-toggle-active`);
-	}
 
 	return button;
 };
@@ -47,6 +44,20 @@ const clickHandler = (e, maxAge) => {
 
 	setSyncStorage('timeFrame', maxAge);
 	updateStats();
+};
+
+const setActiveToggle = (buttonGroup, toggles) => {
+	const activeToggle =
+		toggles.find(
+			(toggle) => toggle.maxAge === getSyncStorage('timeFrame')
+		) || toggles?.[0];
+	if (activeToggle) {
+		const activeButton = [...buttonGroup.children]?.find(
+			(button) => button.textContent === activeToggle.label
+		);
+
+		activeButton?.classList.add(`${EXTENSION_NAME}-toggle-active`);
+	}
 };
 
 const updateStats = async () => {

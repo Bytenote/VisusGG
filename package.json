@@ -1,8 +1,7 @@
 {
 	"name": "face-m",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"description": "Chrome extension that displays the win percentage of your opponents in FACEIT lobbies",
-	"main": "webpack/index.js",
 	"scripts": {
 		"build": "node webpack/build.js",
 		"start": "node webpack/index.js"
@@ -13,10 +12,7 @@
 	},
 	"author": "Bytenote",
 	"license": "GNU GPLv3",
-	"bugs": {
-		"url": "https://github.com/Bytenote/FACE-M/issues"
-	},
-	"homepage": "https://github.com/Bytenote/FACE-M#readme",
+	"homepage": "https://chrome.google.com/webstore/detail/face-m/kodlabmmaalpolkfolgpahbjehalecki",
 	"devDependencies": {
 		"@types/chrome": "^0.0.202",
 		"clean-webpack-plugin": "^4.0.0",
