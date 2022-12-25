@@ -55,9 +55,18 @@ export const getOpponents = (teams) =>
 		? teams?.faction2?.roster
 		: teams?.faction1?.roster;
 
-export const getMapName = (mapElement) =>
-	mapElement?.children[1]?.children?.[1]?.firstChild?.textContent ||
-	mapElement?.children[0]?.children?.[1]?.firstChild?.textContent;
+export const getMapName = (mapElement) => {
+	const elem1 =
+		mapElement?.children[1]?.children?.[1]?.firstChild?.textContent;
+	const elem2 =
+		mapElement?.children[0]?.children?.[1]?.firstChild?.textContent;
+
+	if (elem1 && elem1 !== 'Veto' && elem1 !== 'Server' && elem1 !== 'Map') {
+		return elem1;
+	}
+
+	return elem2;
+};
 
 export const hasStatsElements = (parent) =>
 	[...parent.querySelectorAll(`div.${EXTENSION_NAME}-stats`)].length > 0;
