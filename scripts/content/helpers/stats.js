@@ -7,7 +7,7 @@ export const loadMapStatsMemoized = pMemoize((_, matchInfo) =>
 	loadMapStats(matchInfo)
 );
 
-export const getAllMaps = (maps = {}) => {
+export const getAllMaps = (maps = []) => {
 	const mapsObj = {};
 
 	maps.forEach(({ image_lg, image_sm, ...mapProps }) => {
@@ -41,7 +41,6 @@ export const getMapStats = (map, maps, stats) => {
 			return (
 				stats[mapObj.class_name] ||
 				stats[mapObj.game_map_id] ||
-				stats[mapObj.guid] ||
 				stats[mapObj.name]
 			);
 		}
@@ -70,7 +69,7 @@ const loadMapStats = async (matchInfo) => {
 				// 	playerIds,
 				// 	matchInfo.id
 				// );
-				teamStats = setTeamStats(
+				teamStats = getTeamStats(
 					playersStats,
 					teamStats,
 					opponents,
@@ -86,12 +85,12 @@ const loadMapStats = async (matchInfo) => {
 	}
 };
 
-const setTeamStats = (playersStats, teamStats, opponents, matchInfo) => {
+const getTeamStats = (playersStats, teamStats, opponents, matchInfo) => {
 	if (playersStats?.length === opponents.length) {
 		for (const player of playersStats) {
 			let playerStats = {};
 
-			for (const [
+			for (let [
 				i,
 				{
 					gameMode,
@@ -112,6 +111,10 @@ const setTeamStats = (playersStats, teamStats, opponents, matchInfo) => {
 						) ||
 						matchInfo.entity?.name.includes(gameMode)
 					) {
+						if (map === 'workshop/125995702/aim_redline') {
+							map = 'workshop/125995702/aim_redline_original';
+						}
+
 						if (!teamStats[map]) {
 							teamStats[map] = getTeamStatObj();
 							teamStats[map].map =

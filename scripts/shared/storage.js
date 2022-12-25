@@ -26,7 +26,8 @@ export const initStorage = async () => {
 
 export const getSyncStorage = (key) => {
 	const sto = syncStorage.get(key);
-	if (key === 'toggles') {
+
+	if (sto && key === 'toggles') {
 		return sto.sort((a, b) => a?.maxAge - b?.maxAge);
 	}
 

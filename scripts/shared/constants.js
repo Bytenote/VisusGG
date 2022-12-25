@@ -1,4 +1,4 @@
-export const CACHE_TIME = 1000 * 60 * 15;
+export const CACHE_TIME = 1000 * 60 * 7;
 export const CREATORS = ['MrMaxim', 'x3picF4ilx'];
 export const EXTENSION_NAME = 'FACE-M';
 export const DEFAULT_AGE = 1000 * 60 * 60 * 24 * 7;
