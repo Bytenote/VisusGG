@@ -1,11 +1,11 @@
 import { EXTENSION_NAME } from '../../shared/constants';
 import { getSyncStorage } from '../../shared/storage';
-import { getMatchroomRoot } from '../helpers/matchroom';
+import { getMatchRoomRoot } from '../helpers/matchroom';
 
 export const showPopover = (e, parent, stats) => {
 	hidePopover();
 
-	const shadow = getMatchroomRoot();
+	const shadow = getMatchRoomRoot();
 	const timeFrameName = getTimeFrameName();
 
 	const popoverDiv = document.createElement('div');
@@ -51,7 +51,7 @@ export const showPopover = (e, parent, stats) => {
 };
 
 export const hidePopover = () => {
-	const popover = getMatchroomRoot().querySelector(
+	const popover = getMatchRoomRoot().querySelector(
 		`div.${EXTENSION_NAME}-popover`
 	);
 

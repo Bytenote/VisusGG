@@ -8,7 +8,7 @@ import {
 import { getMatchInfo } from './helpers/api';
 import { initStorage } from '../shared/storage';
 import {
-	getMatchroomRoot,
+	getMatchRoomRoot,
 	getRoomId,
 	isPlayerOfMatch,
 } from './helpers/matchroom';
@@ -20,16 +20,12 @@ const domObserver = () => {
 		const roomId = getRoomId();
 
 		if (roomId) {
-			const shadowElem = getMatchroomRoot();
+			const shadowElem = getMatchRoomRoot();
 			if (shadowElem) {
 				const matchInfo = (await getMatchInfo(roomId)) ?? {};
 				if (matchInfo && isPlayerOfMatch(matchInfo.teams)) {
 					addStylingElement(shadowElem);
-					addTimeFrameToggle(
-						shadowElem,
-						matchInfo.state,
-						matchInfo.matchCustom
-					);
+					addTimeFrameToggle(shadowElem, matchInfo);
 					await addMapStats(shadowElem, matchInfo);
 				}
 			}

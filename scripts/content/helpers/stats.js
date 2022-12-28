@@ -1,3 +1,4 @@
+import mem from 'mem';
 import pMemoize from 'p-memoize';
 import { getOpponents } from './matchroom';
 import { getLifeTimeStats, getPlayerMatches } from './api';
@@ -7,31 +8,7 @@ export const loadMapStatsMemoized = pMemoize((_, matchInfo) =>
 	loadMapStats(matchInfo)
 );
 
-export const getAllMaps = (maps = []) => {
-	const mapsObj = {};
-
-	maps.forEach(({ image_lg, image_sm, ...mapProps }) => {
-		let workshopName = '';
-
-		if (!isNaN(mapProps.game_map_id)) {
-			workshopName = `workshop/${mapProps.game_map_id}/${mapProps.class_name}`;
-			mapsObj[workshopName] = {
-				...mapProps,
-				game_map_id: workshopName,
-			};
-		}
-		mapsObj[mapProps.name] = {
-			...mapProps,
-			...(workshopName && { game_map_id: workshopName }),
-		};
-		mapsObj[mapProps.class_name] = {
-			...mapProps,
-			...(workshopName && { game_map_id: workshopName }),
-		};
-	});
-
-	return mapsObj;
-};
+export const getMapDictMemoized = mem((_, maps) => getMapDict(maps));
 
 export const getMapStats = (map, maps, stats) => {
 	if (stats) {
@@ -69,6 +46,7 @@ const loadMapStats = async (matchInfo) => {
 				// 	playerIds,
 				// 	matchInfo.id
 				// );
+
 				teamStats = getTeamStats(
 					playersStats,
 					teamStats,
@@ -83,6 +61,32 @@ const loadMapStats = async (matchInfo) => {
 		console.log(err);
 		return null;
 	}
+};
+
+const getMapDict = (maps = []) => {
+	const mapsObj = {};
+
+	maps.forEach(({ image_lg, image_sm, ...mapProps }) => {
+		let workshopName = '';
+
+		if (!isNaN(mapProps.game_map_id)) {
+			workshopName = `workshop/${mapProps.game_map_id}/${mapProps.class_name}`;
+			mapsObj[workshopName] = {
+				...mapProps,
+				game_map_id: workshopName,
+			};
+		}
+		mapsObj[mapProps.name] = {
+			...mapProps,
+			...(workshopName && { game_map_id: workshopName }),
+		};
+		mapsObj[mapProps.class_name] = {
+			...mapProps,
+			...(workshopName && { game_map_id: workshopName }),
+		};
+	});
+
+	return mapsObj;
 };
 
 const getTeamStats = (playersStats, teamStats, opponents, matchInfo) => {
@@ -106,6 +110,8 @@ const getTeamStats = (playersStats, teamStats, opponents, matchInfo) => {
 				if (inTimeFrame) {
 					if (
 						gameMode === matchInfo.matchCustom?.overview?.name ||
+						gameMode ===
+							matchInfo.matchCustom?.overview?.elo_type ||
 						matchInfo.matchCustom?.overview?.name.includes(
 							gameMode
 						) ||
@@ -118,7 +124,8 @@ const getTeamStats = (playersStats, teamStats, opponents, matchInfo) => {
 						if (!teamStats[map]) {
 							teamStats[map] = getTeamStatObj();
 							teamStats[map].map =
-								getAllMaps(
+								getMapDictMemoized(
+									matchInfo.id,
 									matchInfo?.matchCustom?.tree?.map?.values
 										?.value
 								)?.[map]?.name || null;
@@ -193,10 +200,10 @@ const getPlayerStatObj = (playerId) => {
 
 const finalizeStats = (teamStats, playerStats, nickname) => {
 	for (const recentMap in playerStats) {
-		playerStats[recentMap].winRate = getWinRate(
-			playerStats[recentMap].wins,
-			playerStats[recentMap].matches
+		playerStats[recentMap].winRate = Math.round(
+			(playerStats[recentMap].wins / playerStats[recentMap].matches) * 100
 		);
+
 		teamStats[recentMap].players[nickname] = playerStats[recentMap];
 
 		if (!teamStats[recentMap].playerArr.includes(nickname)) {
@@ -204,8 +211,6 @@ const finalizeStats = (teamStats, playerStats, nickname) => {
 		}
 	}
 };
-
-const getWinRate = (wins, matches) => Math.round((wins / matches) * 100);
 
 const addTeamWinRate = (teamStats) => {
 	for (const mapProp in teamStats) {
