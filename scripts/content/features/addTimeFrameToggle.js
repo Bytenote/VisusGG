@@ -3,7 +3,7 @@ import { insertTimeFrameToggle } from '../components/toggle';
 import { getMatchInfo } from '../helpers/api';
 import {
 	getMapElements,
-	getMatchroomRoot,
+	getMatchRoomRoot,
 	getRoomId,
 	getToggleGroup,
 	hasToggleElements,
@@ -11,14 +11,21 @@ import {
 } from '../helpers/matchroom';
 import { addMapStats } from './addMapStats';
 
-export const addTimeFrameToggle = (parent) => {
+export const addTimeFrameToggle = (parent, matchInfo) => {
 	const matchRoomElem = parent?.getElementById('MATCHROOM-OVERVIEW');
-	if (matchRoomElem) {
+	const matchRoomMaps = matchInfo.matchCustom?.tree?.map?.values?.value;
+
+	if (matchRoomElem && matchRoomMaps?.length > 0) {
 		if (!hasToggleElements(matchRoomElem)) {
-			const mapElems = getMapElements(matchRoomElem);
+			const mapElems = getMapElements(
+				matchRoomElem,
+				matchInfo.id,
+				matchRoomMaps
+			);
 
 			if (mapElems && mapElems.length > 0) {
-				insertTimeFrameToggle(mapElems[0]);
+				const firstMapElem = mapElems[0].mapElem;
+				insertTimeFrameToggle(firstMapElem);
 			}
 		}
 	}
@@ -29,9 +36,11 @@ export const addTimeFrameToggle = (parent) => {
 export const updateTimeFrame = async (changes) => {
 	if (changes?.toggles) {
 		const roomId = getRoomId();
+
 		if (roomId) {
-			const shadowElem = getMatchroomRoot();
+			const shadowElem = getMatchRoomRoot();
 			const matchInfo = (await getMatchInfo(roomId)) ?? {};
+
 			if (matchInfo && isPlayerOfMatch(matchInfo.teams)) {
 				const toggles = await getStorage('toggles');
 				const foundToggle =
@@ -46,11 +55,7 @@ export const updateTimeFrame = async (changes) => {
 				setSyncStorage('toggles', toggles);
 
 				removeTimeFrameToggle(shadowElem);
-				addTimeFrameToggle(
-					shadowElem,
-					matchInfo.state,
-					matchInfo.matchCustom
-				);
+				addTimeFrameToggle(shadowElem, matchInfo);
 				await addMapStats(shadowElem, matchInfo);
 			}
 		}
@@ -59,6 +64,7 @@ export const updateTimeFrame = async (changes) => {
 
 const removeTimeFrameToggle = (parent) => {
 	const matchRoomElem = parent?.getElementById('MATCHROOM-OVERVIEW');
+
 	if (matchRoomElem) {
 		if (hasToggleElements(matchRoomElem)) {
 			const toggleGroup = getToggleGroup(matchRoomElem);

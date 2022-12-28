@@ -1,31 +1,26 @@
 import {
-	getAllMaps,
+	getMapDictMemoized,
 	getMapStats,
 	loadMapStatsMemoized,
 } from '../helpers/stats';
-import {
-	getMapElements,
-	getMapName,
-	hasStatsElements,
-} from '../helpers/matchroom';
+import { getMapElements, hasStatsElements } from '../helpers/matchroom';
 import { insertStats, updateStats } from '../components/winrate';
 import { getSyncStorage } from '../../shared/storage';
 
 export const addMapStats = async (parent, matchInfo) => {
 	const matchRoomElem = parent?.getElementById('MATCHROOM-OVERVIEW');
-	if (matchRoomElem) {
-		const mapElems = getMapElements(matchRoomElem);
+	const matchRoomMaps = matchInfo.matchCustom?.tree?.map?.values?.value;
 
-		if (mapElems) {
+	if (matchRoomElem && matchRoomMaps?.length > 0) {
+		const mapElems = getMapElements(
+			matchRoomElem,
+			matchInfo.id,
+			matchRoomMaps
+		);
+
+		if (mapElems && mapElems.length > 0) {
 			if (!hasStatsElements(matchRoomElem)) {
-				for (const elem in mapElems) {
-					const mapElem = mapElems[elem];
-					const mapName = getMapName(mapElem);
-
-					if (mapName) {
-						insertStats(mapElem);
-					}
-				}
+				mapElems.forEach(({ mapElem }) => insertStats(mapElem));
 			}
 
 			const timeFrame = getSyncStorage('timeFrame');
@@ -33,20 +28,11 @@ export const addMapStats = async (parent, matchInfo) => {
 				`${matchInfo.id}-${timeFrame}`,
 				matchInfo
 			);
-			const maps = getAllMaps(
-				matchInfo.matchCustom?.tree?.map?.values?.value
+			const maps = getMapDictMemoized(matchInfo.id, matchRoomMaps);
+
+			mapElems.forEach(({ mapElem, mapName }) =>
+				updateStats(mapElem, getMapStats(mapName, maps, mapStats))
 			);
-
-			for (const elem in mapElems) {
-				const mapElem = mapElems[elem];
-				const mapName = getMapName(mapElem);
-
-				if (mapName) {
-					const stats = getMapStats(mapName, maps, mapStats);
-
-					updateStats(mapElem, stats);
-				}
-			}
 		}
 	}
 

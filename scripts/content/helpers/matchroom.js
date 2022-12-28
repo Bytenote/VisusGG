@@ -1,4 +1,5 @@
 import { EXTENSION_NAME } from '../../shared/constants';
+import { getMapDictMemoized } from './stats';
 import { getCurrentUserId } from './user';
 
 export const getRoomId = (path = location.pathname) =>
@@ -12,10 +13,55 @@ export const isPlayerOfMatch = (teams) =>
 	) ||
 	teams?.faction2?.roster?.find((player) => player.id === getCurrentUserId());
 
-export const getMatchroomRoot = () =>
+export const getMatchRoomRoot = () =>
 	document.getElementById('parasite-container')?.shadowRoot;
 
-export const getMapElementsParent = (matchRoomElem) => {
+export const getMapElements = (matchRoomElem, matchRoomId, matchRoomMaps) => {
+	const mapElementsParent = getMapElementsParent(matchRoomElem);
+
+	if (mapElementsParent) {
+		const mapElements = [...mapElementsParent.children].reduce(
+			(acc, curr) => {
+				if (
+					!curr.getAttribute('id', `${EXTENSION_NAME}-button-group`)
+				) {
+					const mapName = getMapName(
+						curr,
+						matchRoomId,
+						matchRoomMaps
+					);
+					if (mapName) {
+						acc.push({
+							mapElem: curr,
+							mapName,
+						});
+					}
+				}
+
+				return acc;
+			},
+			[]
+		);
+
+		return mapElements;
+	}
+};
+
+export const getOpponents = (teams) =>
+	teams.faction1?.roster?.find((player) => player?.id === getCurrentUserId())
+		? teams?.faction2?.roster
+		: teams?.faction1?.roster;
+
+export const hasStatsElements = (parent) =>
+	[...parent.querySelectorAll(`div.${EXTENSION_NAME}-stats`)].length > 0;
+
+export const hasToggleElements = (parent) =>
+	!!parent.querySelector(`#${EXTENSION_NAME}-button-group`);
+
+export const getToggleGroup = (parent) =>
+	parent.querySelector(`#${EXTENSION_NAME}-button-group`);
+
+const getMapElementsParent = (matchRoomElem) => {
 	const miscElem = matchRoomElem.querySelector(
 		"div > div[name='info'] > div > div"
 	);
@@ -31,48 +77,26 @@ export const getMapElementsParent = (matchRoomElem) => {
 	return parent;
 };
 
-export const getMapElements = (matchRoomElem) => {
-	const mapElementsParent = getMapElementsParent(matchRoomElem);
+const getMapName = (element, matchRoomId, matchRoomMaps) => {
+	const elemChildren = element?.children;
+	if (elemChildren) {
+		const mapDict = getMapDictMemoized(matchRoomId, matchRoomMaps);
 
-	if (mapElementsParent) {
-		const filteredParents = [...mapElementsParent.children].filter(
-			(elem) => !elem.getAttribute('id', `${EXTENSION_NAME}-button-group`)
-		);
-		const mapName = getMapName(filteredParents?.[3]);
+		for (const elem of elemChildren) {
+			if (!elem.classList.contains(`${EXTENSION_NAME}-stats`)) {
+				const elementName =
+					elem?.children?.[1]?.firstChild?.textContent;
+				const mapName = mapDict[elementName];
 
-		if (filteredParents && filteredParents.length > 0 && mapName) {
-			if (getMapName(filteredParents?.[0])) {
-				return filteredParents;
+				if (mapName) {
+					return (
+						mapName.class_name ||
+						mapName.name ||
+						mapName.guid ||
+						mapName.game_map_id
+					);
+				}
 			}
-
-			return [mapElementsParent.lastChild];
 		}
 	}
 };
-
-export const getOpponents = (teams) =>
-	teams.faction1?.roster?.find((player) => player?.id === getCurrentUserId())
-		? teams?.faction2?.roster
-		: teams?.faction1?.roster;
-
-export const getMapName = (mapElement) => {
-	const elem1 =
-		mapElement?.children[1]?.children?.[1]?.firstChild?.textContent;
-	const elem2 =
-		mapElement?.children[0]?.children?.[1]?.firstChild?.textContent;
-
-	if (elem1 && elem1 !== 'Veto' && elem1 !== 'Server' && elem1 !== 'Map') {
-		return elem1;
-	}
-
-	return elem2;
-};
-
-export const hasStatsElements = (parent) =>
-	[...parent.querySelectorAll(`div.${EXTENSION_NAME}-stats`)].length > 0;
-
-export const hasToggleElements = (parent) =>
-	!!parent.querySelector(`#${EXTENSION_NAME}-button-group`);
-
-export const getToggleGroup = (parent) =>
-	parent.querySelector(`#${EXTENSION_NAME}-button-group`);
