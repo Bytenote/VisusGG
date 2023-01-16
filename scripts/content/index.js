@@ -1,19 +1,14 @@
 import { addCreatorBadge } from './features/addCreatorBadge';
 import { addMapStats } from './features/addMapStats';
 import { addStylingElement } from './features/addStylingElement';
-import {
-	addTimeFrameToggle,
-	updateTimeFrame,
-} from './features/addTimeFrameToggle';
+import { addTimeFrameToggle } from './features/addTimeFrameToggle';
 import { getMatchInfo } from './helpers/api';
 import { initStorage } from '../shared/storage';
-import {
-	getMatchRoomRoot,
-	getRoomId,
-	isPlayerOfMatch,
-} from './helpers/matchroom';
+import { getMatchRoomRoot, getRoomId } from './helpers/matchroom';
 import { getBannerRoot, getCreatorProfile } from './helpers/profile';
 import { isLoggedIn } from './helpers/user';
+import { updateStorage } from './helpers/storageChanges';
+import { isPlayerOfMatch } from './helpers/teams';
 
 const domObserver = () => {
 	const observer = new MutationObserver(async (mutationList) => {
@@ -23,7 +18,7 @@ const domObserver = () => {
 			const shadowElem = getMatchRoomRoot();
 			if (shadowElem) {
 				const matchInfo = (await getMatchInfo(roomId)) ?? {};
-				if (matchInfo && isPlayerOfMatch(matchInfo.teams)) {
+				if (matchInfo && isPlayerOfMatch(roomId, matchInfo.teams)) {
 					addStylingElement(shadowElem);
 					addTimeFrameToggle(shadowElem, matchInfo);
 					await addMapStats(shadowElem, matchInfo);
@@ -55,8 +50,8 @@ const domObserver = () => {
 	if (isLoggedIn()) {
 		await initStorage();
 
-		chrome.storage.local.onChanged.removeListener(updateTimeFrame);
-		chrome.storage.local.onChanged.addListener(updateTimeFrame);
+		chrome.storage.local.onChanged.removeListener(updateStorage);
+		chrome.storage.local.onChanged.addListener(updateStorage);
 
 		domObserver();
 	}

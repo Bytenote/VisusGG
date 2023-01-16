@@ -51,6 +51,7 @@ const setActiveToggle = (buttonGroup, toggles) => {
 		toggles.find(
 			(toggle) => toggle.maxAge === getSyncStorage('timeFrame')
 		) || toggles?.[0];
+
 	if (activeToggle) {
 		const activeButton = [...buttonGroup.children]?.find(
 			(button) => button.textContent === activeToggle.label

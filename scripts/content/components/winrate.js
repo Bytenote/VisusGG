@@ -1,4 +1,6 @@
 import { EXTENSION_NAME } from '../../shared/constants';
+import { getColorToUse } from '../helpers/colorHelper';
+import { setColorOfElements } from './color';
 import { hidePopover, showPopover } from './popover';
 
 export const insertStats = (mapElement) => {
@@ -33,24 +35,53 @@ export const updateStats = (mapElement, stats) => {
 		);
 		statsDiv.addEventListener('mouseleave', (e) => hidePopover(e));
 
-		if (stats) {
-			if (stats.winRate < 50) {
-				mapElement.style.cssText = 'background: rgb(0, 153, 51, 0.05)';
-				bar.style.cssText = 'background: rgb(0, 153, 51)';
-				winRateText.style.cssText = 'color: rgb(0, 153, 51)';
-			} else {
-				mapElement.style.cssText = 'background: rgb(230, 0, 0, 0.05)';
-				bar.style.cssText = 'background: rgb(230, 0, 0)';
-				winRateText.style.cssText = 'color: rgb(230, 0, 0)';
-			}
-
-			winRateText.textContent = `${stats.winRate}%`;
-		} else {
-			mapElement.style.removeProperty('background');
-			bar.style.removeProperty('background');
-			winRateText.style.removeProperty('color');
-
-			winRateText.textContent = '---';
-		}
+		showWinRate(stats, mapElement, bar, winRateText);
 	}
+};
+
+const showWinRate = (stats, mapElement, bar, winRateText) => {
+	const { winRate, condition, winRateSymbol } =
+		getModeSpecificDataToDisplay(stats);
+
+	if (!isNaN(winRate)) {
+		const elements = [
+			{ element: mapElement, type: 'background', opacity: 0.05 },
+			{ element: bar, type: 'background' },
+			{ element: winRateText, type: 'color' },
+		];
+		const colorToUse = getColorToUse(condition);
+
+		setColorOfElements(colorToUse, elements);
+
+		winRateText.textContent = `${winRateSymbol + winRate}%`;
+	} else {
+		mapElement.style.removeProperty('background');
+		bar.style.removeProperty('background');
+		winRateText.style.removeProperty('color');
+
+		winRateText.textContent = '---';
+	}
+};
+
+const getModeSpecificDataToDisplay = (stats) => {
+	let data = {
+		winRate: 0,
+		condition: false,
+		winRateSymbol: '',
+	};
+
+	if (stats?.length === 1) {
+		data.winRate = stats[0]?.winRate;
+		data.condition = data.winRate >= 50;
+	} else if (stats?.length === 2) {
+		const ownTeamSide = stats[0]?.ownTeamSide === 0 ? 0 : 1;
+		const opponentTeamSide = ownTeamSide === 0 ? 1 : 0;
+
+		data.winRate =
+			stats[ownTeamSide]?.winRate - stats[opponentTeamSide]?.winRate;
+		data.condition = data.winRate <= 0;
+		data.winRateSymbol = data.winRate > 0 ? '+' : data.winRate === 0 && '±';
+	}
+
+	return data;
 };

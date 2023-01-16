@@ -53,7 +53,7 @@ export const createStylingElement = (parent) => {
 			font-weight: bold;
 			padding-left: 8px;
 			text-align: center;
-			width: 40px;
+			width: 50px;
 		}
 		
 		div.${EXTENSION_NAME}-popover {
@@ -86,7 +86,8 @@ export const createStylingElement = (parent) => {
 			font-size: 14px;
 		}
 		
-		div.${EXTENSION_NAME}-player-div:not(:last-of-type) {
+		div.${EXTENSION_NAME}-player-div:not(:last-of-type), 
+		div.${EXTENSION_NAME}-player-div-compact:not(:last-of-type) {
 			border-bottom: 1px solid #303030;
 		}
 	
@@ -113,6 +114,61 @@ export const createStylingElement = (parent) => {
 		span.${EXTENSION_NAME}-player-win-rate {
 			display: inline-block;
 			font-size: 16px;
+			font-weight: bold;
+			text-align: end;
+			width: auto;
+		}
+
+		div.${EXTENSION_NAME}-stats-div-compact {
+			display: grid;
+			grid-auto-flow: column;
+			grid-column-gap: 20px;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			padding: 14px 0px;
+			padding-top: 0px;
+			width: 100%;
+		}
+		
+		div.${EXTENSION_NAME}-team-div-compact {
+			border-bottom: 3px solid #303030;
+			display: grid;
+			font-size: 15px;
+			font-weight: bold;
+			grid-auto-flow: column;
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			padding: 14px 0px;
+			width: 100%;
+		}
+
+		div.${EXTENSION_NAME}-team-div-compact > span.${EXTENSION_NAME}-player-win-rate-compact {
+			font-size: 15px;
+			font-weight: bold;
+		}
+
+		div.${EXTENSION_NAME}-player-div-compact {
+			display: grid;
+			font-size: 12px;
+			font-weight: bold;
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			grid-auto-flow: column;
+			padding: 14px 0px;
+			width: 100%;
+		}
+
+		span.${EXTENSION_NAME}-player-name-compact{
+			font-weight: bold;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		span.${EXTENSION_NAME}-player-matches-compact {
+			text-align: center;
+		}
+		
+		span.${EXTENSION_NAME}-player-win-rate-compact {
+			display: inline-block;
+			font-size: 12px;
 			font-weight: bold;
 			text-align: end;
 			width: auto;

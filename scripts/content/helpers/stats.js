@@ -1,8 +1,9 @@
 import mem from 'mem';
 import pMemoize from 'p-memoize';
-import { getOpponents } from './matchroom';
-import { getLifeTimeStats, getPlayerMatches } from './api';
+import { getOpponents, getOwnTeam, getOwnTeamSide } from './teams';
+import { getPlayerMatches } from './api';
 import { getSyncStorage } from '../../shared/storage';
+import { getCurrentUserId } from './user';
 
 export const loadMapStatsMemoized = pMemoize((_, matchInfo) =>
 	loadMapStats(matchInfo)
@@ -10,53 +11,86 @@ export const loadMapStatsMemoized = pMemoize((_, matchInfo) =>
 
 export const getMapDictMemoized = mem((_, maps) => getMapDict(maps));
 
-export const getMapStats = (map, maps, stats) => {
-	if (stats) {
-		const mapObj = maps?.[map];
+export const getMapStats = (map, maps, stats, matchInfo) => {
+	const usesCompareMode = getSyncStorage('usesCompareMode');
+	const opponentStats = stats?.opponents;
+	const ownTeamStats = stats?.ownTeam;
+
+	if (opponentStats && ownTeamStats) {
+		const mapObj = maps[map];
 
 		if (mapObj) {
-			return (
-				stats[mapObj.class_name] ||
-				stats[mapObj.game_map_id] ||
-				stats[mapObj.name]
-			);
+			const opponentMapStats =
+				getMapStatsObject(opponentStats, mapObj) ?? {};
+			const mapStats = [opponentMapStats];
+
+			if (usesCompareMode) {
+				const ownTeamMapStats =
+					getMapStatsObject(ownTeamStats, mapObj) ?? {};
+
+				if (getOwnTeamSide(matchInfo.id, matchInfo.teams) > 0) {
+					ownTeamMapStats['ownTeamSide'] = 1;
+					mapStats.push(ownTeamMapStats);
+				} else {
+					ownTeamMapStats['ownTeamSide'] = 0;
+					mapStats.unshift(ownTeamMapStats);
+				}
+			}
+
+			return mapStats;
 		}
 	}
 
-	return false;
+	return [];
 };
 
 const loadMapStats = async (matchInfo) => {
 	try {
-		let teamStats = {};
+		const usesCompareMode = getSyncStorage('usesCompareMode');
+
+		let teamsStats = {
+			opponents: {},
+			ownTeam: {},
+		};
 
 		if (matchInfo?.teams) {
-			const opponents = getOpponents(matchInfo.teams);
-			if (opponents && opponents.length > 0) {
-				const playerPromises = [];
-				// const playerIds = [];
+			const opponents = getOpponents(matchInfo.id, matchInfo.teams);
+			const teammates = getOwnTeam(matchInfo.id, matchInfo.teams);
 
-				for (const { id } of opponents) {
-					playerPromises.push(getPlayerMatches(id));
-					// playerIds.push(id);
+			if (opponents?.length > 0 && teammates?.length > 0) {
+				let opponentResponse = [];
+				let ownTeamResponse = [];
+
+				const playerStatsPromises =
+					getPlayerStatsPromisesDependingOnMode(
+						opponents,
+						teammates,
+						usesCompareMode
+					);
+				const response = await Promise.all(playerStatsPromises);
+
+				if (usesCompareMode) {
+					opponentResponse = response.slice(0, opponents.length);
+					ownTeamResponse = response.slice(opponents.length);
+
+					teamsStats.ownTeam = getTeamStats(
+						ownTeamResponse,
+						teammates,
+						matchInfo
+					);
+				} else {
+					opponentResponse = response;
 				}
 
-				const playersStats = await Promise.all(playerPromises);
-				// const lifetimeStats = await getLifeTimeStats(
-				// 	playerIds,
-				// 	matchInfo.id
-				// );
-
-				teamStats = getTeamStats(
-					playersStats,
-					teamStats,
+				teamsStats.opponents = getTeamStats(
+					opponentResponse,
 					opponents,
 					matchInfo
 				);
 			}
 		}
 
-		return teamStats;
+		return teamsStats;
 	} catch (err) {
 		console.log(err);
 		return null;
@@ -89,7 +123,21 @@ const getMapDict = (maps = []) => {
 	return mapsObj;
 };
 
-const getTeamStats = (playersStats, teamStats, opponents, matchInfo) => {
+const getMapStatsObject = (stats, mapObj) =>
+	stats[mapObj.class_name] || stats[mapObj.game_map_id] || stats[mapObj.name];
+
+const getPlayerStatsPromisesDependingOnMode = (
+	opponents,
+	teammates,
+	usesCompareMode
+) =>
+	usesCompareMode
+		? [...opponents, ...teammates].map(({ id }) => getPlayerMatches(id))
+		: opponents.map(({ id }) => getPlayerMatches(id));
+
+const getTeamStats = (playersStats, opponents, matchInfo) => {
+	const teamStats = {};
+
 	if (playersStats?.length === opponents.length) {
 		for (const player of playersStats) {
 			let playerStats = {};
@@ -142,13 +190,13 @@ const getTeamStats = (playersStats, teamStats, opponents, matchInfo) => {
 						playerStats[map].matches += 1;
 					}
 				} else if (inTimeFrame === false) {
-					finalizeStats(teamStats, playerStats, nickname);
+					addPlayerMapStats(teamStats, playerStats, nickname);
 
 					break;
 				}
 
 				if (i === player.length - 1) {
-					finalizeStats(teamStats, playerStats, nickname);
+					addPlayerMapStats(teamStats, playerStats, nickname);
 				}
 			}
 		}
@@ -178,8 +226,7 @@ const getTeamStatObj = () => {
 	const obj = {
 		map: '',
 		matches: 0,
-		players: {},
-		playerArr: [],
+		players: new Map(),
 		winRate: 0,
 		wins: 0,
 	};
@@ -198,16 +245,16 @@ const getPlayerStatObj = (playerId) => {
 	return obj;
 };
 
-const finalizeStats = (teamStats, playerStats, nickname) => {
+const addPlayerMapStats = (teamStats, playerStats, nickname) => {
 	for (const recentMap in playerStats) {
 		playerStats[recentMap].winRate = Math.round(
 			(playerStats[recentMap].wins / playerStats[recentMap].matches) * 100
 		);
 
-		teamStats[recentMap].players[nickname] = playerStats[recentMap];
+		teamStats[recentMap].players.set(nickname, playerStats[recentMap]);
 
-		if (!teamStats[recentMap].playerArr.includes(nickname)) {
-			teamStats[recentMap].playerArr.push(nickname);
+		if (playerStats[recentMap]?.playerId === getCurrentUserId()) {
+			playerStats[recentMap]['isCurrentUser'] = true;
 		}
 	}
 };
@@ -215,13 +262,13 @@ const finalizeStats = (teamStats, playerStats, nickname) => {
 const addTeamWinRate = (teamStats) => {
 	for (const mapProp in teamStats) {
 		const mapStats = teamStats[mapProp];
-		const players = mapStats.playerArr;
+		const players = [...mapStats.players.keys()];
 
 		teamStats[mapProp].winRate = Math.round(
 			players.reduce(
-				(acc, curr) => acc + mapStats.players[curr]?.winRate,
+				(acc, curr) => acc + mapStats.players.get(curr)?.winRate,
 				0
-			) / players.length
+			) / mapStats.players.size
 		);
 	}
 };

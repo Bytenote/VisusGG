@@ -17,8 +17,7 @@
 				</span>
 				<div class="info">Limited to the most recent 2000 matches</div>
 			</div>
-
-			<div class="content-container">
+			<div style="padding-top: 10px">
 				<div class="sub-heading" id="FACE-M-heading">
 					Select button to edit
 				</div>
@@ -27,7 +26,7 @@
 
 			<div class="content-container">
 				<form id="FACE-M-form" autocomplete="off">
-					<div style="padding-bottom: 20px">
+					<div style="padding-bottom: 25px">
 						<div class="sub-heading">Select time frame</div>
 						<div class="FACE-M-form-div" id="FACE-M-form-edit">
 							<input id="FACE-M-input" name="input" disabled />
@@ -49,11 +48,60 @@
 						</div>
 					</div>
 
+					<div style="padding-bottom: 25px">
+						<div class="sub-heading">Toggle compare mode</div>
+						<div
+							class="FACE-M-form-div"
+							id="FACE-M-form-compare-mode"
+						>
+							<span
+								class="FACE-M-form-desc"
+								style="padding-right: 45px"
+							>
+								Show win-% difference between both teams
+							</span>
+							<label class="FACE-M-form-switch">
+								<input
+									id="FACE-M-form-switch-input"
+									type="checkbox"
+								/>
+								<span class="FACE-M-form-switch-span"></span>
+							</label>
+						</div>
+					</div>
+
+					<div style="padding-bottom: 25px">
+						<div class="sub-heading">Set colors</div>
+						<div class="FACE-M-form-div" id="FACE-M-form-color1">
+							<span
+								class="FACE-M-form-desc"
+								style="padding-right: 40px"
+							>
+								Customize win-% colors
+							</span>
+
+							<div id="FACE-M-form-color-picker-wrapper1">
+								<input
+									class="FACE-M-form-color-picker"
+									id="FACE-M-form-picker1"
+									type="color"
+								/>
+							</div>
+							<div id="FACE-M-form-color-picker-wrapper2">
+								<input
+									class="FACE-M-form-color-picker"
+									id="FACE-M-form-picker2"
+									type="color"
+								/>
+							</div>
+						</div>
+					</div>
+
 					<div>
-						<div class="sub-heading">Reset time frame</div>
+						<div class="sub-heading">Reset settings</div>
 						<div class="FACE-M-form-div" id="FACE-M-form-reset">
 							<span class="FACE-M-form-desc">
-								Loads the default values
+								Load the default values
 							</span>
 							<button
 								class="FACE-M-submit-btn"
