@@ -24,14 +24,18 @@ export const addMapStats = async (parent, matchInfo) => {
 			}
 
 			const timeFrame = getSyncStorage('timeFrame');
-			const mapStats = await loadMapStatsMemoized(
-				`${matchInfo.id}-${timeFrame}`,
+			const usesCompareMode = getSyncStorage('usesCompareMode');
+			const stats = await loadMapStatsMemoized(
+				`${matchInfo.id}-${timeFrame}-${usesCompareMode}`,
 				matchInfo
 			);
 			const maps = getMapDictMemoized(matchInfo.id, matchRoomMaps);
 
 			mapElems.forEach(({ mapElem, mapName }) =>
-				updateStats(mapElem, getMapStats(mapName, maps, mapStats))
+				updateStats(
+					mapElem,
+					getMapStats(mapName, maps, stats, matchInfo)
+				)
 			);
 		}
 	}

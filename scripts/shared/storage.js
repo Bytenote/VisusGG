@@ -1,25 +1,33 @@
-import { DEFAULT_AGE, DEFAULT_TOGGLES } from './constants';
+import { DEFAULT_STORAGE } from './constants';
 
 const syncStorage = new Map();
 
 export const initStorage = async () => {
-	const isEmpty = await hasStorage();
-	if (isEmpty) {
-		await setStorage('timeFrame', DEFAULT_AGE);
-		await setStorage(
-			'toggles',
-			DEFAULT_TOGGLES.sort((a, b) => a?.maxAge - b?.maxAge)
+	let storage = await getAllStorage();
+
+	if (!hasAllStorageProps(storage)) {
+		const storagePromises = DEFAULT_STORAGE.map(({ key }) =>
+			getStorage(key)
 		);
+		const storageProps = await Promise.all(storagePromises);
+
+		const setterPromises = storageProps.map((value, index) => {
+			if (!value) {
+				const { key, value } = DEFAULT_STORAGE[index];
+
+				return setStorage(key, value);
+			}
+
+			return true;
+		});
+		await Promise.all(setterPromises);
+
+		storage = await getAllStorage();
 	}
 
 	if (syncStorage.size < 1) {
-		const age = await getStorage('timeFrame');
-		const toggles = await getStorage('toggles');
-
-		setSyncStorage('timeFrame', age);
-		setSyncStorage(
-			'toggles',
-			toggles.sort((a, b) => a?.maxAge - b?.maxAge)
+		Object.entries(storage).forEach(([key, value]) =>
+			setSyncStorage(key, value)
 		);
 	}
 };
@@ -74,8 +82,7 @@ export const clearStorage = () =>
 
 const getAllStorage = async () => await getStorage(null);
 
-const hasStorage = async () => {
-	const sto = await getAllStorage();
-
-	return typeof sto == 'object' ? Object.keys(sto)?.length < 1 : true;
-};
+const hasAllStorageProps = (storage) =>
+	storage &&
+	typeof storage === 'object' &&
+	Object.keys(storage)?.length === DEFAULT_STORAGE.length;
