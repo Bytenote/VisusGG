@@ -2,7 +2,7 @@ require('dotenv').config();
 const WebpackDevServer = require('webpack-dev-server');
 const webpack = require('webpack');
 const path = require('path');
-const config = require('../webpack.config');
+const config = require('./webpack.config');
 
 const PORT = process.env.PORT || 3000;
 
@@ -15,7 +15,7 @@ const server = new WebpackDevServer(
 		host: 'localhost',
 		port: PORT,
 		static: {
-			directory: path.join(__dirname, './build'),
+			directory: path.join(__dirname, '../build'),
 		},
 		devMiddleware: {
 			publicPath: `http://localhost:${PORT}/`,

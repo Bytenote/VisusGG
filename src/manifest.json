@@ -1,0 +1,26 @@
+{
+	"manifest_version": 3,
+	"name": "FACE-M",
+	"description": "See win percentages (%) for both teams on FACEIT. Created by x3picF4ilx (Bytenote) & MrMaxim.",
+	"version": "1.2.1",
+	"icons": {
+		"16": "icon-16.png",
+		"48": "icon-48.png",
+		"128": "icon-128.png"
+	},
+	"background": { "service_worker": "background.js" },
+	"content_scripts": [
+		{
+			"run_at": "document_end",
+			"matches": ["https://www.faceit.com/*"],
+			"js": ["content.js"]
+		}
+	],
+	"action": {
+		"default_icon": "icon-48.png",
+		"default_popup": "popup.html",
+		"default_title": "FACE-M"
+	},
+	"permissions": ["cookies", "storage"],
+	"host_permissions": ["https://*.faceit.com/*"]
+}
