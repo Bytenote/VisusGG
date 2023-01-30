@@ -19,7 +19,7 @@ By hovering over the win percentage you will see individual player performance n
 Get the extension from here:
 
 -   [Chrome & Edge](https://chrome.google.com/webstore/detail/face-m/kodlabmmaalpolkfolgpahbjehalecki)
--   Firefox - TBA
+-   [Firefox](https://addons.mozilla.org/en-US/firefox/addon/face-m)
 
 # Build from source
 
