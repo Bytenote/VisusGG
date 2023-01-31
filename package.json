@@ -1,10 +1,12 @@
 {
 	"name": "face-m",
-	"version": "1.2.0",
-	"description": "Chrome extension that displays the win percentage of your opponents & your own team in FACEIT lobbies",
+	"version": "1.2.1",
+	"description": "Browser extension that displays the win percentage of your opponents & your own team in FACEIT lobbies",
 	"scripts": {
-		"build": "node webpack/build.js",
-		"start": "node webpack/index.js"
+		"build": "cross-env NODE_ENV=production node webpack/build.js",
+		"build-firefox": "cross-env BROWSER=firefox NODE_ENV=production node webpack/build.js",
+		"start": "node webpack/index.js",
+		"start-firefox": "cross-env BROWSER=firefox node webpack/index.js"
 	},
 	"repository": {
 		"type": "git",
@@ -17,7 +19,9 @@
 		"@types/chrome": "^0.0.202",
 		"clean-webpack-plugin": "^4.0.0",
 		"copy-webpack-plugin": "^7.0.0",
+		"cross-env": "^7.0.3",
 		"css-loader": "^6.7.2",
+		"dotenv": "^16.0.3",
 		"file-loader": "^6.2.0",
 		"html-loader": "^3.1.0",
 		"html-webpack-plugin": "^5.5.0",
@@ -26,12 +30,13 @@
 		"source-map-loader": "^3.0.1",
 		"style-loader": "^3.3.1",
 		"terser-webpack-plugin": "^5.3.6",
+		"webextension-polyfill": "^0.10.0",
 		"webpack": "^5.75.0",
 		"webpack-cli": "^4.10.0",
 		"webpack-dev-server": "^4.11.1"
 	},
 	"dependencies": {
-		"dotenv": "^16.0.3",
+		"@melloware/coloris": "^0.17.1",
 		"mem": "^9.0.2",
 		"p-memoize": "^7.1.1",
 		"p-retry": "^5.1.2"
