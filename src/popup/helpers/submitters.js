@@ -10,23 +10,28 @@ import {
 	setSyncStorage,
 } from '../../shared/storage';
 import { displaySnackbar } from '../components/snackbar';
-import { resetForm } from '../components/form';
+import { resetForm } from '../helpers/inputHandlers';
 import { getUpdatedColors } from './colorPickerHelpers';
+
+const SUBMITTERS = {
+	timeFrameSubmitter: (input, select) => timeFrameSubmitter(input, select),
+	reset: () => resetSubmitter(),
+};
 
 export const submitHandler = async (e) => {
 	e.preventDefault();
 
-	const formData = new FormData(e.target);
-	const input = +formData.get('input');
-	const select = formData.get('select');
-	const submitter = e.submitter.name;
+	const submitter = e.submitter?.name;
+	const { input, select } = getFormData(e.target, submitter);
 
-	if (submitters?.[submitter]) {
-		submitters[submitter](input, select);
+	if (input || submitter === 'reset') {
+		if (SUBMITTERS?.[submitter]) {
+			SUBMITTERS[submitter](input, select);
 
-		displaySnackbar(e.target, 'Success');
+			displaySnackbar(e.target, 'Success');
 
-		resetForm();
+			resetForm();
+		}
 	}
 };
 
@@ -48,12 +53,7 @@ export const colorPickerSubmitter = async (e) => {
 	displaySnackbar(formElem, 'Success');
 };
 
-const submitters = {
-	edit: (input, select) => editSubmitter(input, select),
-	reset: () => resetSubmitter(),
-};
-
-const editSubmitter = async (input, select) => {
+const timeFrameSubmitter = async (input, select) => {
 	const toggles = getSyncStorage('toggles');
 	const activeLabel = document.querySelector(
 		`.${EXTENSION_NAME}-toggle-active`
@@ -89,6 +89,24 @@ const resetSubmitter = async () => {
 	);
 	await setStorage('usesCompareMode', DEFAULT_COMPARE_MODE);
 	setSyncStorage('colors', DEFAULT_COLORS);
+};
+
+const getFormData = (form, submitter) => {
+	const formData = new FormData(form);
+	const data = {
+		input: null,
+	};
+
+	if (submitter === 'timeFrameSubmitter') {
+		const input = formData.get('input');
+
+		if (!isNaN(input) && input > 0) {
+			data.input = formData.get('input');
+			data['select'] = formData.get('select');
+		}
+	}
+
+	return data;
 };
 
 const getAge = (input, type) => {

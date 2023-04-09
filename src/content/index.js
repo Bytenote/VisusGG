@@ -10,8 +10,13 @@ import { isLoggedIn } from './helpers/user';
 import { isPlayerOfMatch } from './helpers/teams';
 import { initStorageChangeListener } from './helpers/storageChanges';
 
+const OBSERVER_OPTIONS = {
+	childList: true,
+	subtree: true,
+};
+
 const domObserver = () => {
-	const observer = new MutationObserver(async (mutationList) => {
+	const observer = new MutationObserver(async () => {
 		const roomId = getRoomId();
 
 		if (roomId) {
@@ -31,19 +36,8 @@ const domObserver = () => {
 				addCreatorBadge(shadowElem);
 			}
 		}
-
-		for (const mutation of mutationList) {
-			for (const addedNode of mutation.addedNodes) {
-				if (addedNode.shadowRoot) {
-					observer.observe(addedNode.shadowRoot, {
-						childList: true,
-						subtree: true,
-					});
-				}
-			}
-		}
 	});
-	observer.observe(document.body, { childList: true, subtree: true });
+	observer.observe(document.body, OBSERVER_OPTIONS);
 };
 
 (async () => {

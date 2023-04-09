@@ -15,7 +15,7 @@
 					<span style="font-weight: 400">&</span>
 					MrMaxim
 				</span>
-				<div class="info">Limited to the most recent 2000 matches</div>
+				<div class="info">Limited to the most recent 100 matches</div>
 			</div>
 			<div style="padding-top: 10px">
 				<div class="sub-heading" id="FACE-M-heading">
@@ -36,11 +36,12 @@
 								<option value="months">Months</option>
 								<option value="years">Years</option>
 							</select>
+
 							<button
 								class="FACE-M-submit-btn"
-								id="FACE-M-add-btn"
+								id="FACE-M-input-btn"
+								name="timeFrameSubmitter"
 								type="submit"
-								name="edit"
 								disabled
 							>
 								save
@@ -60,6 +61,7 @@
 							>
 								Show win-% difference between both teams
 							</span>
+
 							<label class="FACE-M-form-switch">
 								<input
 									id="FACE-M-form-switch-input"
@@ -108,8 +110,8 @@
 							<button
 								class="FACE-M-submit-btn"
 								id="FACE-M-reset-btn"
-								type="submit"
 								name="reset"
+								type="submit"
 							>
 								reset
 							</button>

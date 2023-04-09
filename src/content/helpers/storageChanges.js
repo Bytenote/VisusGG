@@ -14,6 +14,12 @@ import { getMatchInfo } from './api';
 import { getMatchRoomRoot, getRoomId } from './matchroom';
 import { isPlayerOfMatch } from './teams';
 
+const UPDATE_FUNC = {
+	toggles: (key, newValue) => DOMUpdater(key, newValue),
+	usesCompareMode: (key, newValue) => genericUpdater(key, newValue),
+	colors: (key, newValue) => genericUpdater(key, newValue),
+};
+
 export const initStorageChangeListener = () => {
 	browser.storage.local.onChanged.removeListener(updateStorage);
 	browser.storage.local.onChanged.addListener(updateStorage);
@@ -23,14 +29,8 @@ const updateStorage = async (changes) => {
 	const [[key, { oldValue, newValue }]] = Object.entries(changes);
 
 	if (!isEqual(oldValue, newValue)) {
-		updateFunc[key]?.(key, newValue);
+		UPDATE_FUNC[key]?.(key, newValue);
 	}
-};
-
-const updateFunc = {
-	toggles: (key, newValue) => DOMUpdater(key, newValue),
-	usesCompareMode: (key, newValue) => genericUpdater(key, newValue),
-	colors: (key, newValue) => genericUpdater(key, newValue),
 };
 
 const DOMUpdater = async (_, toggles) => {

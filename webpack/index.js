@@ -15,7 +15,7 @@ const server = new WebpackDevServer(
 		host: 'localhost',
 		port: PORT,
 		static: {
-			directory: path.join(__dirname, '../build'),
+			directory: path.join(__dirname, '..', 'build'),
 		},
 		devMiddleware: {
 			publicPath: `http://localhost:${PORT}/`,

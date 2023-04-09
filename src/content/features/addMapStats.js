@@ -6,6 +6,7 @@ import {
 import { getMapElements, hasStatsElements } from '../helpers/matchroom';
 import { insertStats, updateStats } from '../components/winrate';
 import { getSyncStorage } from '../../shared/storage';
+import { createPopover } from '../components/popover';
 
 export const addMapStats = async (parent, matchInfo) => {
 	const matchRoomElem = parent?.getElementById('MATCHROOM-OVERVIEW');
@@ -21,6 +22,8 @@ export const addMapStats = async (parent, matchInfo) => {
 		if (mapElems && mapElems.length > 0) {
 			if (!hasStatsElements(matchRoomElem)) {
 				mapElems.forEach(({ mapElem }) => insertStats(mapElem));
+
+				createPopover();
 			}
 
 			const timeFrame = getSyncStorage('timeFrame');
@@ -31,12 +34,10 @@ export const addMapStats = async (parent, matchInfo) => {
 			);
 			const maps = getMapDictMemoized(matchInfo.id, matchRoomMaps);
 
-			mapElems.forEach(({ mapElem, mapName }) =>
-				updateStats(
-					mapElem,
-					getMapStats(mapName, maps, stats, matchInfo)
-				)
-			);
+			mapElems.forEach(({ mapElem, mapName }) => {
+				const mapStats = getMapStats(mapName, maps, stats, matchInfo);
+				updateStats(mapElem, mapStats);
+			});
 		}
 	}
 

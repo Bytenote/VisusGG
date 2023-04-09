@@ -5,8 +5,7 @@ browser.runtime.onMessage.addListener((message, _, sendResponse) => {
 	if (!message) return;
 	const { path, token } = message;
 
-	const response = faceitAPI(path, token);
-	response
+	faceitAPI(path, token)
 		.then((res) => sendResponse(res))
 		.catch((err) => {
 			console.log(err);

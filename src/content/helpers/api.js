@@ -22,6 +22,12 @@ export const getPlayerMatches = (playerId) =>
 		`/stats/v1/stats/time/users/${playerId}/games/csgo?size=2000`
 	);
 
+export const getPlayerHistory = (playerId, from, to) => {
+	return fetchAPIMemoized(
+		`/data/v4/players/${playerId}/history?game=csgo&from=${from}&to=${to}&limit=100`
+	);
+};
+
 const fetchAPI = async (path) => {
 	if (typeof path !== 'string') return;
 
