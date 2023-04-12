@@ -9,25 +9,25 @@ export const DEFAULT_COLORS = {
 };
 export const DEFAULT_TOGGLES = [
 	{
-		label: '7d',
-		name: '7 days',
-		amount: 7,
+		label: '2d',
+		name: '2 days',
+		amount: 2,
 		type: 'days',
+		maxAge: 1000 * 60 * 60 * 24 * 2,
+	},
+	{
+		label: '1w',
+		name: '1 week',
+		amount: 1,
+		type: 'weeks',
 		maxAge: 1000 * 60 * 60 * 24 * 7,
 	},
 	{
-		label: '1m',
-		name: '1 month',
-		amount: 1,
-		type: 'months',
-		maxAge: 1000 * 60 * 60 * 24 * 30,
-	},
-	{
-		label: '3m',
-		name: '3 months',
-		amount: 3,
-		type: 'months',
-		maxAge: 1000 * 60 * 60 * 24 * 30 * 3,
+		label: '2w',
+		name: '2 weeks',
+		amount: 2,
+		type: 'weeks',
+		maxAge: 1000 * 60 * 60 * 24 * 14,
 	},
 ];
 export const DEFAULT_STORAGE = [

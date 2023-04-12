@@ -25,21 +25,20 @@ export const updateStats = (mapElement, stats) => {
 	const statsDiv = mapElement.querySelector(`.${EXTENSION_NAME}-stats`);
 
 	if (statsDiv) {
-		const bar = mapElement.querySelector(`.${EXTENSION_NAME}-bar`);
-		const winRateText = mapElement.querySelector(
-			`.${EXTENSION_NAME}-win-rate`
-		).firstChild;
-
-		statsDiv.addEventListener('mouseenter', (e) =>
+		statsDiv.addEventListener('mouseover', (e) =>
 			showPopover(e, statsDiv, stats)
 		);
-		statsDiv.addEventListener('mouseleave', (e) => hidePopover(e));
+		statsDiv.addEventListener('mouseout', (e) => hidePopover(e));
 
-		showWinRate(stats, mapElement, bar, winRateText);
+		showWinRate(stats, mapElement);
 	}
 };
 
-const showWinRate = (stats, mapElement, bar, winRateText) => {
+const showWinRate = (stats, mapElement) => {
+	const bar = mapElement.querySelector(`.${EXTENSION_NAME}-bar`);
+	const winRateText = mapElement.querySelector(
+		`.${EXTENSION_NAME}-win-rate`
+	).firstChild;
 	const { winRate, condition, winRateSymbol } =
 		getModeSpecificDataToDisplay(stats);
 

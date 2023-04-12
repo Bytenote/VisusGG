@@ -12,13 +12,13 @@ const BROWSER = process.env.BROWSER || 'chrome';
 const options = {
 	mode: NODE_ENV,
 	entry: {
-		background: path.join(__dirname, '../src', 'background', 'index.js'),
-		content: path.join(__dirname, '../src', 'content', 'index.js'),
-		popup: path.join(__dirname, '../src', 'popup', 'index.js'),
+		background: path.join(__dirname, '..', 'src', 'background', 'index.js'),
+		content: path.join(__dirname, '..', 'src', 'content', 'index.js'),
+		popup: path.join(__dirname, '..', 'src', 'popup', 'index.js'),
 	},
 	output: {
 		filename: '[name].js',
-		path: path.resolve(__dirname, '../build'),
+		path: path.resolve(__dirname, '..', 'build'),
 		clean: true,
 		publicPath: ASSET_PATH,
 	},
@@ -48,8 +48,8 @@ const options = {
 		new CopyWebpackPlugin({
 			patterns: [
 				{
-					from: path.join(__dirname, '../src/manifest.json'),
-					to: path.join(__dirname, '../build'),
+					from: path.join(__dirname, '..', 'src', 'manifest.json'),
+					to: path.join(__dirname, '..', 'build'),
 					force: true,
 					transform: function (content) {
 						let manifest = JSON.parse(content.toString());
@@ -61,19 +61,15 @@ const options = {
 						return Buffer.from(JSON.stringify(manifest));
 					},
 				},
-			],
-		}),
-		new CopyWebpackPlugin({
-			patterns: [
 				{
-					from: 'assets/img',
-					to: path.join(__dirname, '../build'),
+					from: path.join(__dirname, '..', 'src', 'assets', 'icons'),
+					to: path.join(__dirname, '..', 'build'),
 					force: true,
 				},
 			],
 		}),
 		new HtmlWebpackPlugin({
-			template: path.join(__dirname, '../src', 'popup', 'index.html'),
+			template: path.join(__dirname, '..', 'src', 'popup', 'index.html'),
 			filename: 'popup.html',
 			chunks: ['popup'],
 			cache: false,

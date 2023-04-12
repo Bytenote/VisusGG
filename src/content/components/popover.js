@@ -4,12 +4,7 @@ import { getColorToUse } from '../helpers/colorHelper';
 import { getMatchRoomRoot } from '../helpers/matchroom';
 import { setColorOfElements } from './color';
 
-export const showPopover = (e, parent, stats) => {
-	hidePopover();
-
-	const shadow = getMatchRoomRoot();
-	const timeFrameName = getTimeFrameName();
-
+export const createPopover = () => {
 	const popoverDiv = document.createElement('div');
 	const headingDiv = document.createElement('div');
 	const mapDiv = document.createElement('div');
@@ -17,57 +12,82 @@ export const showPopover = (e, parent, stats) => {
 	const timeFrameDiv = document.createElement('div');
 	const timeFrameSpan = document.createElement('span');
 
-	const coordinates = parent.getBoundingClientRect() || {};
-	const { x, y } = getPopoverAnchor(coordinates, stats);
+	const shadow = getMatchRoomRoot();
+
+	popoverDiv.id = `${EXTENSION_NAME}-popover`;
+	headingDiv.id = `${EXTENSION_NAME}-popover-heading`;
 
 	popoverDiv.classList.add(`${EXTENSION_NAME}-popover`);
 	headingDiv.classList.add(`${EXTENSION_NAME}-popover-heading`);
 	mapDiv.classList.add(`${EXTENSION_NAME}-map`);
 	timeFrameDiv.classList.add(`${EXTENSION_NAME}-time-frame`);
 
-	popoverDiv.style.left = `${x}px`;
-	popoverDiv.style.top = `${y}px`;
-
-	mapSpan.textContent = stats[0]?.map || stats[1]?.map;
-	timeFrameSpan.textContent = timeFrameName;
+	popoverDiv.style.display = 'none';
 
 	timeFrameDiv.append(timeFrameSpan);
 	mapDiv.append(mapSpan);
 	headingDiv.append(mapDiv, timeFrameDiv);
 	popoverDiv.prepend(headingDiv);
 
-	if (!shadow.querySelector(`.${EXTENSION_NAME}-popover`)) {
-		const usesCompareMode = getSyncStorage('usesCompareMode');
-		const conditionCModeOff =
-			!usesCompareMode && Object.keys(stats?.[0] || {}).length > 1;
-		const conditionCModeOn =
-			usesCompareMode &&
-			(Object.keys(stats?.[0] || {}).length > 1 ||
-				Object.keys(stats?.[1] || {}).length > 1);
+	shadow?.append(popoverDiv);
+};
 
-		if (conditionCModeOff || conditionCModeOn) {
+export const showPopover = (e, parent, stats) => {
+	hidePopover();
+
+	const shadow = getMatchRoomRoot();
+	const timeFrameName = getTimeFrameName();
+
+	const contentContainer = shadow.querySelector(
+		`#${EXTENSION_NAME}-popover-content`
+	);
+	if (!contentContainer) {
+		const popoverDiv = shadow.getElementById(`${EXTENSION_NAME}-popover`);
+		const mapSpan = shadow.querySelector(`.${EXTENSION_NAME}-map span`);
+		const timeFrameSpan = shadow.querySelector(
+			`.${EXTENSION_NAME}-time-frame span`
+		);
+
+		const coordinates = parent.getBoundingClientRect() || {};
+		const { x, y } = getPopoverAnchor(coordinates, stats);
+
+		setPopoverActive(popoverDiv, x, y);
+
+		mapSpan.textContent = stats[0]?.map || stats[1]?.map;
+		timeFrameSpan.textContent = timeFrameName;
+
+		const usesCompareMode = getSyncStorage('usesCompareMode');
+		const hasStats =
+			Object.keys(stats?.[0] || {}).length > 1 ||
+			(usesCompareMode && Object.keys(stats?.[1] || {}).length > 1);
+		const contentDiv = document.createElement('div');
+
+		contentDiv.id = `${EXTENSION_NAME}-popover-content`;
+
+		if (hasStats) {
 			if (!usesCompareMode) {
 				const players = stats[0]?.players;
 				if (players) {
-					addPlayers(popoverDiv, players, false);
+					addPlayers(contentDiv, players, false);
 				}
 			} else {
-				addCompareMode(popoverDiv, stats);
+				addCompareMode(contentDiv, stats);
 			}
 		} else {
-			showNoData(popoverDiv);
+			showNoData(contentDiv);
 		}
-	}
 
-	shadow?.appendChild(popoverDiv);
+		popoverDiv.append(contentDiv);
+	}
 };
 
 export const hidePopover = () => {
-	const popover = getMatchRoomRoot().querySelector(
-		`div.${EXTENSION_NAME}-popover`
-	);
+	const shadow = getMatchRoomRoot();
+	const popover = shadow?.getElementById(`${EXTENSION_NAME}-popover`);
 
-	popover?.remove();
+	popover.style.display = 'none';
+
+	popover.querySelector(`#${EXTENSION_NAME}-popover-content`)?.remove();
 };
 
 const getTimeFrameName = () => {
@@ -86,6 +106,12 @@ const getPopoverAnchor = ({ x, y }, stats) => {
 	const height = (playerCount * 53 + 20) / 2 + 24 - 25 ?? 20;
 
 	return { x: x + 60, y: height ? y - height : y - 32 };
+};
+
+const setPopoverActive = (element, x, y) => {
+	element.style.left = `${x}px`;
+	element.style.top = `${y}px`;
+	element.style.display = 'block';
 };
 
 const addPlayers = (parent, players, isCompact = false) => {
@@ -132,10 +158,7 @@ const addPlayers = (parent, players, isCompact = false) => {
 	}
 };
 
-const addCompareMode = (popoverDiv, stats) => {
-	const headingDiv = popoverDiv.querySelector(
-		`.${EXTENSION_NAME}-popover-heading`
-	);
+const addCompareMode = (parent, stats) => {
 	const isCompact = true;
 
 	const statsDiv = document.createElement('div');
@@ -175,7 +198,7 @@ const addCompareMode = (popoverDiv, stats) => {
 		statsDiv.append(teamDiv);
 	}
 
-	headingDiv.insertAdjacentElement('afterend', statsDiv);
+	parent.insertAdjacentElement('afterbegin', statsDiv);
 };
 
 const showNoData = (parent) => {

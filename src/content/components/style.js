@@ -55,7 +55,7 @@ export const createStylingElement = (parent) => {
 			text-align: center;
 			width: 50px;
 		}
-		
+
 		div.${EXTENSION_NAME}-popover {
 			background: #161616;
 			box-shadow: 0px 2px 8px 4px rgb(0, 0, 0, 0.38);
