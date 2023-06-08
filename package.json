@@ -1,7 +1,7 @@
 {
-	"name": "face-m",
-	"version": "1.2.2",
-	"description": "Browser extension that displays the win percentage of your opponents & your own team in FACEIT lobbies",
+	"name": "visusgg",
+	"version": "2.0.0",
+	"description": "Browser extension aiming to improve the user experience by providing additional stats around the FACEIT platform.",
 	"scripts": {
 		"build": "cross-env NODE_ENV=production node webpack/build.js",
 		"build-firefox": "cross-env BROWSER=firefox NODE_ENV=production node webpack/build.js",
@@ -10,11 +10,11 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/Bytenote/FACE-M.git"
+		"url": "git+https://github.com/Bytenote/VisusGG.git"
 	},
 	"author": "Bytenote",
 	"license": "GNU GPLv3",
-	"homepage": "https://chrome.google.com/webstore/detail/face-m/kodlabmmaalpolkfolgpahbjehalecki",
+	"homepage": "https://chrome.google.com/webstore/detail/visusgg/kodlabmmaalpolkfolgpahbjehalecki",
 	"devDependencies": {
 		"@types/chrome": "^0.0.202",
 		"clean-webpack-plugin": "^4.0.0",

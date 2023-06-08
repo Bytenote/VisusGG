@@ -1,3 +1,4 @@
+import { getSyncStorage } from '../../shared/storage';
 import { insertTimeFrameToggle } from '../components/toggle';
 import {
 	getMapElements,
@@ -6,7 +7,11 @@ import {
 } from '../helpers/matchroom';
 
 export const addTimeFrameToggle = (parent, matchInfo) => {
-	const matchRoomElem = parent?.getElementById('MATCHROOM-OVERVIEW');
+	if (!getSyncStorage('usesFaceIt')) {
+		return;
+	}
+
+	const matchRoomElem = parent?.querySelector('#MATCHROOM-OVERVIEW');
 	const matchRoomMaps = matchInfo.matchCustom?.tree?.map?.values?.value;
 
 	if (matchRoomElem && matchRoomMaps?.length > 0) {
@@ -28,7 +33,7 @@ export const addTimeFrameToggle = (parent, matchInfo) => {
 };
 
 export const removeTimeFrameToggle = (parent) => {
-	const matchRoomElem = parent?.getElementById('MATCHROOM-OVERVIEW');
+	const matchRoomElem = parent?.querySelector('#MATCHROOM-OVERVIEW');
 
 	if (matchRoomElem) {
 		if (hasToggleElements(matchRoomElem)) {

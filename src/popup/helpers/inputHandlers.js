@@ -1,7 +1,5 @@
-import { EXTENSION_NAME } from '../../shared/constants';
-
 export const inputHandler = (e) => {
-	const inputElem = document.querySelector(`#${EXTENSION_NAME}-input`);
+	const inputElem = document.querySelector('#form-input');
 
 	if (/^0*[1-9]\d*$/.test(e.target.value) && +e.target.value <= 999) {
 		inputElem.value = e.target.value;
@@ -15,14 +13,10 @@ export const keyDownHandler = (e) => {
 		e.preventDefault();
 
 		const inputName = e.target.name;
-		const inputElem = document.querySelector(
-			`#${EXTENSION_NAME}-${inputName}`
-		);
-		const buttonElem = document.querySelector(
-			`#${EXTENSION_NAME}-${inputName}-btn`
-		);
+		const inputElem = document.querySelector(`#form-${inputName}`);
+		const buttonElem = document.querySelector(`#form-${inputName}-btn`);
 
-		const formElem = document.querySelector(`#${EXTENSION_NAME}-form`);
+		const formElem = document.querySelector('#form');
 		const submitEvent = new SubmitEvent('submit', {
 			submitter: buttonElem,
 		});
@@ -33,7 +27,7 @@ export const keyDownHandler = (e) => {
 };
 
 export const resetForm = () => {
-	const inputElem = document.querySelector(`#${EXTENSION_NAME}-input`);
+	const inputElem = document.querySelector('#form-input');
 
 	inputElem.value = null;
 };

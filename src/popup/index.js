@@ -3,12 +3,12 @@ import './styles.css';
 import { displayTimeFrameToggle } from './features/updateTimeFrameToggle';
 import { initStorage } from '../shared/storage';
 import { initStorageChangeListener } from './helpers/storageChanges';
-import { setSwitchValue } from './features/updateCompareModeSwitch';
+import { setSwitchesValue } from './features/updateSwitches';
 import { setColorPickersColors } from './features/updateColorPicker';
 import { initFormListeners } from './helpers/formListeners';
 
 const initPopupElements = async () => {
-	setSwitchValue();
+	setSwitchesValue();
 	setColorPickersColors();
 	await displayTimeFrameToggle();
 

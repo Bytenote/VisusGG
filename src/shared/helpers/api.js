@@ -1,6 +1,6 @@
 import browser from 'webextension-polyfill';
 import pMemoize from 'p-memoize';
-import { CACHE_TIME } from '../../shared/constants';
+import { CACHE_TIME } from '../constants';
 
 export const getMatchInfo = (matchId) =>
 	fetchAPIMemoized(`/match/v2/match/${matchId}`);
@@ -17,9 +17,9 @@ export const getLifeTimeStats = (playerId, roomId) => {
 	return fetchAPIMemoized(`/stats/v1/stats/users/${playerId}/games/csgo`);
 };
 
-export const getPlayerMatches = (playerId) =>
+export const getPlayerMatches = (playerId, size = 100) =>
 	fetchAPIMemoized(
-		`/stats/v1/stats/time/users/${playerId}/games/csgo?size=2000`
+		`/stats/v1/stats/time/users/${playerId}/games/csgo?size=${size}`
 	);
 
 export const getPlayerHistory = (playerId, from, to) => {
@@ -27,6 +27,15 @@ export const getPlayerHistory = (playerId, from, to) => {
 		`/data/v4/players/${playerId}/history?game=csgo&from=${from}&to=${to}&limit=100`
 	);
 };
+
+export const getProfileBySteamId = (steamId) =>
+	fetchAPIMemoized(`/search/v1/?query=${steamId}`);
+
+export const getPlayerBans = (playerId) =>
+	fetchAPIMemoized(`/sheriff/v1/bans/${playerId}`);
+
+export const getPlayerInfo = (nickname) =>
+	fetchAPIMemoized(`/users/v1/nicknames/${nickname}`);
 
 const fetchAPI = async (path) => {
 	if (typeof path !== 'string') return;

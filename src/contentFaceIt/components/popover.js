@@ -2,6 +2,11 @@ import { EXTENSION_NAME } from '../../shared/constants';
 import { getSyncStorage } from '../../shared/storage';
 import { getColorToUse } from '../helpers/colorHelper';
 import { getMatchRoomRoot } from '../helpers/matchroom';
+import {
+	getMapDictMemoized,
+	getMapStats,
+	loadMapStatsMemoized,
+} from '../helpers/stats';
 import { setColorOfElements } from './color';
 
 export const createPopover = () => {
@@ -12,7 +17,7 @@ export const createPopover = () => {
 	const timeFrameDiv = document.createElement('div');
 	const timeFrameSpan = document.createElement('span');
 
-	const shadow = getMatchRoomRoot();
+	const rootElem = getMatchRoomRoot();
 
 	popoverDiv.id = `${EXTENSION_NAME}-popover`;
 	headingDiv.id = `${EXTENSION_NAME}-popover-heading`;
@@ -29,22 +34,30 @@ export const createPopover = () => {
 	headingDiv.append(mapDiv, timeFrameDiv);
 	popoverDiv.prepend(headingDiv);
 
-	shadow?.append(popoverDiv);
+	rootElem?.append(popoverDiv);
 };
 
-export const showPopover = (e, parent, stats) => {
-	hidePopover();
-
-	const shadow = getMatchRoomRoot();
+export const showPopover = async (_, parent, mapName, matchInfo) => {
+	const rootElem = getMatchRoomRoot();
 	const timeFrameName = getTimeFrameName();
 
-	const contentContainer = shadow.querySelector(
+	const contentContainer = rootElem.querySelector(
 		`#${EXTENSION_NAME}-popover-content`
 	);
 	if (!contentContainer) {
-		const popoverDiv = shadow.getElementById(`${EXTENSION_NAME}-popover`);
-		const mapSpan = shadow.querySelector(`.${EXTENSION_NAME}-map span`);
-		const timeFrameSpan = shadow.querySelector(
+		const matchRoomMaps = matchInfo.matchCustom?.tree?.map?.values?.value;
+		const maps = getMapDictMemoized(matchInfo?.id, matchRoomMaps);
+		const timeFrame = getSyncStorage('timeFrame');
+		const usesCompareMode = getSyncStorage('usesCompareMode');
+		const allStats = await loadMapStatsMemoized(
+			`${matchInfo.id}-${timeFrame}-${usesCompareMode}`,
+			matchInfo
+		);
+		const stats = getMapStats(mapName, maps, allStats, matchInfo);
+
+		const popoverDiv = rootElem.querySelector(`#${EXTENSION_NAME}-popover`);
+		const mapSpan = rootElem.querySelector(`.${EXTENSION_NAME}-map span`);
+		const timeFrameSpan = rootElem.querySelector(
 			`.${EXTENSION_NAME}-time-frame span`
 		);
 
@@ -56,7 +69,6 @@ export const showPopover = (e, parent, stats) => {
 		mapSpan.textContent = stats[0]?.map || stats[1]?.map;
 		timeFrameSpan.textContent = timeFrameName;
 
-		const usesCompareMode = getSyncStorage('usesCompareMode');
 		const hasStats =
 			Object.keys(stats?.[0] || {}).length > 1 ||
 			(usesCompareMode && Object.keys(stats?.[1] || {}).length > 1);
@@ -82,8 +94,8 @@ export const showPopover = (e, parent, stats) => {
 };
 
 export const hidePopover = () => {
-	const shadow = getMatchRoomRoot();
-	const popover = shadow?.getElementById(`${EXTENSION_NAME}-popover`);
+	const rootElem = getMatchRoomRoot();
+	const popover = rootElem?.querySelector(`#${EXTENSION_NAME}-popover`);
 
 	popover.style.display = 'none';
 

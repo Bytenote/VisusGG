@@ -1,10 +1,8 @@
-import { EXTENSION_NAME } from '../../shared/constants';
-
 export const displaySnackbar = (parent, message) => {
 	removeSnackbar();
 
 	const feedbackElem = document.createElement('div');
-	feedbackElem.classList.add(`${EXTENSION_NAME}-feedback`);
+	feedbackElem.classList.add('feedback');
 	feedbackElem.textContent = message;
 
 	parent.append(feedbackElem);
@@ -15,7 +13,7 @@ export const displaySnackbar = (parent, message) => {
 };
 
 const removeSnackbar = () => {
-	const feedbackElem = document.querySelector(`.${EXTENSION_NAME}-feedback`);
+	const feedbackElem = document.querySelector('.feedback');
 	if (feedbackElem) {
 		feedbackElem.remove();
 	}

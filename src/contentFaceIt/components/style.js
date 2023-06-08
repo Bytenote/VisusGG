@@ -1,10 +1,10 @@
 import { EXTENSION_NAME } from '../../shared/constants';
 
 export const createStylingElement = (parent) => {
-	const shadowStyling = document.createElement('style');
+	const rootStyling = document.createElement('style');
 
-	shadowStyling.setAttribute('id', `${EXTENSION_NAME}-styling`);
-	shadowStyling.textContent = `
+	rootStyling.setAttribute('id', `${EXTENSION_NAME}-styling`);
+	rootStyling.textContent = `
 		div#${EXTENSION_NAME}-button-group {
 			text-align: start;
 		}
@@ -189,5 +189,5 @@ export const createStylingElement = (parent) => {
 			}
 		}`;
 
-	parent.appendChild(shadowStyling);
+	parent.appendChild(rootStyling);
 };

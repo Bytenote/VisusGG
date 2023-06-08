@@ -3,7 +3,7 @@ import { getColorToUse } from '../helpers/colorHelper';
 import { setColorOfElements } from './color';
 import { hidePopover, showPopover } from './popover';
 
-export const insertStats = (mapElement) => {
+export const insertStats = (mapElement, mapName, matchInfo) => {
 	const statsDiv = document.createElement('div');
 	const bar = document.createElement('span');
 	const winRateDiv = document.createElement('div');
@@ -15,6 +15,19 @@ export const insertStats = (mapElement) => {
 
 	winRateText.textContent = '...%';
 
+	function onMouseOver(e) {
+		showPopover(e, statsDiv, mapName, matchInfo);
+	}
+	function onMouseOut(e) {
+		hidePopover(e, statsDiv);
+	}
+
+	statsDiv.removeEventListener('mouseover', onMouseOver);
+	statsDiv.removeEventListener('mouseout', onMouseOut);
+
+	statsDiv.addEventListener('mouseover', onMouseOver);
+	statsDiv.addEventListener('mouseout', onMouseOut);
+
 	winRateDiv.append(winRateText);
 	statsDiv.append(bar, winRateDiv);
 
@@ -22,16 +35,7 @@ export const insertStats = (mapElement) => {
 };
 
 export const updateStats = (mapElement, stats) => {
-	const statsDiv = mapElement.querySelector(`.${EXTENSION_NAME}-stats`);
-
-	if (statsDiv) {
-		statsDiv.addEventListener('mouseover', (e) =>
-			showPopover(e, statsDiv, stats)
-		);
-		statsDiv.addEventListener('mouseout', (e) => hidePopover(e));
-
-		showWinRate(stats, mapElement);
-	}
+	showWinRate(stats, mapElement);
 };
 
 const showWinRate = (stats, mapElement) => {
@@ -49,16 +53,26 @@ const showWinRate = (stats, mapElement) => {
 			{ element: winRateText, type: 'color' },
 		];
 		const colorToUse = getColorToUse(condition);
-
 		setColorOfElements(colorToUse, elements);
 
-		winRateText.textContent = `${winRateSymbol + winRate}%`;
+		const displayValue = `${winRateSymbol + winRate}%`;
+		if (
+			winRateText?.textContent &&
+			winRateText.textContent !== displayValue
+		) {
+			winRateText.textContent = displayValue;
+		}
 	} else {
-		mapElement.style.removeProperty('background');
-		bar.style.removeProperty('background');
-		winRateText.style.removeProperty('color');
-
-		winRateText.textContent = '---';
+		const displayValue = '---';
+		if (
+			winRateText?.textContent &&
+			winRateText.textContent !== displayValue
+		) {
+			mapElement.style.removeProperty('background');
+			bar.style.removeProperty('background');
+			winRateText.style.removeProperty('color');
+			winRateText.textContent = displayValue;
+		}
 	}
 };
 

@@ -1,7 +1,7 @@
 import mem from 'mem';
 import pMemoize from 'p-memoize';
 import { getOpponents, getOwnTeam, getOwnTeamSide } from './teams';
-import { getPlayerMatches } from './api';
+import { getPlayerMatches } from '../../shared/helpers/api';
 import { getSyncStorage } from '../../shared/storage';
 import { getCurrentUserId } from './user';
 

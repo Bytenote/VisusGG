@@ -2,123 +2,168 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<title>FACE-M</title>
+		<title>VisusGG</title>
 	</head>
 
 	<body>
 		<main id="main">
 			<div class="heading">
-				<span>FACE-M</span>
-				<span id="FACE-M-creators">
-					<span style="font-weight: 400">by</span>
-					x3picF4ilx
-					<span style="font-weight: 400">&</span>
-					MrMaxim
+				<span>VisusGG</span>
+				<span class="info">
+					by
+					<span class="creators"> x3picF4ilx </span>
+					&
+					<span class="creators"> MrMaxim </span>
 				</span>
-				<div class="info">Limited to the most recent 100 matches</div>
-			</div>
-			<div style="padding-top: 10px">
-				<div class="sub-heading" id="FACE-M-heading">
-					Select button to edit
-				</div>
-				<div id="FACE-M-button-group"></div>
 			</div>
 
-			<div class="content-container">
-				<form id="FACE-M-form" autocomplete="off">
-					<div style="padding-bottom: 25px">
-						<div class="sub-heading">Select time frame</div>
-						<div class="FACE-M-form-div" id="FACE-M-form-edit">
-							<input id="FACE-M-input" name="input" disabled />
-							<select id="FACE-M-select" name="select" disabled>
-								<option value="days">Days</option>
-								<option value="weeks">Weeks</option>
-								<option value="months">Months</option>
-								<option value="years">Years</option>
-							</select>
-
-							<button
-								class="FACE-M-submit-btn"
-								id="FACE-M-input-btn"
-								name="timeFrameSubmitter"
-								type="submit"
-								disabled
-							>
-								save
-							</button>
-						</div>
-					</div>
-
-					<div style="padding-bottom: 25px">
-						<div class="sub-heading">Toggle compare mode</div>
-						<div
-							class="FACE-M-form-div"
-							id="FACE-M-form-compare-mode"
-						>
-							<span
-								class="FACE-M-form-desc"
-								style="padding-right: 45px"
-							>
-								Show win-% difference between both teams
-							</span>
-
-							<label class="FACE-M-form-switch">
-								<input
-									id="FACE-M-form-switch-input"
-									type="checkbox"
-								/>
-								<span class="FACE-M-form-switch-span"></span>
-							</label>
-						</div>
-					</div>
-
-					<div style="padding-bottom: 25px">
-						<div class="sub-heading">Set colors</div>
-						<div class="FACE-M-form-div" id="FACE-M-form-color1">
-							<span
-								class="FACE-M-form-desc"
-								style="padding-right: 40px"
-							>
-								Customize win-% colors
-							</span>
-
-							<div id="FACE-M-form-color-picker-wrapper1">
-								<input
-									class="FACE-M-form-color-picker"
-									id="FACE-M-form-picker1"
-									type="text"
-									data-coloris
-								/>
-							</div>
-							<div id="FACE-M-form-color-picker-wrapper2">
-								<input
-									class="FACE-M-form-color-picker"
-									id="FACE-M-form-picker2"
-									type="text"
-									data-coloris
-								/>
-							</div>
-						</div>
-					</div>
-
+			<form id="form" autocomplete="off">
+				<div class="sub-heading">
+					<div>Faceit</div>
 					<div>
-						<div class="sub-heading">Reset settings</div>
-						<div class="FACE-M-form-div" id="FACE-M-form-reset">
-							<span class="FACE-M-form-desc">
-								Load the default values
-							</span>
-							<button
-								class="FACE-M-submit-btn"
-								id="FACE-M-reset-btn"
-								name="reset"
-								type="submit"
+						<label class="toggle">
+							<input
+								id="toggle-faceit"
+								class="toggle-switch-input"
+								type="checkbox"
+							/>
+							<span class="toggle-span"></span>
+						</label>
+					</div>
+				</div>
+
+				<div class="content-container">
+					<div class="option">
+						<div class="option-heading" id="button-edit-div">
+							Select button to edit
+							<span
+								title="Edit time frame from which to get statistics (100 matches max)"
 							>
-								reset
-							</button>
+								<svg
+									class="option-helper"
+									id="time-frame-helper"
+									viewBox="0 0 24 24"
+								>
+									<path
+										d="M11.07 12.85c.77-1.39 2.25-2.21 3.11-3.44.91-1.29.4-3.7-2.18-3.7-1.69 0-2.52 1.28-2.87 2.34L6.54 6.96C7.25 4.83 9.18 3 11.99 3c2.35 0 3.96 1.07 4.78 2.41.7 1.15 1.11 3.3.03 4.9-1.2 1.77-2.35 2.31-2.97 3.45-.25.46-.35.76-.35 2.24h-2.89c-.01-.78-.13-2.05.48-3.15zM14 20c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2z"
+									></path>
+								</svg>
+							</span>
+						</div>
+						<div id="button-edit-group"></div>
+
+						<div class="option-content" id="form-btn-edit">
+							<div>
+								<input id="form-input" name="input" disabled />
+								<select id="form-select" name="select" disabled>
+									<option value="days">Days</option>
+									<option value="weeks">Weeks</option>
+									<option value="months">Months</option>
+									<option value="years">Years</option>
+								</select>
+							</div>
+							<div class="option-action">
+								<button
+									class="form-submit-btn"
+									id="form-input-btn"
+									name="timeFrameSubmitter"
+									type="submit"
+									disabled
+								>
+									save
+								</button>
+							</div>
 						</div>
 					</div>
-				</form>
-			</div>
+
+					<div class="option">
+						<div class="option-content">
+							<div class="option-text">
+								<div class="option-heading">
+									Toggle compare mode
+								</div>
+								<span class="option-desc">
+									Show win-% difference between both teams
+								</span>
+							</div>
+							<div class="option-action">
+								<label class="toggle">
+									<input
+										id="form-switch-input"
+										class="toggle-switch-input"
+										type="checkbox"
+									/>
+									<span class="toggle-span"></span>
+								</label>
+							</div>
+						</div>
+					</div>
+
+					<div class="option">
+						<div class="option-content">
+							<div class="option-text">
+								<div class="option-heading">Set colors</div>
+								<span class="option-desc">
+									Customize win-% colors
+								</span>
+							</div>
+							<div class="option-action">
+								<div id="form-color-picker-wrapper1">
+									<input
+										class="form-color-picker"
+										id="form-picker1"
+										type="text"
+										data-coloris
+									/>
+								</div>
+								<div id="form-color-picker-wrapper2">
+									<input
+										class="form-color-picker"
+										id="form-picker2"
+										type="text"
+										data-coloris
+									/>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="option" style="padding-bottom: 10px">
+						<div class="option-content">
+							<div class="option-text">
+								<div class="option-heading">Reset settings</div>
+								<span class="option-desc">
+									Load the default values
+								</span>
+							</div>
+							<div class="option-action">
+								<button
+									class="form-submit-btn"
+									id="reset-btn"
+									name="reset"
+									type="submit"
+								>
+									reset
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="sub-heading">
+					<div>Steam</div>
+					<div>
+						<label class="toggle">
+							<input
+								id="toggle-steam"
+								class="toggle-switch-input"
+								type="checkbox"
+							/>
+							<span class="toggle-span"></span>
+						</label>
+					</div>
+				</div>
+			</form>
 		</main>
 
 		<script scr="popup.js"></script>
