@@ -1,4 +1,3 @@
-import { EXTENSION_NAME } from '../../shared/constants';
 import {
 	colorPickerInputHandler,
 	getColorPickerElements,
@@ -12,19 +11,38 @@ import {
 
 export const initFormListeners = () => {
 	const colorPickerElem = getColorPickerElements();
-	const inputElem = document.querySelector(`#${EXTENSION_NAME}-input`);
-	const switchElem = document.querySelector(
-		`#${EXTENSION_NAME}-form-switch-input`
-	);
-	const formElem = document.querySelector(`#${EXTENSION_NAME}-form`);
+	const ELEMS = [
+		{ id: 'form-input', event: 'input', handler: inputHandler },
+		{ id: 'form-input', event: 'keydown', handler: keyDownHandler },
+		{
+			id: 'form-switch-input',
+			event: 'change',
+			handler: onCompareModeChange,
+		},
+		{ id: 'toggle-faceit', event: 'change', handler: onFaceItChange },
+		{ id: 'toggle-steam', event: 'change', handler: onSteamChange },
+		{ id: 'form', event: 'submit', handler: submitHandler },
+	];
 
 	for (const elem of colorPickerElem) {
 		elem.addEventListener('input', colorPickerInputHandler);
 		elem.addEventListener('change', colorPickerSubmitter);
 	}
 
-	inputElem.addEventListener('input', inputHandler);
-	inputElem.addEventListener('keydown', keyDownHandler);
-	switchElem.addEventListener('change', switchSubmitter);
-	formElem.addEventListener('submit', submitHandler);
+	ELEMS.forEach(({ id, event, handler }) => {
+		const elem = document.querySelector(`#${id}`);
+		elem.addEventListener(event, handler);
+	});
+};
+
+const onCompareModeChange = (e) => {
+	switchSubmitter(e, 'usesCompareMode');
+};
+
+const onFaceItChange = (e) => {
+	switchSubmitter(e, 'usesFaceIt');
+};
+
+const onSteamChange = (e) => {
+	switchSubmitter(e, 'usesSteam');
 };

@@ -9,7 +9,11 @@ import { getSyncStorage } from '../../shared/storage';
 import { createPopover } from '../components/popover';
 
 export const addMapStats = async (parent, matchInfo) => {
-	const matchRoomElem = parent?.getElementById('MATCHROOM-OVERVIEW');
+	if (!getSyncStorage('usesFaceIt')) {
+		return;
+	}
+
+	const matchRoomElem = parent?.querySelector('#MATCHROOM-OVERVIEW');
 	const matchRoomMaps = matchInfo.matchCustom?.tree?.map?.values?.value;
 
 	if (matchRoomElem && matchRoomMaps?.length > 0) {
@@ -21,8 +25,9 @@ export const addMapStats = async (parent, matchInfo) => {
 
 		if (mapElems && mapElems.length > 0) {
 			if (!hasStatsElements(matchRoomElem)) {
-				mapElems.forEach(({ mapElem }) => insertStats(mapElem));
-
+				mapElems.forEach(({ mapElem, mapName }) =>
+					insertStats(mapElem, mapName, matchInfo)
+				);
 				createPopover();
 			}
 
@@ -42,4 +47,21 @@ export const addMapStats = async (parent, matchInfo) => {
 	}
 
 	return;
+};
+
+export const removeMapStats = (parent) => {
+	const matchRoomElem = parent?.querySelector('#MATCHROOM-OVERVIEW');
+
+	if (matchRoomElem) {
+		if (hasStatsElements(matchRoomElem)) {
+			const statsElems = [
+				...matchRoomElem.querySelectorAll('.VisusGG-stats'),
+			];
+
+			statsElems?.forEach((elem) => {
+				elem?.parentElement?.removeAttribute('style');
+				elem?.remove();
+			});
+		}
+	}
 };

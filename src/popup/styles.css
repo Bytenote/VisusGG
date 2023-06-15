@@ -4,6 +4,8 @@
 	--color-text-secondary: rgba(255, 255, 255, 0.6);
 	--color-bg-primary: #161616;
 	--color-bg-secondary: #1f1f1f;
+	--color-bg-elevated-4: rgb(39, 39, 39);
+	--color-bg-elevated-12: rgb(51, 51, 51);
 	--color-button-disabled: #fea3756c;
 	--font-family: 'Segoe UI', Tahoma, sans-serif;
 }
@@ -13,62 +15,104 @@ body {
 	background: var(--color-bg-primary);
 	color: var(--color-text-secondary);
 	font-weight: 400;
-	padding: 15px;
-	width: 350px;
+	padding: 0px;
+	margin: 0px;
+	width: 400px;
 	overflow: hidden;
 }
 
-#FACE-M-button-group {
-	display: flex;
-	justify-content: center;
-	padding-top: 10px;
-}
 .heading {
+	background: var(--color-bg-elevated-4);
 	color: var(--color-theme-primary);
-	font-size: 18px;
+	font-size: 20px;
 	font-weight: 700;
 	letter-spacing: 0.8px;
-	padding-bottom: 10px;
+	padding: 22px 25px;
 	text-align: start;
 }
 
-.content-container {
-	padding: 20px 0px;
+.info {
+	display: block;
+	color: var(--color-text-secondary);
+	font-size: 11px;
+	font-weight: 400;
 }
 
-.content-container:last-child {
-	padding: 20px 0px;
-	padding-bottom: 0px;
+.creators {
+	color: var(--color-text-primary);
+	font-size: 11px;
 }
 
 .sub-heading {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background: var(--color-bg-elevated-12);
+	color: var(--color-theme-primary);
+	font-size: 16px;
+	font-weight: 500;
+	text-transform: uppercase;
+	padding: 16px 25px;
+}
+
+.content-container {
+	padding: 15px 40px;
+}
+
+.option {
+	padding-bottom: 25px;
+}
+
+.option-heading {
+	display: flex;
+	align-items: center;
 	color: var(--color-text-primary);
 	font-size: 13px;
 	font-weight: 600;
 	text-align: start;
 }
 
-.info {
-	color: var(--color-text-secondary);
-	font-size: 12px;
-	font-style: italic;
-	font-weight: 400;
+.option-helper {
+	fill: #fff;
+	width: 10px;
+	height: 10px;
+	padding: 1px;
+	margin-left: 5px;
+	border: 1px solid #fff;
+	border-radius: 50%;
 }
 
-#FACE-M-creators {
-	color: var(--color-text-primary);
-	font-size: 13px;
+.option-content {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
-#FACE-M-button-group > .FACE-M-toggle:first-child {
+.option-text {
+	display: inline-block;
+}
+
+.option-action {
+	display: flex;
+	justify-content: flex-end;
+	min-width: 75px;
+	max-width: 75px;
+	padding-left: 10px;
+}
+
+#button-edit-group {
+	padding: 7px 0px;
+}
+
+#button-edit-group > .toggle-btn:first-child {
 	border-radius: 4px 0 0 4px;
 }
 
-#FACE-M-button-group > .FACE-M-toggle:last-child {
+#button-edit-group > .toggle-btn:last-child {
 	border-radius: 0 4px 4px 0;
 }
 
-.FACE-M-toggle {
+.toggle-btn {
 	background: var(--color-bg-secondary);
 	border: 1px solid #303030;
 	color: var(--color-text-secondary);
@@ -78,21 +122,16 @@ body {
 	transition: background 100ms;
 }
 
-.FACE-M-toggle:hover:not(.FACE-M-toggle-active) {
+.toggle-btn:hover:not(.toggle-btn-active) {
 	background: #282828;
 }
 
-.FACE-M-toggle-active {
+.toggle-btn-active {
 	background: #303030;
 	color: var(--color-text-primary);
 }
 
-.FACE-M-form-div {
-	display: flex;
-	justify-content: flex-start;
-}
-
-#FACE-M-input {
+#form-input {
 	background: var(--color-bg-secondary);
 	border: 0px;
 	border-bottom: 1px solid var(--color-text-primary);
@@ -104,45 +143,35 @@ body {
 	width: 60px;
 }
 
-#FACE-M-input:disabled {
+#form-input:disabled {
 	background: var(--color-bg-secondary);
 	border-bottom: 1px solid var(--color-text-secondary);
 }
 
-#FACE-M-input:disabled::placeholder {
+#form-input:disabled::placeholder {
 	color: var(--color-text-secondary);
 }
 
-#FACE-M-input::placeholder {
+#form-input::placeholder {
 	color: var(--color-text-primary);
 }
 
-#FACE-M-select {
+#form-select {
 	background: var(--color-bg-secondary);
 	border: 0px;
 	color: var(--color-text-primary);
 	height: 29px;
 	font-size: 13px;
-	margin-right: 10px;
 	width: 70px;
 }
 
-.FACE-M-form-desc {
+.option-desc {
 	color: var(--color-text-secondary);
 	font-size: 11px;
 	font-weight: 400;
-	padding-right: 20px;
-	text-align: start;
 }
 
-.FACE-M-form-desc-disabled {
-	color: var(--color-text-secondary);
-	font-size: 11px;
-	font-weight: 700;
-	text-align: start;
-}
-
-.FACE-M-submit-btn {
+.form-submit-btn {
 	background: var(--color-theme-primary);
 	border: 0px;
 	border-radius: 2px;
@@ -151,51 +180,47 @@ body {
 	font-size: 12px;
 	font-weight: 600;
 	height: 28px;
-	margin-left: auto;
-	margin-right: 0;
 	min-width: 75px;
 	text-transform: uppercase;
 	transition: background 100ms;
 }
 
-.FACE-M-submit-btn:hover:not(:disabled) {
+.form-submit-btn:hover:not(:disabled) {
 	background: #ff5500b3;
 }
 
-.FACE-M-submit-btn:active:not(:disabled) {
+.form-submit-btn:active:not(:disabled) {
 	background: #f87b3d8b;
 }
 
-.FACE-M-submit-btn:disabled {
+.form-submit-btn:disabled {
 	background: var(--color-button-disabled);
 	color: var(--color-text-secondary);
 	cursor: auto;
 }
 
-.FACE-M-form-switch {
+.toggle {
 	display: inline-block;
 	height: 10px;
-	margin-left: auto;
-	margin-right: 0;
 	min-width: 35px;
 	position: relative;
 	width: 25px;
 }
 
-#FACE-M-form-switch-input {
+.toggle-switch-input {
 	display: none;
 }
 
-#FACE-M-form-switch-input:checked + .FACE-M-form-switch-span {
+.toggle-switch-input:checked + .toggle-span {
 	background: #fea3756c;
 }
 
-#FACE-M-form-switch-input:checked + .FACE-M-form-switch-span:before {
+.toggle-switch-input:checked + .toggle-span:before {
 	background: var(--color-theme-primary);
 	transform: translate(18px, 0);
 }
 
-.FACE-M-form-switch-span {
+.toggle-span {
 	background: var(--color-text-secondary);
 	border-radius: 28px;
 	bottom: 0;
@@ -209,7 +234,7 @@ body {
 	width: 100%;
 }
 
-.FACE-M-form-switch-span:before {
+.toggle-span:before {
 	background: var(--color-text-primary);
 	border-radius: 100%;
 	bottom: -5px;
@@ -222,7 +247,7 @@ body {
 	width: 20px;
 }
 
-.FACE-M-form-color-picker {
+.form-color-picker {
 	border: none;
 	display: block;
 	height: 100%;
@@ -230,17 +255,11 @@ body {
 	width: 30px;
 }
 
-#FACE-M-form-color-picker-wrapper1 {
-	margin-left: auto;
-	margin-right: 0;
-}
-
-#FACE-M-form-color-picker-wrapper2 {
+#form-color-picker-wrapper2 {
 	margin-left: 7px;
-	margin-right: 0;
 }
 
-.FACE-M-feedback {
+.feedback {
 	align-items: center;
 	animation: fadeIn 0.25s;
 	background: rgb(0, 153, 51);

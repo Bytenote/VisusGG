@@ -2,7 +2,6 @@ import {
 	DEFAULT_COLORS,
 	DEFAULT_COMPARE_MODE,
 	DEFAULT_TOGGLES,
-	EXTENSION_NAME,
 } from '../../shared/constants';
 import {
 	getSyncStorage,
@@ -35,16 +34,16 @@ export const submitHandler = async (e) => {
 	}
 };
 
-export const switchSubmitter = async (e) => {
-	const formElem = document.querySelector(`#${EXTENSION_NAME}-form`);
+export const switchSubmitter = async (e, storageKey) => {
+	const formElem = document.querySelector('#form');
 
-	await setStorage('usesCompareMode', e.target.checked);
+	await setStorage(storageKey, e.target.checked);
 
 	displaySnackbar(formElem, 'Success');
 };
 
 export const colorPickerSubmitter = async (e) => {
-	const formElem = document.querySelector(`#${EXTENSION_NAME}-form`);
+	const formElem = document.querySelector('#form');
 	const updatedColors = getUpdatedColors(e.target, e.target.value);
 
 	await setStorage('colors', updatedColors);
@@ -55,9 +54,8 @@ export const colorPickerSubmitter = async (e) => {
 
 const timeFrameSubmitter = async (input, select) => {
 	const toggles = getSyncStorage('toggles');
-	const activeLabel = document.querySelector(
-		`.${EXTENSION_NAME}-toggle-active`
-	)?.textContent;
+	const activeLabel =
+		document.querySelector('.toggle-btn-active')?.textContent;
 
 	const toggleIndex = toggles.findIndex(
 		(toggle) => toggle.label === activeLabel

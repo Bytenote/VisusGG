@@ -7,7 +7,7 @@ export const getCreatorProfile = (path = location.pathname) => {
 };
 
 export const getBannerRoot = () =>
-	document.querySelector('parasite-player-banner')?.shadowRoot;
+	document.querySelector('parasite-player-banner');
 
 export const getBanner = (root) =>
 	root.querySelector('h5[size="5"]')?.parentElement?.parentElement;

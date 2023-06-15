@@ -1,5 +1,5 @@
 import Coloris from '@melloware/coloris';
-import { convertRGBToHexColor } from '../../shared/colorConverter';
+import { convertRGBToHexColor } from '../../shared/helpers/colorConverter';
 import { getSyncStorage } from '../../shared/storage';
 import { setColorPickerValue } from '../components/colorPicker';
 import {

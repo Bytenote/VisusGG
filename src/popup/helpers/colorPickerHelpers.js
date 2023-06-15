@@ -1,5 +1,4 @@
-import { convertHexToRGBColor } from '../../shared/colorConverter';
-import { EXTENSION_NAME } from '../../shared/constants';
+import { convertHexToRGBColor } from '../../shared/helpers/colorConverter';
 import { getSyncStorage } from '../../shared/storage';
 import { setColorPickerValue } from '../components/colorPicker';
 
@@ -17,8 +16,8 @@ export const getUpdatedColors = (elem, newColor) => {
 };
 
 export const getColorPickerElements = () => [
-	document.querySelector(`#${EXTENSION_NAME}-form-picker1`),
-	document.querySelector(`#${EXTENSION_NAME}-form-picker2`),
+	document.querySelector('#form-picker1'),
+	document.querySelector('#form-picker2'),
 ];
 
 export const colorPickerInputHandler = (e) =>

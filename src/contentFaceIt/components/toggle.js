@@ -1,6 +1,6 @@
 import { EXTENSION_NAME } from '../../shared/constants';
 import { addMapStats } from '../features/addMapStats';
-import { getMatchInfo } from '../helpers/api';
+import { getMatchInfo } from '../../shared/helpers/api';
 import { getSyncStorage, setSyncStorage } from '../../shared/storage';
 import { getMatchRoomRoot, getRoomId } from '../helpers/matchroom';
 
@@ -25,7 +25,10 @@ const createButton = (label, maxAge) => {
 	const button = document.createElement('button');
 
 	button.classList.add(`${EXTENSION_NAME}-toggle`);
-	button.addEventListener('click', (e) => clickHandler(e, maxAge));
+
+	const onClick = (e) => clickHandler(e, maxAge);
+	button.removeEventListener('click', onClick);
+	button.addEventListener('click', onClick);
 
 	button.textContent = label;
 

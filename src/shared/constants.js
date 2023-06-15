@@ -1,12 +1,15 @@
 export const CACHE_TIME = 1000 * 60 * 7;
+export const CREATOR_STEAM_IDS = ['76561197985066751', '76561198119651364'];
 export const CREATORS = ['MrMaxim', 'x3picF4ilx'];
-export const EXTENSION_NAME = 'FACE-M';
+export const EXTENSION_NAME = 'VisusGG';
 export const DEFAULT_AGE = 1000 * 60 * 60 * 24 * 7;
-export const DEFAULT_COMPARE_MODE = false;
 export const DEFAULT_COLORS = {
 	cVal1: '230, 0, 0',
 	cVal2: '0, 153, 51',
 };
+export const DEFAULT_COMPARE_MODE = false;
+export const DEFAULT_FACEIT = true;
+export const DEFAULT_STEAM = true;
 export const DEFAULT_TOGGLES = [
 	{
 		label: '2d',
@@ -34,5 +37,11 @@ export const DEFAULT_STORAGE = [
 	{ key: 'timeFrame', value: DEFAULT_AGE },
 	{ key: 'toggles', value: DEFAULT_TOGGLES },
 	{ key: 'usesCompareMode', value: DEFAULT_COMPARE_MODE },
+	{ key: 'usesFaceIt', value: DEFAULT_FACEIT },
+	{ key: 'usesSteam', value: DEFAULT_STEAM },
 	{ key: 'colors', value: DEFAULT_COLORS },
 ];
+export const OBSERVER_OPTIONS = {
+	childList: true,
+	subtree: true,
+};

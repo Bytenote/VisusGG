@@ -1,32 +1,42 @@
-# FACE-M
+# VisusGG (formerly FACE-M)
 
-FACE-M is a browser extension created by x3picF4ilx (Bytenote) & MrMaxim that shows map stats of your opponents for current and past FACEIT matches.  
-You can also activate the "Compare Mode" to get statistics of your own team.
+VisusGG is a browser extension created by x3picF4ilx (Bytenote) & MrMaxim that is designed to improve the user experience around FACEIT's platform, by providing valuable insights into player and map statistics.
 
-By hovering over the win percentage you will see individual player performance numbers in a popup.
+## Features
 
-# Features
+### FACEIT
 
--   See opponents win percentage (%) during map selection
+This extension shows the win rates of your opponents, as well as of your teammates, on a per map basis for different time periods.
+Hovering over the win percentages will display the individual player performance numbers of the accumulated team stats, thus offering a deeper understanding of each player's preferences and overall contributions.
+
+-   See opponents win percentages during map selection
 -   Toggle compare mode to see statistics for both teams
 -   Switch between time frames or create custom ones
--   Useable for all game modes, HUBs & Queues
--   Customize the win percentage (%) colors
+-   Compatible with all game modes, HUBs & Queues
+-   Customize the win percentage colors
 -   Check past games
 
-# Download
+## Steam
+
+With the release of v2.0.0, VisusGG now showcases FACEIT account details directly on Steam profiles, giving its users a convenient way to assess both their own and others' FACEIT stats without the need to manually search for them in a new tab.
+
+-   View FACEIT stats on Steam profiles
+-   Check account status and creation date
+-   Compatible with private Steam profiles
+
+## Download
 
 Get the extension from here:
 
--   [Chrome & Edge](https://chrome.google.com/webstore/detail/face-m/kodlabmmaalpolkfolgpahbjehalecki)
--   [Firefox](https://addons.mozilla.org/en-US/firefox/addon/face-m)
+-   [Chrome & Edge](https://chrome.google.com/webstore/detail/visusgg/kodlabmmaalpolkfolgpahbjehalecki)
+-   [Firefox](https://addons.mozilla.org/en-US/firefox/addon/visusgg)
 
-# Build from source
+## Build from source
 
 ###### Cloning
 
 ```bash
-$ git clone https://github.com/Bytenote/FACE-M.git
+$ git clone https://github.com/Bytenote/VisusGG.git
 ```
 
 ###### Installation

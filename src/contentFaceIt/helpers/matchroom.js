@@ -7,7 +7,7 @@ export const getRoomId = (path = location.pathname) =>
 	)?.[1] || null;
 
 export const getMatchRoomRoot = () =>
-	document.getElementById('parasite-container')?.shadowRoot;
+	document.querySelector('#parasite-container');
 
 export const getMapElements = (matchRoomElem, matchRoomId, matchRoomMaps) => {
 	const mapElementsParent = getMapElementsParent(matchRoomElem);
@@ -51,8 +51,9 @@ export const getToggleGroup = (parent) =>
 
 const getMapElementsParent = (matchRoomElem) => {
 	const miscElem = matchRoomElem.querySelector(
-		"div > div[name='info'] > div > div"
+		"div > div[name='info'] > div > div > div"
 	);
+
 	const miscElem2 =
 		miscElem?.children?.[2]?.nodeName?.toLowerCase() === 'div'
 			? miscElem.children[2]

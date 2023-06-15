@@ -13,7 +13,20 @@ const options = {
 	mode: NODE_ENV,
 	entry: {
 		background: path.join(__dirname, '..', 'src', 'background', 'index.js'),
-		content: path.join(__dirname, '..', 'src', 'content', 'index.js'),
+		contentFaceIt: path.join(
+			__dirname,
+			'..',
+			'src',
+			'contentFaceIt',
+			'index.js'
+		),
+		contentSteam: path.join(
+			__dirname,
+			'..',
+			'src',
+			'contentSteam',
+			'index.js'
+		),
 		popup: path.join(__dirname, '..', 'src', 'popup', 'index.js'),
 	},
 	output: {
@@ -66,6 +79,22 @@ const options = {
 					to: path.join(__dirname, '..', 'build'),
 					force: true,
 				},
+				{
+					from: path.join(__dirname, '..', 'src', 'assets', 'imgs'),
+					to: path.join(__dirname, '..', 'build', 'imgs'),
+					force: true,
+				},
+				{
+					from: path.join(
+						__dirname,
+						'..',
+						'src',
+						'contentSteam',
+						'contentSteam.css'
+					),
+					to: path.join(__dirname, '..', 'build'),
+					force: true,
+				},
 			],
 		}),
 		new HtmlWebpackPlugin({
@@ -103,6 +132,19 @@ function convertManifestV3ToFirefoxV2(manifest) {
 		all_frames: false,
 	};
 	manifest['browser_action'] = manifest.action;
+	manifest.web_accessible_resources = [
+		'imgs/f00.png',
+		'imgs/f01.png',
+		'imgs/f02.png',
+		'imgs/f03.png',
+		'imgs/f04.png',
+		'imgs/f05.png',
+		'imgs/f06.png',
+		'imgs/f07.png',
+		'imgs/f08.png',
+		'imgs/f09.png',
+		'imgs/f10.png',
+	];
 	manifest.permissions = [
 		...manifest.permissions,
 		...manifest.host_permissions,
