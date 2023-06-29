@@ -53,7 +53,6 @@ const getMapElementsParent = (matchRoomElem) => {
 	const miscElem = matchRoomElem.querySelector(
 		"div > div[name='info'] > div > div > div"
 	);
-
 	const miscElem2 =
 		miscElem?.children?.[2]?.nodeName?.toLowerCase() === 'div'
 			? miscElem.children[2]
