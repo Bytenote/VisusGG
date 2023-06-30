@@ -45,7 +45,7 @@ export const getStats = async (steamId) => {
 					status
 				);
 				playerInfo.createdAt = getAccountCreationDate(
-					stats?.lifetime?.created_at ?? profile?.created_at
+					profile?.created_at ?? stats?.lifetime?.created_at
 				);
 				playerInfo.description = getAccountDescription(
 					playerInfo.membership,

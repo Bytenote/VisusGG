@@ -16,7 +16,7 @@ Hovering over the win percentages will display the individual player performance
 -   Customize the win percentage colors
 -   Check past games
 
-## Steam
+### Steam
 
 With the release of v2.0.0, VisusGG now showcases FACEIT account details directly on Steam profiles, giving its users a convenient way to assess both their own and others' FACEIT stats without the need to manually search for them in a new tab.
 
