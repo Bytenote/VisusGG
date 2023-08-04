@@ -13,15 +13,7 @@ export const getStats = async (steamId) => {
 
 		if (account) {
 			const { country, guid, id, nickname, status, verified } =
-				(account.players?.results ?? []).find((player) =>
-					(player.games ?? []).some((game) => {
-						if (game.name === 'csgo') {
-							playerInfo.level = game.skill_level;
-
-							return true;
-						}
-					})
-				) ?? {};
+				getHighestSkillLevelAccount(account, playerInfo);
 
 			if (guid || id) {
 				const statsPromise = getLifeTimeStats(guid || id);
@@ -77,6 +69,45 @@ export const getStats = async (steamId) => {
 
 		return {};
 	}
+};
+
+const getHighestSkillLevelAccount = (account, playerInfo) => {
+	const results = account.players?.results ?? [];
+
+	if (results.length <= 1) {
+		const games = results[0]?.games ?? [];
+		for (const game of games) {
+			if (game.name === 'csgo') {
+				playerInfo.level = game.skill_level;
+
+				break;
+			}
+		}
+
+		return results[0] ?? {};
+	}
+
+	return (
+		(account.players?.results ?? []).reduce((prev, curr) => {
+			const curr_skill_level = (curr.games ?? []).find(
+				(game) => game.name === 'csgo'
+			)?.skill_level;
+
+			const prev_skill_level = (prev.games ?? []).find(
+				(game) => game.name === 'csgo'
+			)?.skill_level;
+
+			if (curr_skill_level > prev_skill_level) {
+				playerInfo.level = curr_skill_level;
+
+				return curr;
+			} else {
+				playerInfo.level = prev_skill_level;
+
+				return prev;
+			}
+		}) ?? {}
+	);
 };
 
 const capitalize = (str) => {
