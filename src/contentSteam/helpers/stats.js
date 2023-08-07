@@ -97,6 +97,17 @@ const getHighestSkillLevelAccount = (account, playerInfo) => {
 				(game) => game.name === 'csgo'
 			)?.skill_level;
 
+			if (!curr_skill_level) {
+				playerInfo.level = prev_skill_level;
+
+				return prev;
+			}
+			if (!prev_skill_level) {
+				playerInfo.level = curr_skill_level;
+
+				return curr;
+			}
+
 			if (curr_skill_level > prev_skill_level) {
 				playerInfo.level = curr_skill_level;
 

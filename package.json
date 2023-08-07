@@ -1,6 +1,6 @@
 {
 	"name": "visusgg",
-	"version": "2.0.2",
+	"version": "2.0.3",
 	"description": "Browser extension aiming to improve the user experience by providing additional stats around the FACEIT platform.",
 	"scripts": {
 		"build": "cross-env NODE_ENV=production node webpack/build.js",
