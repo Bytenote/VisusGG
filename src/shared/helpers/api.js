@@ -8,23 +8,23 @@ export const getMatchInfo = (matchId) =>
 export const getLifeTimeStats = (playerId, roomId) => {
 	if (Array.isArray(playerId)) {
 		return fetchAPIMemoized(
-			`/stats/v1/stats/users/lifetime?match_id=${roomId}&game=csgo&player_ids=${playerId.join(
+			`/stats/v1/stats/users/lifetime?match_id=${roomId}&game=cs2&player_ids=${playerId.join(
 				'&player_ids='
 			)}`
 		);
 	}
 
-	return fetchAPIMemoized(`/stats/v1/stats/users/${playerId}/games/csgo`);
+	return fetchAPIMemoized(`/stats/v1/stats/users/${playerId}/games/cs2`);
 };
 
 export const getPlayerMatches = (playerId, size = 100) =>
 	fetchAPIMemoized(
-		`/stats/v1/stats/time/users/${playerId}/games/csgo?size=${size}`
+		`/stats/v1/stats/time/users/${playerId}/games/cs2?size=${size}`
 	);
 
 export const getPlayerHistory = (playerId, from, to) => {
 	return fetchAPIMemoized(
-		`/data/v4/players/${playerId}/history?game=csgo&from=${from}&to=${to}&limit=100`
+		`/data/v4/players/${playerId}/history?game=cs2&from=${from}&to=${to}&limit=100`
 	);
 };
 

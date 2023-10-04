@@ -31,7 +31,7 @@ export const getStats = async (steamId) => {
 				playerInfo.matches = stats?.lifetime?.m1 ?? '-';
 				playerInfo.wins = stats?.lifetime?.m2 ?? '-';
 
-				playerInfo.elo = profile?.games?.csgo?.faceit_elo ?? '-';
+				playerInfo.elo = profile?.games?.cs2?.faceit_elo ?? '-';
 				playerInfo.membership = getMembershipStatus(
 					profile?.memberships,
 					status
@@ -77,7 +77,7 @@ const getHighestSkillLevelAccount = (account, playerInfo) => {
 	if (results.length <= 1) {
 		const games = results[0]?.games ?? [];
 		for (const game of games) {
-			if (game.name === 'csgo') {
+			if (game.name === 'cs2') {
 				playerInfo.level = game.skill_level;
 
 				break;
@@ -90,11 +90,11 @@ const getHighestSkillLevelAccount = (account, playerInfo) => {
 	return (
 		(account.players?.results ?? []).reduce((prev, curr) => {
 			const curr_skill_level = (curr.games ?? []).find(
-				(game) => game.name === 'csgo'
+				(game) => game.name === 'cs2'
 			)?.skill_level;
 
 			const prev_skill_level = (prev.games ?? []).find(
-				(game) => game.name === 'csgo'
+				(game) => game.name === 'cs2'
 			)?.skill_level;
 
 			if (!curr_skill_level) {
@@ -134,7 +134,7 @@ const getMembershipStatus = (membership, status) => {
 		return 'Deactivated';
 	}
 
-	const premiumMemberShips = ['csgo', 'premium'];
+	const premiumMemberShips = ['cs2', 'premium'];
 	return membership.some((membership) =>
 		premiumMemberShips.includes(membership)
 	)
