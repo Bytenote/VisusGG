@@ -59,6 +59,16 @@ body {
 	padding: 15px 40px;
 }
 
+.feature-helper {
+	fill: var(--color-theme-primary);
+	width: 10px;
+	height: 10px;
+	padding: 1px;
+	margin-left: 5px;
+	border: 1px solid var(--color-theme-primary);
+	border-radius: 50%;
+}
+
 .option {
 	padding-bottom: 25px;
 }
