@@ -5,26 +5,26 @@ import { CACHE_TIME } from '../constants';
 export const getMatchInfo = (matchId) =>
 	fetchAPIMemoized(`/match/v2/match/${matchId}`);
 
-export const getLifeTimeStats = (playerId, roomId) => {
+export const getLifeTimeStats = (game, playerId, roomId) => {
 	if (Array.isArray(playerId)) {
 		return fetchAPIMemoized(
-			`/stats/v1/stats/users/lifetime?match_id=${roomId}&game=csgo&player_ids=${playerId.join(
+			`/stats/v1/stats/users/lifetime?match_id=${roomId}&game=${game}&player_ids=${playerId.join(
 				'&player_ids='
 			)}`
 		);
 	}
 
-	return fetchAPIMemoized(`/stats/v1/stats/users/${playerId}/games/csgo`);
+	return fetchAPIMemoized(`/stats/v1/stats/users/${playerId}/games/${game}`);
 };
 
-export const getPlayerMatches = (playerId, size = 100) =>
+export const getPlayerMatches = (game, playerId, size = 100) =>
 	fetchAPIMemoized(
-		`/stats/v1/stats/time/users/${playerId}/games/csgo?size=${size}`
+		`/stats/v1/stats/time/users/${playerId}/games/${game}?size=${size}`
 	);
 
-export const getPlayerHistory = (playerId, from, to) => {
+export const getPlayerHistory = (game, playerId, from, to) => {
 	return fetchAPIMemoized(
-		`/data/v4/players/${playerId}/history?game=csgo&from=${from}&to=${to}&limit=100`
+		`/data/v4/players/${playerId}/history?game=${game}&from=${from}&to=${to}&limit=100`
 	);
 };
 

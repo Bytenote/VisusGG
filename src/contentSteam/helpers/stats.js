@@ -16,20 +16,41 @@ export const getStats = async (steamId) => {
 				getHighestSkillLevelAccount(account, playerInfo);
 
 			if (guid || id) {
-				const statsPromise = getLifeTimeStats(guid || id);
+				const csgoStatsPromise = getLifeTimeStats('csgo', guid || id);
+				const cs2StatsPromise = getLifeTimeStats('cs2', guid || id);
 				const banPromise = getPlayerBans(guid || id);
 				const profilePromise = getPlayerInfo(nickname);
-				const matchesPromise = getPlayerMatches(guid || id, 20);
+				const csgoMatchesPromise = getPlayerMatches(
+					'csgo',
+					guid || id,
+					20
+				);
+				const cs2MatchesPromise = getPlayerMatches(
+					'cs2',
+					guid || id,
+					20
+				);
 
-				const [stats, bans, profile, matches] = await Promise.all([
-					statsPromise,
+				const [
+					csgoStats,
+					cs2Stats,
+					bans,
+					profile,
+					csgoMatches,
+					cs2Matches,
+				] = await Promise.all([
+					csgoStatsPromise,
+					cs2StatsPromise,
 					banPromise,
 					profilePromise,
-					matchesPromise,
+					csgoMatchesPromise,
+					cs2MatchesPromise,
 				]);
 
-				playerInfo.matches = stats?.lifetime?.m1 ?? '-';
-				playerInfo.wins = stats?.lifetime?.m2 ?? '-';
+				playerInfo.matches =
+					cs2Stats?.lifetime?.m1 ?? csgoStats?.lifetime?.m1 ?? '-';
+				playerInfo.wins =
+					cs2Stats?.lifetime?.m2 ?? csgoStats?.lifetime?.m2 ?? '-';
 
 				playerInfo.elo = profile?.games?.csgo?.faceit_elo ?? '-';
 				playerInfo.membership = getMembershipStatus(
@@ -37,7 +58,9 @@ export const getStats = async (steamId) => {
 					status
 				);
 				playerInfo.createdAt = getAccountCreationDate(
-					profile?.created_at ?? stats?.lifetime?.created_at
+					profile?.created_at ??
+						cs2Stats?.lifetime?.created_at ??
+						csgoStats?.lifetime?.created_at
 				);
 				playerInfo.description = getAccountDescription(
 					playerInfo.membership,
@@ -47,7 +70,9 @@ export const getStats = async (steamId) => {
 					playerInfo.banReason = bans[0].reason?.toLowerCase();
 				}
 
-				const avgStats = getAverageStats(matches);
+				const lastMatches = getLast20Matches(csgoMatches, cs2Matches);
+				const avgStats = getAverageStats(lastMatches);
+
 				playerInfo.avgKD = avgStats.avgKillsPerDeath ?? '-';
 				playerInfo.avgKills = avgStats.avgKills ?? '-';
 				playerInfo.avgKR = avgStats.avgKillsPerRound ?? '-';
@@ -73,57 +98,32 @@ export const getStats = async (steamId) => {
 
 const getHighestSkillLevelAccount = (account, playerInfo) => {
 	const results = account.players?.results ?? [];
+	let highestSkillLevel = -1;
+	let highestSkillLevelAccount = {};
 
-	if (results.length <= 1) {
-		const games = results[0]?.games ?? [];
-		for (const game of games) {
-			if (game.name === 'csgo') {
-				playerInfo.level = game.skill_level;
+	for (const result of results) {
+		const csgoResults = (result.games ?? []).find(
+			(game) => game.name === 'csgo'
+		);
+		const cs2Results = (result.games ?? []).find(
+			(game) => game.name === 'cs2'
+		);
 
-				break;
-			}
+		const skillLevel =
+			cs2Results?.skill_level || csgoResults?.skill_level || -1;
+
+		if (skillLevel > highestSkillLevel) {
+			highestSkillLevel = skillLevel;
+			highestSkillLevelAccount = result;
 		}
-
-		return results[0] ?? {};
 	}
 
-	return (
-		(account.players?.results ?? []).reduce((prev, curr) => {
-			const curr_skill_level = (curr.games ?? []).find(
-				(game) => game.name === 'csgo'
-			)?.skill_level;
+	playerInfo.level = highestSkillLevel;
 
-			const prev_skill_level = (prev.games ?? []).find(
-				(game) => game.name === 'csgo'
-			)?.skill_level;
-
-			if (!curr_skill_level) {
-				playerInfo.level = prev_skill_level;
-
-				return prev;
-			}
-			if (!prev_skill_level) {
-				playerInfo.level = curr_skill_level;
-
-				return curr;
-			}
-
-			if (curr_skill_level > prev_skill_level) {
-				playerInfo.level = curr_skill_level;
-
-				return curr;
-			} else {
-				playerInfo.level = prev_skill_level;
-
-				return prev;
-			}
-		}) ?? {}
-	);
+	return highestSkillLevelAccount;
 };
 
-const capitalize = (str) => {
-	return str.charAt(0).toUpperCase() + str.slice(1);
-};
+const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 
 const getMembershipStatus = (membership, status) => {
 	if (status === 'banned') {
@@ -134,7 +134,7 @@ const getMembershipStatus = (membership, status) => {
 		return 'Deactivated';
 	}
 
-	const premiumMemberShips = ['csgo', 'premium'];
+	const premiumMemberShips = ['csgo', 'cs2', 'premium'];
 	return membership.some((membership) =>
 		premiumMemberShips.includes(membership)
 	)
@@ -162,9 +162,15 @@ const getAccountDescription = (membership, createdAt) => {
 	return `${membership} (${createdAt})`;
 };
 
-const getAverageStats = (matches = []) => {
-	let matchAmount = 0;
+const getLast20Matches = (csgoMatches = [], cs2Matches = []) =>
+	cs2Matches.length > 0 &&
+	cs2Matches.find((match) => match?.gameMode.includes('5v5'))
+		? cs2Matches
+		: csgoMatches;
+
+const getAverageStats = (matches) => {
 	const avgStats = {};
+	let matchAmount = 0;
 
 	const totalStats = matches.reduce(
 		(acc, curr) => {

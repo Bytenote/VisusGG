@@ -132,8 +132,10 @@ const getPlayerStatsPromisesDependingOnMode = (
 	usesCompareMode
 ) =>
 	usesCompareMode
-		? [...opponents, ...teammates].map(({ id }) => getPlayerMatches(id))
-		: opponents.map(({ id }) => getPlayerMatches(id));
+		? [...opponents, ...teammates].map(({ id }) =>
+				getPlayerMatches('cs2', id)
+		  )
+		: opponents.map(({ id }) => getPlayerMatches('cs2', id));
 
 const getTeamStats = (playersStats, opponents, matchInfo) => {
 	const teamStats = {};
