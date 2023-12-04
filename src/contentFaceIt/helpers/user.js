@@ -28,4 +28,4 @@ export const getCurrentUserId = () => {
 	return null;
 };
 
-export const isLoggedIn = () => !!localStorage.getItem('token');
+export const isLoggedIn = () => document.cookie.includes(' t=');
