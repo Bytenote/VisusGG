@@ -7,10 +7,23 @@ export const getCreatorProfile = (path = location.pathname) => {
 };
 
 export const getBannerRoot = () =>
-	document.querySelector('parasite-player-banner');
+	document.querySelector('.modal-content parasite-player-profile') ||
+	document.querySelector('#parasite-container');
 
-export const getBanner = (root) =>
-	root.querySelector('h5[size="5"]')?.parentElement?.parentElement;
+export const getBanner = (root) => {
+	const hasAvatar = !!(
+		root.querySelector('i[data-testid="avatar"]') ||
+		root.querySelector('img[aria-label="avatar"]')
+	);
+	if (hasAvatar) {
+		const playerName =
+			root.querySelector('h5[size="5"]')?.parentElement?.parentElement;
+
+		return playerName;
+	}
+
+	return null;
+};
 
 export const hasCreatorElement = (bannerElem) =>
 	!!bannerElem.querySelector(`#${EXTENSION_NAME}-badge`);
