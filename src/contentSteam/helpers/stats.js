@@ -52,7 +52,10 @@ export const getStats = async (steamId) => {
 				playerInfo.wins =
 					cs2Stats?.lifetime?.m2 ?? csgoStats?.lifetime?.m2 ?? '-';
 
-				playerInfo.elo = profile?.games?.csgo?.faceit_elo ?? '-';
+				playerInfo.elo =
+					profile?.games?.cs2?.faceit_elo ??
+					profile?.games?.csgo?.faceit_elo ??
+					'-';
 				playerInfo.membership = getMembershipStatus(
 					profile?.memberships,
 					status
@@ -134,7 +137,7 @@ const getMembershipStatus = (membership, status) => {
 		return 'Deactivated';
 	}
 
-	const premiumMemberShips = ['csgo', 'cs2', 'premium'];
+	const premiumMemberShips = ['cs2', 'csgo', 'plus', 'premium'];
 	return membership.some((membership) =>
 		premiumMemberShips.includes(membership)
 	)
