@@ -1,5 +1,5 @@
 import { getSyncStorage } from '../../shared/storage';
-import { createStatsContainer, updateStats } from '../components/stats';
+import { createStatsContainer, hydrateStats } from '../components/stats';
 import {
 	getExtensionContainer,
 	getSteamId,
@@ -19,7 +19,7 @@ export const addFaceItStats = async () => {
 		}
 
 		const steamId = getSteamId();
-		const stats = await getStats(steamId);
-		updateStats(stats);
+		const { stats, selectedGame } = await getStats(steamId);
+		hydrateStats(stats, selectedGame);
 	}
 };

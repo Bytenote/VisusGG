@@ -9,32 +9,58 @@ export const getRoomId = (path = location.pathname) =>
 export const getMatchRoomRoot = () =>
 	document.querySelector('#parasite-container');
 
-export const getMapElements = (matchRoomElem, matchRoomId, matchRoomMaps) => {
-	const mapElementsParent = getMapElementsParent(matchRoomElem);
+export const getMapElements = (
+	matchRoomElem,
+	matchRoomId,
+	matchRoomMaps = []
+) => {
+	const mapDict = getMapDictMemoized(matchRoomId, matchRoomMaps);
+	const matchRoomInfoColumn = matchRoomElem.querySelector(
+		"div > div[name='info']"
+	);
 
-	if (mapElementsParent) {
-		const mapElements = [...mapElementsParent.children].reduce(
-			(acc, curr) => {
-				if (
-					!curr.getAttribute('id', `${EXTENSION_NAME}-button-group`)
-				) {
-					const mapName = getMapNameFromElement(
-						curr,
-						matchRoomId,
-						matchRoomMaps
-					);
-					if (mapName) {
-						acc.push({
-							mapElem: curr,
-							mapName,
-						});
-					}
+	const matchRoomContainer = matchRoomInfoColumn ?? matchRoomElem;
+	if (!!matchRoomContainer) {
+		const endSlotElems =
+			matchRoomContainer?.querySelectorAll('div.endSlot');
+		const mapElements = [...endSlotElems].reduce((acc, curr) => {
+			if (
+				curr?.parentElement.querySelector('div.startSlot') &&
+				curr.parentElement.querySelector('div.middleSlot')
+			) {
+				const mapName = getMapNameFromElement(
+					curr.parentElement.querySelector('div.middleSlot'),
+					mapDict
+				);
+				if (mapName) {
+					acc.push({
+						mapElem: curr.parentElement?.parentElement,
+						mapName,
+					});
 				}
 
 				return acc;
-			},
-			[]
-		);
+			}
+		}, []);
+
+		if (mapElements.length === 0) {
+			for (const map of matchRoomMaps) {
+				const mapElem =
+					matchRoomElem.querySelector(`div[src="${map.image_sm}"]`)
+						?.parentElement?.parentElement?.parentElement ??
+					matchRoomElem.querySelector(`div[src="${map.image_lg}"]`)
+						?.parentElement?.parentElement?.parentElement;
+
+				if (mapElem) {
+					const mapName = checkParentForMapName(mapElem, mapDict);
+
+					mapElements.push({
+						mapElem,
+						mapName,
+					});
+				}
+			}
+		}
 
 		return mapElements;
 	}
@@ -49,42 +75,28 @@ export const hasToggleElements = (parent) =>
 export const getToggleGroup = (parent) =>
 	parent.querySelector(`#${EXTENSION_NAME}-button-group`);
 
-const getMapElementsParent = (matchRoomElem) => {
-	const miscElem = matchRoomElem.querySelector(
-		"div > div[name='info'] > div > div > div"
-	);
-	const miscElem2 =
-		miscElem?.children?.[2]?.nodeName?.toLowerCase() === 'div'
-			? miscElem.children[2]
-			: miscElem?.querySelector('div');
-	const parent =
-		miscElem2?.children?.length > 1
-			? miscElem2
-			: miscElem2?.querySelector('div');
-
-	return parent;
+const getMapNameFromElement = (element, mapDict) => {
+	const mapNames = mapDict[element.textContent.trim()];
+	if (mapNames) {
+		return (
+			mapNames.class_name ||
+			mapNames.name ||
+			mapNames.guid ||
+			mapNames.game_map_id
+		);
+	}
 };
 
-const getMapNameFromElement = (element, matchRoomId, matchRoomMaps) => {
-	const elemChildren = element?.children;
-	if (elemChildren) {
-		const mapDict = getMapDictMemoized(matchRoomId, matchRoomMaps);
+const checkParentForMapName = (parent, mapDict) => {
+	const mapName = getMapNameFromElement(parent, mapDict);
+	if (mapName) {
+		return mapName;
+	}
 
-		for (const elem of elemChildren) {
-			if (!elem.classList.contains(`${EXTENSION_NAME}-stats`)) {
-				const elementName =
-					elem?.children?.[1]?.firstChild?.textContent;
-				const mapName = mapDict[elementName];
-
-				if (mapName) {
-					return (
-						mapName.class_name ||
-						mapName.name ||
-						mapName.guid ||
-						mapName.game_map_id
-					);
-				}
-			}
+	for (const child of parent.children) {
+		const mapName = checkParentForMapName(child, mapDict);
+		if (mapName) {
+			return mapName;
 		}
 	}
 };
