@@ -1,5 +1,4 @@
 export const CACHE_TIME = 1000 * 60 * 7;
-export const CREATOR_STEAM_IDS = ['76561197985066751', '76561198119651364'];
 export const CREATORS = ['MrMaxim', 'x3picF4ilx'];
 export const EXTENSION_NAME = 'VisusGG';
 export const DEFAULT_AGE = 1000 * 60 * 60 * 24 * 7;
@@ -44,4 +43,21 @@ export const DEFAULT_STORAGE = [
 export const OBSERVER_OPTIONS = {
 	childList: true,
 	subtree: true,
+};
+export const VIP_STEAM_IDS = {
+	'76561197985066751': {
+		name: 'MrMaxim',
+		label: `${EXTENSION_NAME} Creator`,
+		color: '#1fa704',
+	},
+	'76561198119651364': {
+		name: 'x3picF4ilx',
+		label: `${EXTENSION_NAME} Creator`,
+		color: '#1fa704',
+	},
+	'76561198346163255': {
+		name: 'Aquarius',
+		label: 'Certified Cat Meme Expert',
+		color: '#1fa704',
+	},
 };

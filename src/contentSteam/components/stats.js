@@ -1,4 +1,4 @@
-import { CREATOR_STEAM_IDS, EXTENSION_NAME } from '../../shared/constants';
+import { EXTENSION_NAME, VIP_STEAM_IDS } from '../../shared/constants';
 import { getLevelImg } from '../helpers/profile';
 
 export const createStatsContainer = (parent) => {
@@ -88,8 +88,9 @@ export const hydrateStats = (stats, selectedGame) => {
 			addBanBanner(stats);
 		}
 
-		if (CREATOR_STEAM_IDS.includes(stats.steamId)) {
-			addCreatorBanner(stats);
+		if (stats.steamId in VIP_STEAM_IDS) {
+			const vip = VIP_STEAM_IDS[stats.steamId];
+			addVIPBanner(vip);
 		}
 
 		playerHeader.prepend(flagElem);
@@ -305,14 +306,13 @@ const addBanBanner = ({ membership, banReason }) => {
 	addBanner(label, bannerId);
 };
 
-const addCreatorBanner = () => {
-	const label = `${EXTENSION_NAME} creator`;
-	const bannerId = `${EXTENSION_NAME}-creator-banner`;
+const addVIPBanner = ({ label, color }) => {
+	const bannerId = `${EXTENSION_NAME}-vip-banner`;
 
-	addBanner(label, bannerId);
+	addBanner(label, bannerId, color);
 };
 
-const addBanner = (label, id) => {
+const addBanner = (label, id, color) => {
 	const playerHeader = document.getElementById(
 		`${EXTENSION_NAME}-player-header`
 	);
@@ -325,6 +325,10 @@ const addBanner = (label, id) => {
 
 	bannerContainer.id = id;
 	bannerContainer.textContent = label;
+
+	if (color) {
+		bannerContainer.style.background = color;
+	}
 
 	playerHeader.insertAdjacentElement('afterend', bannerContainer);
 };
