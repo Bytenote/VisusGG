@@ -117,7 +117,7 @@ const getPopoverAnchor = ({ x, y }, stats) => {
 	const playerCount = team1?.size > team2?.size ? team1?.size : team2?.size;
 	const height = (playerCount * 53 + 20) / 2 + 24 - 25 ?? 20;
 
-	return { x: x + 60, y: height ? y - height : y - 32 };
+	return { x: x + 90, y: height ? y - height : y - 32 };
 };
 
 const setPopoverActive = (element, x, y) => {

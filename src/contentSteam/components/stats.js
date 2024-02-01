@@ -161,6 +161,9 @@ const createHeader = () => {
 };
 
 const createGameSelector = () => {
+	const showcaseBgElem = document.querySelector(
+		`#${EXTENSION_NAME}-container .showcase_content_bg`
+	);
 	const gameSelectorContainer = document.createElement('div');
 	const gameSelector = document.createElement('select');
 
@@ -168,6 +171,8 @@ const createGameSelector = () => {
 
 	gameSelector.style.minWidth = '120px';
 	gameSelector.style.maxWidth = '180px';
+	gameSelector.style.background =
+		getComputedStyle(showcaseBgElem)?.backgroundColor;
 	gameSelectorContainer.classList.add('responsive_tab_control');
 
 	const options = ['CS2', 'CSGO'];

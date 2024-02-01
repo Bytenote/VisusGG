@@ -14,39 +14,57 @@ export const initStorageChangeListener = () => {
 };
 
 const updateFunc = {
-	toggles: (newValue) => timeFrameUpdater(newValue),
-	usesCompareMode: (newValue, key) =>
-		toggleUpdater(newValue, key, 'form-switch-input'),
-	usesFaceIt: (newValue, key) =>
-		toggleUpdater(newValue, key, 'toggle-faceit'),
-	usesSteam: (newValue, key) => toggleUpdater(newValue, key, 'toggle-steam'),
-	colors: (newValue) => colorPickerUpdater(newValue),
+	toggles: (changes) => timeFrameUpdater(changes),
+	usesCompareMode: (changes, key) =>
+		toggleUpdater(changes, key, 'form-switch-input'),
+	usesFaceIt: (changes, key) => toggleUpdater(changes, key, 'toggle-faceit'),
+	usesSteam: (changes, key) => toggleUpdater(changes, key, 'toggle-steam'),
+	colors: (changes) => colorPickerUpdater(changes),
 };
 
-const updateStorage = async (changes) => {
+const updateStorage = async (changes = {}) => {
 	const [[key, { oldValue, newValue }]] = Object.entries(changes);
 
 	if (!isEqual(oldValue, newValue)) {
-		updateFunc[key]?.(newValue, key);
+		updateFunc[key]?.({ oldValue, newValue }, key);
 	}
 };
 
-const timeFrameUpdater = async (newValue) => {
+const timeFrameUpdater = async ({ newValue, oldValue }) => {
 	setSyncStorage('toggles', newValue);
 
-	updatePopupElements(true);
+	function countObjects(arr) {
+		return arr.reduce((acc, curr) => {
+			const key = JSON.stringify(curr);
+			acc.set(key, (acc.get(key) || 0) + 1);
+
+			return acc;
+		}, new Map());
+	}
+
+	const oldCount = countObjects(oldValue);
+	const newCount = countObjects(newValue);
+	const newToggle = newValue.find((toggle) => {
+		const key = JSON.stringify(toggle);
+		const newCountForKey = newCount.get(key) || 0;
+		const oldCountForKey = oldCount.get(key) || 0;
+
+		return newCountForKey > oldCountForKey;
+	});
+
+	updatePopupElements(false, newToggle);
 	removeOldToggles();
 
-	await displayTimeFrameToggle();
+	await displayTimeFrameToggle(newToggle.label);
 };
 
-const toggleUpdater = async (newValue, storageKey, id) => {
+const toggleUpdater = async ({ newValue }, storageKey, id) => {
 	setSyncStorage(storageKey, newValue);
 
 	setSwitchValue(storageKey, id);
 };
 
-const colorPickerUpdater = async (newValue) => {
+const colorPickerUpdater = async ({ newValue }) => {
 	const colorPickerElems = getColorPickerElements();
 
 	for (const elem of colorPickerElems) {

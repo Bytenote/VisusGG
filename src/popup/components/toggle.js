@@ -1,8 +1,16 @@
 import { getToggleInfo } from '../helpers/toggles';
 
-export const initToggleButtons = (toggles, buttonGroupElem) => {
+export const initToggleButtons = (
+	toggles,
+	buttonGroupElem,
+	activeToggleLabel = null
+) => {
 	for (const toggle of toggles) {
-		const button = createButton(toggle.label, 'toggle-btn');
+		const button = createButton(
+			toggle.label,
+			'toggle-btn',
+			activeToggleLabel
+		);
 
 		buttonGroupElem.append(button);
 	}
@@ -14,45 +22,59 @@ export const removeOldToggles = () => {
 	];
 	toggleGroupChildren.forEach((toggle) => {
 		if (toggle.classList.contains('toggle-btn')) {
+			toggle.removeEventListener('click', clickHandler);
 			toggle.remove();
 		}
 	});
 };
 
-export const updatePopupElements = (isDisabled, caller = null) => {
-	const formEditElems = [
-		...document.querySelector('#form-btn-edit')?.children,
-	];
-	const heading = document.querySelector('#button-edit-div');
-	let headingText = 'Select button to edit';
+export const updatePopupElements = (isDisabled, toggle = null) => {
+	const timeFrameModalElem = document.getElementById('time-frame-modal');
+	timeFrameModalElem.style.visibility = isDisabled ? 'hidden' : 'visible';
 
-	for (const elem of formEditElems) {
-		for (const child of elem.children) {
-			child.disabled = isDisabled;
+	if (toggle) {
+		if (toggle?.type && toggle?.amount) {
+			const timeFrameUnitBtns = [
+				...document.querySelector('#time-frame-units')?.children,
+			];
+			const timeFrameNumberBtns = [
+				...document.querySelector('#time-frame-numbers')?.children,
+			];
+
+			timeFrameUnitBtns.forEach((btn) => {
+				if (btn.value === toggle.type) {
+					btn.classList.add('time-frame-btn-active');
+				} else {
+					btn.classList.remove('time-frame-btn-active');
+				}
+			});
+
+			timeFrameNumberBtns.forEach((btn) => {
+				if (+btn.value === toggle.amount) {
+					btn.classList.add('time-frame-btn-active');
+				} else {
+					btn.classList.remove('time-frame-btn-active');
+				}
+			});
 		}
 	}
-
-	if (!isDisabled) {
-		const selectElem = document.querySelector('#form-select');
-		const toggle = getToggleInfo(caller.textContent);
-
-		if (toggle?.type) {
-			selectElem.value = toggle.type;
-		}
-
-		headingText = 'Editing button';
-	}
-
-	heading.textContent = headingText;
 };
 
-const createButton = (label, cssClass) => {
+const createButton = (label, cssClass, activeToggleLabel = null) => {
+	const btnGroup = document.getElementById('button-edit-group');
 	const button = document.createElement('button');
 
-	button.classList.add(cssClass);
+	button.classList.add(
+		cssClass,
+		...(activeToggleLabel === label &&
+		!hasClass(btnGroup, 'toggle-btn-active')
+			? ['toggle-btn-active']
+			: [])
+	);
 	button.addEventListener('click', clickHandler);
 
 	button.textContent = label;
+	button.value = label;
 
 	return button;
 };
@@ -65,11 +87,15 @@ const clickHandler = (e) => {
 
 		updatePopupElements(true);
 	} else {
+		const toggle = getToggleInfo(e.currentTarget.value);
+
 		for (const button of activeButtons) {
 			button.classList.remove('toggle-btn-active');
 		}
 		e.currentTarget?.classList.add('toggle-btn-active');
 
-		updatePopupElements(false, e.currentTarget);
+		updatePopupElements(false, toggle);
 	}
 };
+
+const hasClass = (parent, className) => !!parent.querySelector(`.${className}`);

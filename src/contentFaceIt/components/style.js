@@ -53,7 +53,7 @@ export const createStylingElement = (parent) => {
 			font-weight: bold;
 			padding-left: 8px;
 			text-align: center;
-			width: 50px;
+			width: 72px;
 		}
 
 		div.${EXTENSION_NAME}-popover {

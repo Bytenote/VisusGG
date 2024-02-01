@@ -1,6 +1,8 @@
 import {
 	DEFAULT_COLORS,
 	DEFAULT_COMPARE_MODE,
+	DEFAULT_FACEIT,
+	DEFAULT_STEAM,
 	DEFAULT_TOGGLES,
 } from '../../shared/constants';
 import {
@@ -9,28 +11,16 @@ import {
 	setSyncStorage,
 } from '../../shared/storage';
 import { displaySnackbar } from '../components/snackbar';
-import { resetForm } from '../helpers/inputHandlers';
 import { getUpdatedColors } from './colorPickerHelpers';
-
-const SUBMITTERS = {
-	timeFrameSubmitter: (input, select) => timeFrameSubmitter(input, select),
-	reset: () => resetSubmitter(),
-};
 
 export const submitHandler = async (e) => {
 	e.preventDefault();
 
 	const submitter = e.submitter?.name;
-	const { input, select } = getFormData(e.target, submitter);
+	if (submitter === 'reset') {
+		resetSubmitter();
 
-	if (input || submitter === 'reset') {
-		if (SUBMITTERS?.[submitter]) {
-			SUBMITTERS[submitter](input, select);
-
-			displaySnackbar(e.target, 'Success');
-
-			resetForm();
-		}
+		displaySnackbar(e.target, 'Success');
 	}
 };
 
@@ -52,23 +42,22 @@ export const colorPickerSubmitter = async (e) => {
 	displaySnackbar(formElem, 'Success');
 };
 
-const timeFrameSubmitter = async (input, select) => {
+export const timeFrameSubmitter = async (amount, type, activeLabel) => {
+	const formElem = document.querySelector('#form');
 	const toggles = getSyncStorage('toggles');
-	const activeLabel =
-		document.querySelector('.toggle-btn-active')?.textContent;
 
 	const toggleIndex = toggles.findIndex(
 		(toggle) => toggle.label === activeLabel
 	);
 	if (toggleIndex >= 0) {
 		const newToggle = {
-			label: `${input}${select[0]}`,
-			name: `${input} ${
-				input > 1 ? select : select.slice(0, select.length - 1)
+			label: `${amount}${type[0]}`,
+			name: `${amount} ${
+				amount > 1 ? type : type.slice(0, type.length - 1)
 			}`,
-			amount: input,
-			type: select,
-			maxAge: getAge(input, select),
+			amount,
+			type,
+			maxAge: getAge(amount, type),
 		};
 
 		toggles[toggleIndex] = newToggle;
@@ -78,6 +67,8 @@ const timeFrameSubmitter = async (input, select) => {
 		'toggles',
 		toggles.sort((a, b) => a?.maxAge - b?.maxAge)
 	);
+
+	displaySnackbar(formElem, 'Success');
 };
 
 const resetSubmitter = async () => {
@@ -86,34 +77,18 @@ const resetSubmitter = async () => {
 		DEFAULT_TOGGLES.sort((a, b) => a?.maxAge - b?.maxAge)
 	);
 	await setStorage('usesCompareMode', DEFAULT_COMPARE_MODE);
+	await setStorage('usesFaceIt', DEFAULT_FACEIT);
+	await setStorage('usesSteam', DEFAULT_STEAM);
 	setSyncStorage('colors', DEFAULT_COLORS);
 };
 
-const getFormData = (form, submitter) => {
-	const formData = new FormData(form);
-	const data = {
-		input: null,
-	};
-
-	if (submitter === 'timeFrameSubmitter') {
-		const input = formData.get('input');
-
-		if (!isNaN(input) && input > 0) {
-			data.input = formData.get('input');
-			data['select'] = formData.get('select');
-		}
-	}
-
-	return data;
-};
-
-const getAge = (input, type) => {
+const getAge = (amount, type) => {
 	const defaultTime = 1000 * 60 * 60 * 24;
 	const types = {
-		days: defaultTime * input,
-		weeks: defaultTime * input * 7,
-		months: defaultTime * input * 30,
-		years: defaultTime * input * 365,
+		days: defaultTime * amount,
+		weeks: defaultTime * amount * 7,
+		months: defaultTime * amount * 30,
+		years: defaultTime * amount * 365,
 	};
 
 	return types[type];
