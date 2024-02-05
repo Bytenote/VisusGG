@@ -16,8 +16,8 @@ export const getUpdatedColors = (elem, newColor) => {
 };
 
 export const getColorPickerElements = () => [
-	document.querySelector('#form-picker1'),
-	document.querySelector('#form-picker2'),
+	document.getElementById('form-picker1'),
+	document.getElementById('form-picker2'),
 ];
 
 export const colorPickerInputHandler = (e) =>

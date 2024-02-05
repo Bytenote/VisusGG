@@ -37,4 +37,4 @@ const getTeamsInfo = mem((_, teams) => {
 });
 
 const isPlayerOfRoster = (roster) =>
-	!!roster?.find((player) => player.id === getCurrentUserId());
+	roster?.some((player) => player.id === getCurrentUserId());

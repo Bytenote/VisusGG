@@ -7,17 +7,15 @@ export const getCreatorProfile = (path = location.pathname) => {
 };
 
 export const getBannerRoot = () =>
-	document.querySelector('.modal-content parasite-player-profile') ||
-	document.querySelector('#parasite-container');
+	document.querySelector('.modal-content parasite-player-profile') ??
+	document.getElementById('parasite-container') ??
+	getBetaBannerRoot();
 
-export const getBanner = (root) => {
-	const hasAvatar = !!(
-		root.querySelector('i[data-testid="avatar"]') ||
-		root.querySelector('img[aria-label="avatar"]')
-	);
+export const getBanner = (parent) => {
+	const hasAvatar = !!getAvatar(parent);
 	if (hasAvatar) {
 		const playerName =
-			root.querySelector('h5[size="5"]')?.parentElement?.parentElement;
+			parent.querySelector('h5[size="5"]')?.parentElement?.parentElement;
 
 		return playerName;
 	}
@@ -27,3 +25,18 @@ export const getBanner = (root) => {
 
 export const hasCreatorElement = (bannerElem) =>
 	!!bannerElem.querySelector(`#${EXTENSION_NAME}-badge`);
+
+const getBetaBannerRoot = () => {
+	return (
+		(document.querySelector('.FuseModalPortal') &&
+			document.querySelector('i[title="close-icon"]')?.parentElement) ??
+		document.getElementById('main-layout-content')
+	);
+};
+
+const getAvatar = (parent) => {
+	return (
+		parent?.querySelector('i[data-testid="avatar"]') ||
+		parent?.querySelector('img[aria-label="avatar"]')
+	);
+};

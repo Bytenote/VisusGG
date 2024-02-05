@@ -25,7 +25,24 @@ export const getCurrentUserId = () => {
 		}
 	}
 
+	const betaId = getBetaUserId();
+	if (betaId) {
+		return betaId;
+	}
+
 	return null;
 };
 
 export const isLoggedIn = () => document.cookie.includes(' t=');
+
+const getBetaUserId = () => {
+	const cookies = document.cookie.split(';');
+	const cookieContent = cookies
+		.find((cookie) => cookie?.trim()?.startsWith('ab.storage.userId'))
+		?.split('=')?.[1];
+	if (cookieContent) {
+		const userId = JSON.parse(decodeURIComponent(cookieContent))?.g;
+
+		return userId;
+	}
+};

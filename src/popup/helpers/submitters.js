@@ -25,7 +25,7 @@ export const submitHandler = async (e) => {
 };
 
 export const switchSubmitter = async (e, storageKey) => {
-	const formElem = document.querySelector('#form');
+	const formElem = document.getElementById('form');
 
 	await setStorage(storageKey, e.target.checked);
 
@@ -33,7 +33,7 @@ export const switchSubmitter = async (e, storageKey) => {
 };
 
 export const colorPickerSubmitter = async (e) => {
-	const formElem = document.querySelector('#form');
+	const formElem = document.getElementById('form');
 	const updatedColors = getUpdatedColors(e.target, e.target.value);
 
 	await setStorage('colors', updatedColors);
@@ -43,7 +43,7 @@ export const colorPickerSubmitter = async (e) => {
 };
 
 export const timeFrameSubmitter = async (amount, type, activeLabel) => {
-	const formElem = document.querySelector('#form');
+	const formElem = document.getElementById('form');
 	const toggles = getSyncStorage('toggles');
 
 	const toggleIndex = toggles.findIndex(

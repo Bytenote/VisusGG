@@ -1,7 +1,7 @@
 import { EXTENSION_NAME } from '../../shared/constants';
 import { getSyncStorage } from '../../shared/storage';
 import { getColorToUse } from '../helpers/colorHelper';
-import { getMatchRoomRoot } from '../helpers/matchroom';
+import { getContentRoot } from '../helpers/matchroom';
 import {
 	getMapDictMemoized,
 	getMapStats,
@@ -17,7 +17,7 @@ export const createPopover = () => {
 	const timeFrameDiv = document.createElement('div');
 	const timeFrameSpan = document.createElement('span');
 
-	const rootElem = getMatchRoomRoot();
+	const rootElem = getContentRoot();
 
 	popoverDiv.id = `${EXTENSION_NAME}-popover`;
 	headingDiv.id = `${EXTENSION_NAME}-popover-heading`;
@@ -38,7 +38,7 @@ export const createPopover = () => {
 };
 
 export const showPopover = async (_, parent, mapName, matchInfo) => {
-	const rootElem = getMatchRoomRoot();
+	const rootElem = getContentRoot();
 	const timeFrameName = getTimeFrameName();
 
 	const contentContainer = rootElem.querySelector(
@@ -94,7 +94,7 @@ export const showPopover = async (_, parent, mapName, matchInfo) => {
 };
 
 export const hidePopover = () => {
-	const rootElem = getMatchRoomRoot();
+	const rootElem = getContentRoot();
 	const popover = rootElem?.querySelector(`#${EXTENSION_NAME}-popover`);
 
 	popover.style.display = 'none';

@@ -2,7 +2,7 @@
 	"manifest_version": 3,
 	"name": "VisusGG",
 	"description": "VisusGG, a browser extension by x3picF4ilx (Bytenote) & MrMaxim, aims to improve the user experience on FACEIT's platform.",
-	"version": "2.2.2",
+	"version": "2.2.3",
 	"icons": {
 		"16": "icon-16.png",
 		"48": "icon-48.png",
@@ -12,7 +12,10 @@
 	"content_scripts": [
 		{
 			"run_at": "document_end",
-			"matches": ["https://www.faceit.com/*"],
+			"matches": [
+				"https://www.faceit.com/*",
+				"https://beta.faceit.com/*"
+			],
 			"js": ["contentFaceIt.js"]
 		},
 		{
