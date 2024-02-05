@@ -17,7 +17,7 @@ body {
 	font-weight: 400;
 	padding: 0px;
 	margin: 0px;
-	width: 400px;
+	width: 525px;
 	overflow: hidden;
 }
 
@@ -105,13 +105,9 @@ body {
 .option-action {
 	display: flex;
 	justify-content: flex-end;
-	min-width: 75px;
-	max-width: 75px;
+	min-width: 140px;
+	max-width: 140px;
 	padding-left: 10px;
-}
-
-#button-edit-group {
-	padding: 7px 0px;
 }
 
 #button-edit-group > .toggle-btn:first-child {
@@ -132,47 +128,50 @@ body {
 	transition: background 100ms;
 }
 
-.toggle-btn:hover:not(.toggle-btn-active) {
+.toggle-btn:hover:not(.toggle-btn-active),
+.time-frame-btn:hover:not(.time-frame-btn-active) {
 	background: #282828;
 }
 
-.toggle-btn-active {
+.toggle-btn-active,
+.time-frame-btn-group > .time-frame-btn.time-frame-btn-active {
 	background: #303030;
 	color: var(--color-text-primary);
 }
 
-#form-input {
-	background: var(--color-bg-secondary);
-	border: 0px;
-	border-bottom: 1px solid var(--color-text-primary);
-	color: var(--color-text-primary);
-	height: 29px;
-	font-size: 13px;
-	padding: 0px 10px;
-	margin-right: 10px;
-	width: 60px;
+#time-frame-modal {
+	position: absolute;
+	background: var(--color-bg-primary);
+	border-radius: 4px;
+	width: 428px;
+	padding: 10px;
+	z-index: 99;
+	box-shadow: 0px 2px 8px 4px rgb(0, 0, 0, 0.38);
+	top: 197px;
+	left: 38px;
+	visibility: hidden;
 }
 
-#form-input:disabled {
-	background: var(--color-bg-secondary);
-	border-bottom: 1px solid var(--color-text-secondary);
+.time-frame-btn-group {
+	display: flex;
+	justify-content: space-between;
+	gap: 5px;
 }
 
-#form-input:disabled::placeholder {
+.time-frame-btn-group:first-child {
+	margin-bottom: 5px;
+}
+
+.time-frame-btn-group > .time-frame-btn {
+	background: var(--color-bg-secondary);
+	border-radius: 4px;
+	border: 1px solid #303030;
 	color: var(--color-text-secondary);
-}
-
-#form-input::placeholder {
-	color: var(--color-text-primary);
-}
-
-#form-select {
-	background: var(--color-bg-secondary);
-	border: 0px;
-	color: var(--color-text-primary);
-	height: 29px;
-	font-size: 13px;
-	width: 70px;
+	cursor: pointer;
+	overflow: hidden;
+	padding: 6px 0px;
+	transition: background 100ms;
+	width: 100%;
 }
 
 .option-desc {
@@ -258,6 +257,7 @@ body {
 }
 
 .form-color-picker {
+	cursor: pointer;
 	border: none;
 	display: block;
 	height: 100%;

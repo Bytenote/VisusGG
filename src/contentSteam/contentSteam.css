@@ -80,3 +80,7 @@
 	gap: 15px;
 	padding-left: 30px;
 }
+
+#VisusGG-container .responsive_tab_control select#VisusGG-game-selector option {
+	background: rgba(24, 24, 24, 0.93);
+}

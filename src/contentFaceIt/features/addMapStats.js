@@ -4,7 +4,7 @@ import {
 	loadMapStatsMemoized,
 } from '../helpers/stats';
 import { getMapElements, hasStatsElements } from '../helpers/matchroom';
-import { insertStats, updateStats } from '../components/winrate';
+import { insertStats, hydrateStats } from '../components/winrate';
 import { getSyncStorage } from '../../shared/storage';
 import { createPopover } from '../components/popover';
 
@@ -41,7 +41,7 @@ export const addMapStats = async (parent, matchInfo) => {
 
 			mapElems.forEach(({ mapElem, mapName }) => {
 				const mapStats = getMapStats(mapName, maps, stats, matchInfo);
-				updateStats(mapElem, mapStats);
+				hydrateStats(mapElem, mapStats);
 			});
 		}
 	}

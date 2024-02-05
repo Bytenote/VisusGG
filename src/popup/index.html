@@ -45,40 +45,19 @@
 
 				<div class="content-container">
 					<div class="option">
-						<div class="option-heading" id="button-edit-div">
-							Select button to edit
-							<span
-								title="Edit time frame from which to get statistics (100 matches max)"
-							>
-								<svg class="option-helper" viewBox="0 0 24 24">
-									<path
-										d="M11.07 12.85c.77-1.39 2.25-2.21 3.11-3.44.91-1.29.4-3.7-2.18-3.7-1.69 0-2.52 1.28-2.87 2.34L6.54 6.96C7.25 4.83 9.18 3 11.99 3c2.35 0 3.96 1.07 4.78 2.41.7 1.15 1.11 3.3.03 4.9-1.2 1.77-2.35 2.31-2.97 3.45-.25.46-.35.76-.35 2.24h-2.89c-.01-.78-.13-2.05.48-3.15zM14 20c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2z"
-									></path>
-								</svg>
-							</span>
-						</div>
-						<div id="button-edit-group"></div>
-
-						<div class="option-content" id="form-btn-edit">
-							<div>
-								<input id="form-input" name="input" disabled />
-								<select id="form-select" name="select" disabled>
-									<option value="days">Days</option>
-									<option value="weeks">Weeks</option>
-									<option value="months">Months</option>
-									<option value="years">Years</option>
-								</select>
+						<div class="option-content">
+							<div class="option-text">
+								<div class="option-heading">
+									Edit time frame
+								</div>
+								<span class="option-desc">
+									Adjust the time frame for each button by
+									selecting it (limited to the last 100
+									matches).
+								</span>
 							</div>
 							<div class="option-action">
-								<button
-									class="form-submit-btn"
-									id="form-input-btn"
-									name="timeFrameSubmitter"
-									type="submit"
-									disabled
-								>
-									save
-								</button>
+								<div id="button-edit-group"></div>
 							</div>
 						</div>
 					</div>
@@ -86,11 +65,13 @@
 					<div class="option">
 						<div class="option-content">
 							<div class="option-text">
-								<div class="option-heading">
-									Toggle compare mode
-								</div>
+								<div class="option-heading">Compare Mode</div>
 								<span class="option-desc">
-									Show win-% difference between both teams
+									Instead of only showing the enemy team's win
+									rate percentage on maps, this feature will
+									compare your team's win percentage with the
+									enemy team's. Useful when playing with
+									random players.
 								</span>
 							</div>
 							<div class="option-action">
@@ -111,7 +92,7 @@
 							<div class="option-text">
 								<div class="option-heading">Set colors</div>
 								<span class="option-desc">
-									Customize win-% colors
+									Customize win rate percentage colors.
 								</span>
 							</div>
 							<div class="option-action">
@@ -140,7 +121,7 @@
 							<div class="option-text">
 								<div class="option-heading">Reset settings</div>
 								<span class="option-desc">
-									Load the default values
+									Load the default values.
 								</span>
 							</div>
 							<div class="option-action">
@@ -153,6 +134,37 @@
 									reset
 								</button>
 							</div>
+						</div>
+					</div>
+
+					<div id="time-frame-modal">
+						<div id="time-frame-units" class="time-frame-btn-group">
+							<button class="time-frame-btn" value="days">
+								Days
+							</button>
+							<button class="time-frame-btn" value="weeks">
+								Weeks
+							</button>
+							<button class="time-frame-btn" value="months">
+								Months
+							</button>
+							<button class="time-frame-btn" value="years">
+								Years
+							</button>
+						</div>
+						<div
+							id="time-frame-numbers"
+							class="time-frame-btn-group"
+						>
+							<button class="time-frame-btn" value="1">1</button>
+							<button class="time-frame-btn" value="2">2</button>
+							<button class="time-frame-btn" value="3">3</button>
+							<button class="time-frame-btn" value="4">4</button>
+							<button class="time-frame-btn" value="5">5</button>
+							<button class="time-frame-btn" value="6">6</button>
+							<button class="time-frame-btn" value="7">7</button>
+							<button class="time-frame-btn" value="8">8</button>
+							<button class="time-frame-btn" value="9">9</button>
 						</div>
 					</div>
 				</div>

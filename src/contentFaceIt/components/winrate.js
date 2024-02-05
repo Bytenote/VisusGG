@@ -7,7 +7,8 @@ export const insertStats = (mapElement, mapName, matchInfo) => {
 	const statsDiv = document.createElement('div');
 	const bar = document.createElement('span');
 	const winRateDiv = document.createElement('div');
-	const winRateText = document.createElement('span');
+	const winRateText = document.createElement('div');
+	const winRateInfo = document.createElement('div');
 
 	statsDiv.classList.add(`${EXTENSION_NAME}-stats`);
 	bar.classList.add(`${EXTENSION_NAME}-bar`);
@@ -22,56 +23,59 @@ export const insertStats = (mapElement, mapName, matchInfo) => {
 		hidePopover(e, statsDiv);
 	}
 
+	winRateInfo.style.fontSize = '0.57rem';
+
 	statsDiv.removeEventListener('mouseover', onMouseOver);
 	statsDiv.removeEventListener('mouseout', onMouseOut);
 
 	statsDiv.addEventListener('mouseover', onMouseOver);
 	statsDiv.addEventListener('mouseout', onMouseOut);
 
-	winRateDiv.append(winRateText);
+	winRateDiv.append(winRateText, winRateInfo);
 	statsDiv.append(bar, winRateDiv);
 
 	mapElement.insertAdjacentElement('afterbegin', statsDiv);
 };
 
-export const updateStats = (mapElement, stats) => {
-	showWinRate(stats, mapElement);
-};
-
-const showWinRate = (stats, mapElement) => {
+export const hydrateStats = (mapElement, stats) => {
 	const bar = mapElement.querySelector(`.${EXTENSION_NAME}-bar`);
-	const winRateText = mapElement.querySelector(
+	const [winRateElem, winRateInfoElem] = mapElement.querySelector(
 		`.${EXTENSION_NAME}-win-rate`
-	).firstChild;
-	const { winRate, condition, winRateSymbol } =
+	).children;
+
+	const { winRate, winRateInfo, condition, winRateSymbol } =
 		getModeSpecificDataToDisplay(stats);
+
+	if (winRateInfoElem && winRateInfoElem.textContent !== winRateInfo) {
+		winRateInfoElem.textContent = winRateInfo;
+	}
 
 	if (!isNaN(winRate)) {
 		const elements = [
 			{ element: mapElement, type: 'background', opacity: 0.05 },
 			{ element: bar, type: 'background' },
-			{ element: winRateText, type: 'color' },
+			{ element: winRateElem, type: 'color' },
 		];
 		const colorToUse = getColorToUse(condition);
 		setColorOfElements(colorToUse, elements);
 
 		const displayValue = `${winRateSymbol + winRate}%`;
 		if (
-			winRateText?.textContent &&
-			winRateText.textContent !== displayValue
+			winRateElem?.textContent &&
+			winRateElem.textContent !== displayValue
 		) {
-			winRateText.textContent = displayValue;
+			winRateElem.textContent = displayValue;
 		}
 	} else {
 		const displayValue = '---';
 		if (
-			winRateText?.textContent &&
-			winRateText.textContent !== displayValue
+			winRateElem?.textContent &&
+			winRateElem.textContent !== displayValue
 		) {
 			mapElement.style.removeProperty('background');
 			bar.style.removeProperty('background');
-			winRateText.style.removeProperty('color');
-			winRateText.textContent = displayValue;
+			winRateElem.style.removeProperty('color');
+			winRateElem.textContent = displayValue;
 		}
 	}
 };
@@ -79,12 +83,14 @@ const showWinRate = (stats, mapElement) => {
 const getModeSpecificDataToDisplay = (stats) => {
 	let data = {
 		winRate: 0,
+		winRateInfo: '',
 		condition: false,
 		winRateSymbol: '',
 	};
 
 	if (stats?.length === 1) {
 		data.winRate = stats[0]?.winRate;
+		data.winRateInfo = 'Enemy Win %';
 		data.condition = data.winRate >= 50;
 	} else if (stats?.length === 2) {
 		const ownTeamSide = stats[0]?.ownTeamSide === 0 ? 0 : 1;
@@ -92,6 +98,8 @@ const getModeSpecificDataToDisplay = (stats) => {
 
 		data.winRate =
 			stats[ownTeamSide]?.winRate - stats[opponentTeamSide]?.winRate;
+		data.winRateInfo = 'Win %';
+
 		data.condition = data.winRate <= 0;
 		data.winRateSymbol = data.winRate > 0 ? '+' : data.winRate === 0 && '±';
 	}

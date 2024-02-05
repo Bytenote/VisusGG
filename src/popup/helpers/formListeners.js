@@ -2,18 +2,16 @@ import {
 	colorPickerInputHandler,
 	getColorPickerElements,
 } from './colorPickerHelpers';
-import { inputHandler, keyDownHandler } from './inputHandlers';
 import {
 	colorPickerSubmitter,
 	submitHandler,
 	switchSubmitter,
 } from './submitters';
+import { onTimeFrameNumberClick, onTimeFrameUnitClick } from './toggles';
 
 export const initFormListeners = () => {
 	const colorPickerElem = getColorPickerElements();
 	const ELEMS = [
-		{ id: 'form-input', event: 'input', handler: inputHandler },
-		{ id: 'form-input', event: 'keydown', handler: keyDownHandler },
 		{
 			id: 'form-switch-input',
 			event: 'change',
@@ -23,6 +21,12 @@ export const initFormListeners = () => {
 		{ id: 'toggle-steam', event: 'change', handler: onSteamChange },
 		{ id: 'form', event: 'submit', handler: submitHandler },
 	];
+	const timeFrameUnitBtns = [
+		...document.querySelector('#time-frame-units')?.children,
+	];
+	const timeFrameNumberBtns = [
+		...document.querySelector('#time-frame-numbers')?.children,
+	];
 
 	for (const elem of colorPickerElem) {
 		elem.addEventListener('input', colorPickerInputHandler);
@@ -31,7 +35,14 @@ export const initFormListeners = () => {
 
 	ELEMS.forEach(({ id, event, handler }) => {
 		const elem = document.querySelector(`#${id}`);
-		elem.addEventListener(event, handler);
+		elem?.addEventListener(event, handler);
+	});
+
+	timeFrameUnitBtns.forEach((btn) => {
+		btn.addEventListener('click', onTimeFrameUnitClick);
+	});
+	timeFrameNumberBtns.forEach((btn) => {
+		btn.addEventListener('click', onTimeFrameNumberClick);
 	});
 };
 
