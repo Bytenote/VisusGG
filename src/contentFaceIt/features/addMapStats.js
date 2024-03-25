@@ -3,19 +3,22 @@ import {
 	getMapStats,
 	loadMapStatsMemoized,
 } from '../helpers/stats';
-import { getMapElements, hasStatsElements } from '../helpers/matchroom';
+import {
+	getMapElements,
+	getMatchRoomRoot,
+	hasStatsElements,
+} from '../helpers/matchroom';
 import { insertStats, hydrateStats } from '../components/winrate';
 import { getSyncStorage } from '../../shared/storage';
 import { createPopover } from '../components/popover';
 
-export const addMapStats = async (parent, matchInfo) => {
+export const addMapStats = async (matchInfo) => {
 	if (!getSyncStorage('usesFaceIt')) {
 		return;
 	}
 
-	const matchRoomElem = parent?.querySelector('#MATCHROOM-OVERVIEW');
+	const matchRoomElem = getMatchRoomRoot();
 	const matchRoomMaps = matchInfo.matchCustom?.tree?.map?.values?.value;
-
 	if (matchRoomElem && matchRoomMaps?.length > 0) {
 		const mapElems = getMapElements(
 			matchRoomElem,
@@ -49,9 +52,8 @@ export const addMapStats = async (parent, matchInfo) => {
 	return;
 };
 
-export const removeMapStats = (parent) => {
-	const matchRoomElem = parent?.querySelector('#MATCHROOM-OVERVIEW');
-
+export const removeMapStats = () => {
+	const matchRoomElem = getMatchRoomRoot();
 	if (matchRoomElem) {
 		if (hasStatsElements(matchRoomElem)) {
 			const statsElems = [

@@ -2,18 +2,18 @@ import { getSyncStorage } from '../../shared/storage';
 import { insertTimeFrameToggle } from '../components/toggle';
 import {
 	getMapElements,
+	getMatchRoomRoot,
 	getToggleGroup,
 	hasToggleElements,
 } from '../helpers/matchroom';
 
-export const addTimeFrameToggle = (parent, matchInfo) => {
+export const addTimeFrameToggle = (matchInfo) => {
 	if (!getSyncStorage('usesFaceIt')) {
 		return;
 	}
 
-	const matchRoomElem = parent?.querySelector('#MATCHROOM-OVERVIEW');
+	const matchRoomElem = getMatchRoomRoot();
 	const matchRoomMaps = matchInfo.matchCustom?.tree?.map?.values?.value;
-
 	if (matchRoomElem && matchRoomMaps?.length > 0) {
 		if (!hasToggleElements(matchRoomElem)) {
 			const mapElems = getMapElements(
@@ -32,9 +32,8 @@ export const addTimeFrameToggle = (parent, matchInfo) => {
 	return;
 };
 
-export const removeTimeFrameToggle = (parent) => {
-	const matchRoomElem = parent?.querySelector('#MATCHROOM-OVERVIEW');
-
+export const removeTimeFrameToggle = () => {
+	const matchRoomElem = getMatchRoomRoot();
 	if (matchRoomElem) {
 		if (hasToggleElements(matchRoomElem)) {
 			const toggleGroup = getToggleGroup(matchRoomElem);

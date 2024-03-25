@@ -6,8 +6,12 @@ export const getRoomId = (path = location.pathname) =>
 		path
 	)?.[1] || null;
 
+export const getContentRoot = () =>
+	document.getElementById('parasite-container') ??
+	document.getElementById('main-layout-content');
+
 export const getMatchRoomRoot = () =>
-	document.querySelector('#parasite-container');
+	document.getElementById('MATCHROOM-OVERVIEW');
 
 export const getMapElements = (
 	matchRoomElem,

@@ -11,7 +11,7 @@ import {
 	removeTimeFrameToggle,
 } from '../features/addTimeFrameToggle';
 import { getMatchInfo } from '../../shared/helpers/api';
-import { getMatchRoomRoot, getRoomId } from './matchroom';
+import { getContentRoot, getRoomId } from './matchroom';
 import { isPlayerOfMatch } from './teams';
 
 const UPDATE_FUNC = {
@@ -38,27 +38,29 @@ const DOMUpdater = async (key, toggles) => {
 	const roomId = getRoomId();
 
 	if (roomId) {
-		const rootElem = getMatchRoomRoot();
-		const matchInfo = (await getMatchInfo(roomId)) ?? {};
+		const rootElem = getContentRoot();
+		if (rootElem) {
+			const matchInfo = (await getMatchInfo(roomId)) ?? {};
+			if (matchInfo && isPlayerOfMatch(roomId, matchInfo.teams)) {
+				const timeFrame = await getStorage('timeFrame');
+				const foundToggle =
+					(await toggles.find(
+						(toggle) => toggle.maxAge === timeFrame
+					)) || toggles[0];
 
-		if (matchInfo && isPlayerOfMatch(roomId, matchInfo.teams)) {
-			const timeFrame = await getStorage('timeFrame');
-			const foundToggle =
-				(await toggles.find((toggle) => toggle.maxAge === timeFrame)) ||
-				toggles[0];
+				if (foundToggle) {
+					setSyncStorage('timeFrame', foundToggle.maxAge);
+				}
+				setSyncStorage('toggles', toggles);
 
-			if (foundToggle) {
-				setSyncStorage('timeFrame', foundToggle.maxAge);
+				removeTimeFrameToggle();
+				if (key === 'usesFaceIt' && !getSyncStorage(key)) {
+					removeMapStats();
+				}
+
+				addTimeFrameToggle(matchInfo);
+				await addMapStats(matchInfo);
 			}
-			setSyncStorage('toggles', toggles);
-
-			removeTimeFrameToggle(rootElem);
-			if (key === 'usesFaceIt' && !getSyncStorage(key)) {
-				removeMapStats(rootElem);
-			}
-
-			addTimeFrameToggle(rootElem, matchInfo);
-			await addMapStats(rootElem, matchInfo);
 		}
 	}
 };

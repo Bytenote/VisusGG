@@ -4,7 +4,7 @@ import { addStylingElement } from './features/addStylingElement';
 import { addTimeFrameToggle } from './features/addTimeFrameToggle';
 import { getMatchInfo } from '../shared/helpers/api';
 import { initStorage } from '../shared/storage';
-import { getMatchRoomRoot, getRoomId } from './helpers/matchroom';
+import { getContentRoot, getRoomId } from './helpers/matchroom';
 import { getBannerRoot, getCreatorProfile } from './helpers/profile';
 import { isLoggedIn } from './helpers/user';
 import { isPlayerOfMatch } from './helpers/teams';
@@ -16,13 +16,13 @@ const domObserver = () => {
 		const roomId = getRoomId();
 
 		if (roomId) {
-			const rootElem = getMatchRoomRoot();
+			const rootElem = getContentRoot();
 			if (rootElem) {
 				const matchInfo = (await getMatchInfo(roomId)) ?? {};
 				if (matchInfo && isPlayerOfMatch(roomId, matchInfo.teams)) {
 					addStylingElement(rootElem);
-					addTimeFrameToggle(rootElem, matchInfo);
-					await addMapStats(rootElem, matchInfo);
+					addTimeFrameToggle(matchInfo);
+					await addMapStats(matchInfo);
 				}
 			}
 		} else if (getCreatorProfile()) {

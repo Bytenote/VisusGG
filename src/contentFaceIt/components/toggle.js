@@ -2,7 +2,7 @@ import { EXTENSION_NAME } from '../../shared/constants';
 import { addMapStats } from '../features/addMapStats';
 import { getMatchInfo } from '../../shared/helpers/api';
 import { getSyncStorage, setSyncStorage } from '../../shared/storage';
-import { getMatchRoomRoot, getRoomId } from '../helpers/matchroom';
+import { getContentRoot, getRoomId } from '../helpers/matchroom';
 
 export const insertTimeFrameToggle = (parent) => {
 	const buttonGroup = document.createElement('div');
@@ -36,7 +36,7 @@ const createButton = (label, maxAge) => {
 };
 
 const clickHandler = (e, maxAge) => {
-	const activeButtons = getMatchRoomRoot().querySelectorAll(
+	const activeButtons = getContentRoot().querySelectorAll(
 		`.${EXTENSION_NAME}-toggle-active`
 	);
 
@@ -67,5 +67,5 @@ const setActiveToggle = (buttonGroup, toggles) => {
 const updateStats = async () => {
 	const matchInfo = await getMatchInfo(getRoomId());
 
-	addMapStats(getMatchRoomRoot(), matchInfo);
+	addMapStats(matchInfo);
 };

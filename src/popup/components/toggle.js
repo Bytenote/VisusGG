@@ -18,7 +18,7 @@ export const initToggleButtons = (
 
 export const removeOldToggles = () => {
 	const toggleGroupChildren = [
-		...document.querySelector('#button-edit-group')?.children,
+		...document.getElementById('button-edit-group')?.children,
 	];
 	toggleGroupChildren.forEach((toggle) => {
 		if (toggle.classList.contains('toggle-btn')) {
@@ -35,10 +35,10 @@ export const updatePopupElements = (isDisabled, toggle = null) => {
 	if (toggle) {
 		if (toggle?.type && toggle?.amount) {
 			const timeFrameUnitBtns = [
-				...document.querySelector('#time-frame-units')?.children,
+				...document.getElementById('time-frame-units')?.children,
 			];
 			const timeFrameNumberBtns = [
-				...document.querySelector('#time-frame-numbers')?.children,
+				...document.getElementById('time-frame-numbers')?.children,
 			];
 
 			timeFrameUnitBtns.forEach((btn) => {
