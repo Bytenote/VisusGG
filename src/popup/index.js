@@ -1,5 +1,4 @@
 import '@melloware/coloris/dist/coloris.css';
-import './styles.css';
 import { displayTimeFrameToggle } from './features/updateTimeFrameToggle';
 import { initStorage } from '../shared/storage';
 import { initStorageChangeListener } from './helpers/storageChanges';

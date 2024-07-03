@@ -11,7 +11,8 @@ export const getContentRoot = () =>
 	document.getElementById('main-layout-content');
 
 export const getMatchRoomRoot = () =>
-	document.getElementById('MATCHROOM-OVERVIEW');
+	document.getElementById('MATCHROOM-OVERVIEW') ??
+	document.querySelector('[id*="MATCHROOM-OVERVIEW"]');
 
 export const getMapElements = (
 	matchRoomElem,

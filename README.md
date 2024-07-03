@@ -33,16 +33,22 @@ Get the extension from here:
 
 ## Build from source
 
-###### Cloning
+###### Get Bun
 
 ```bash
-$ git clone https://github.com/Bytenote/VisusGG.git
+npm install -g bun
 ```
 
-###### Installation
+###### Clone
 
 ```bash
-npm install
+git clone git@github.com:Bytenote/VisusGG-dev.git
+```
+
+###### Install
+
+```bash
+bun install
 ```
 
 ###### Development
@@ -69,15 +75,31 @@ Start dev server
 <td>
 
 ```bash
-npm run start
+bun run dev
 ```
 
 </td>
 <td>
 
 ```bash
-npm run start-firefox
+bun run dev:firefox
 ```
+
+</td>
+</tr>
+
+<tr>
+<td>
+Reload extension
+</td>
+<td>
+
+`Ctrl + Shift + E`
+
+</td>
+<td>
+
+`Ctrl + Shift + E`
 
 </td>
 </tr>
@@ -89,14 +111,14 @@ Build extension
 <td>
 
 ```bash
-npm run build
+bun run build
 ```
 
 </td>
 <td>
 
 ```bash
-npm run build-firefox
+bun run build:firefox
 ```
 
 </td>
