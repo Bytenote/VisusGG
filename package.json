@@ -1,12 +1,13 @@
 {
 	"name": "visusgg",
-	"version": "2.2.4",
+	"version": "2.3.0",
 	"description": "Browser extension aiming to improve the user experience by providing additional stats around the FACEIT platform.",
+	"type": "module",
 	"scripts": {
-		"build": "cross-env NODE_ENV=production node webpack/build.js",
-		"build:firefox": "cross-env BROWSER=firefox NODE_ENV=production node webpack/build.js",
-		"start": "node webpack/index.js",
-		"start:firefox": "cross-env BROWSER=firefox node webpack/index.js"
+		"build": "NODE_ENV=production bun run ./scripts/build.js",
+		"build:firefox": "NODE_ENV=production BROWSER=firefox bun run ./scripts/build.js",
+		"dev": "bun run nodemon",
+		"dev:firefox": "BROWSER=firefox bun run nodemon"
 	},
 	"repository": {
 		"type": "git",
@@ -16,24 +17,10 @@
 	"license": "GNU GPLv3",
 	"homepage": "https://chrome.google.com/webstore/detail/visusgg/kodlabmmaalpolkfolgpahbjehalecki",
 	"devDependencies": {
-		"@types/chrome": "^0.0.202",
-		"clean-webpack-plugin": "^4.0.0",
-		"copy-webpack-plugin": "^7.0.0",
-		"cross-env": "^7.0.3",
-		"css-loader": "^6.7.2",
-		"dotenv": "^16.0.3",
-		"file-loader": "^6.2.0",
-		"html-loader": "^3.1.0",
-		"html-webpack-plugin": "^5.5.0",
-		"prettier": "^2.7.1",
-		"sass-loader": "^13.2.0",
-		"source-map-loader": "^3.0.1",
-		"style-loader": "^3.3.1",
-		"terser-webpack-plugin": "^5.3.6",
-		"webextension-polyfill": "^0.10.0",
-		"webpack": "^5.75.0",
-		"webpack-cli": "^4.10.0",
-		"webpack-dev-server": "^4.11.1"
+		"bun-asset-loader": "^1.1.0",
+		"bun-css-loader": "^1.1.0",
+		"nodemon": "^3.1.4",
+		"webextension-polyfill": "^0.10.0"
 	},
 	"dependencies": {
 		"@melloware/coloris": "^0.17.1",
