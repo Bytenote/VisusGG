@@ -7,7 +7,9 @@
         "build": "NODE_ENV=production bun run ./scripts/build.js",
         "dev": "bun run nodemon",
         "format": "prettier --write .",
-        "check-format": "prettier --check ."
+        "check-format": "prettier --check .",
+        "add-changeset": "changeset add",
+        "version": "changeset version && bun ./scripts/versioning.js && bun run format"
     },
     "repository": {
         "type": "git",
@@ -19,9 +21,13 @@
     "prettier": "@bytenote/prettier-config",
     "devDependencies": {
         "@bytenote/prettier-config": "^1.0.4",
-        "bun-asset-loader": "^1.1.0",
-        "bun-css-loader": "^1.1.0",
+        "@changesets/changelog-git": "^0.2.0",
+        "@changesets/cli": "^2.27.8",
+        "bun-asset-loader": "^1.2.0",
+        "bun-css-loader": "^1.2.0",
+        "chrome-webstore-upload-cli": "^3.3.1",
         "nodemon": "^3.1.4",
+        "web-ext": "^8.2.0",
         "webextension-polyfill": "^0.10.0"
     },
     "dependencies": {
