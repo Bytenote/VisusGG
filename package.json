@@ -1,7 +1,8 @@
 {
     "name": "visusgg",
-    "version": "2.3.0",
+    "version": "2.3.1",
     "description": "Browser extension aiming to improve the user experience by providing additional stats around the FACEIT platform.",
+    "private": true,
     "type": "module",
     "scripts": {
         "build": "NODE_ENV=production bun run ./scripts/build.js",

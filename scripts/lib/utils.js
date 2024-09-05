@@ -119,14 +119,12 @@ const convertManifestV3ToFirefoxV2 = (manifest) => {
         ...manifest.host_permissions,
     ];
 
-    if (isDev) {
-        manifest['browser_specific_settings'] = {
-            gecko: {
-                id: 'addon@example.com',
-                strict_min_version: '42.0',
-            },
-        };
-    }
+    manifest['browser_specific_settings'] = {
+        gecko: {
+            id: '{13c012e0-7b3e-48d8-8067-3f8504f91913}',
+            strict_min_version: '58.0',
+        },
+    };
 
     delete manifest.action;
     delete manifest.host_permissions;
