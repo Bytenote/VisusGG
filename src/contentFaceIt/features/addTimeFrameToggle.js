@@ -1,7 +1,7 @@
 import { getSyncStorage } from '../../shared/storage';
 import { insertTimeFrameToggle } from '../components/toggle';
 import {
-    getMapElements,
+    getMapObjects,
     getMatchRoomRoot,
     getToggleGroup,
     hasToggleElements,
@@ -16,7 +16,7 @@ export const addTimeFrameToggle = (matchInfo) => {
     const matchRoomMaps = matchInfo.matchCustom?.tree?.map?.values?.value;
     if (matchRoomElem && matchRoomMaps?.length > 0) {
         if (!hasToggleElements(matchRoomElem)) {
-            const mapElems = getMapElements(
+            const mapElems = getMapObjects(
                 matchRoomElem,
                 matchInfo.id,
                 matchRoomMaps

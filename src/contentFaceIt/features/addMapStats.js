@@ -2,8 +2,9 @@ import { getSyncStorage } from '../../shared/storage';
 import { createPopover } from '../components/popover';
 import { hydrateStats, insertStats } from '../components/winrate';
 import {
-    getMapElements,
+    getMapObjects,
     getMatchRoomRoot,
+    getStatsElements,
     hasStatsElements,
 } from '../helpers/matchroom';
 import {
@@ -20,7 +21,7 @@ export const addMapStats = async (matchInfo) => {
     const matchRoomElem = getMatchRoomRoot();
     const matchRoomMaps = matchInfo.matchCustom?.tree?.map?.values?.value;
     if (matchRoomElem && matchRoomMaps?.length > 0) {
-        const mapElems = getMapElements(
+        const mapElems = getMapObjects(
             matchRoomElem,
             matchInfo.id,
             matchRoomMaps
@@ -55,12 +56,9 @@ export const addMapStats = async (matchInfo) => {
 export const removeMapStats = () => {
     const matchRoomElem = getMatchRoomRoot();
     if (matchRoomElem) {
-        if (hasStatsElements(matchRoomElem)) {
-            const statsElems = [
-                ...matchRoomElem.querySelectorAll('.VisusGG-stats'),
-            ];
-
-            statsElems?.forEach((elem) => {
+        const statsElems = getStatsElements(matchRoomElem);
+        if (statsElems?.length > 0) {
+            statsElems.forEach((elem) => {
                 elem?.parentElement?.removeAttribute('style');
                 elem?.remove();
             });

@@ -6,7 +6,7 @@ import { addMapStats } from './features/addMapStats';
 import { addStylingElement } from './features/addStylingElement';
 import { addTimeFrameToggle } from './features/addTimeFrameToggle';
 import { getContentRoot, getRoomId } from './helpers/matchroom';
-import { getBannerRoot, getCreatorProfile } from './helpers/profile';
+import { getBannerRoot, isCreatorProfile } from './helpers/profile';
 import { initStorageChangeListener } from './helpers/storageChanges';
 import { isPlayerOfMatch } from './helpers/teams';
 import { isLoggedIn } from './helpers/user';
@@ -25,7 +25,7 @@ const domObserver = () => {
                     await addMapStats(matchInfo);
                 }
             }
-        } else if (getCreatorProfile()) {
+        } else if (isCreatorProfile()) {
             const rootElem = getBannerRoot();
             if (rootElem) {
                 addStylingElement(rootElem);

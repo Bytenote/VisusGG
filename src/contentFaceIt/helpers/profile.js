@@ -1,42 +1,58 @@
 import { CREATORS, EXTENSION_NAME } from '../../shared/constants';
+import {
+    findElementRecursively,
+    getDirectChildTextContent,
+    getOptimizedElement,
+    getSameParentElement,
+} from './utils';
 
-export const getCreatorProfile = (path = location.pathname) => {
-    const profile = /players(?:-modal)?\/([^/]+)/.exec(path);
+export const isCreatorProfile = () => {
+    const urlName = getPlayerUrlName();
 
-    return CREATORS.includes(profile?.[1] || null) ? profile[1] : null;
+    return CREATORS.includes(urlName) ? urlName : null;
 };
 
 export const getBannerRoot = () =>
-    document.querySelector('.modal-content parasite-player-profile') ??
-    document.getElementById('parasite-container') ??
-    getBetaBannerRoot();
+    document.querySelector('.modal-content parasite-player-profile') ||
+    document.getElementById('parasite-container');
 
-export const getBanner = (parent) => {
-    const hasAvatar = !!getAvatar(parent);
-    if (hasAvatar) {
-        const playerName =
-            parent.querySelector('h5[size="5"]')?.parentElement?.parentElement;
+export const getBannerPlayerCard = (parent) => {
+    const bannerOptimized = getOptimizedElement('profile-banner', () => {
+        const avatarElem = getAvatar(parent);
+        if (avatarElem) {
+            const playerNameElem = findPlayerNameElement(parent);
+            const parentElem = getSameParentElement(avatarElem, playerNameElem);
 
-        return playerName;
-    }
+            return parentElem;
+        }
 
-    return null;
+        return null;
+    });
+
+    return bannerOptimized;
 };
 
 export const hasCreatorElement = (bannerElem) =>
     !!bannerElem.querySelector(`#${EXTENSION_NAME}-badge`);
 
-const getBetaBannerRoot = () => {
-    return (
-        (document.querySelector('.FuseModalPortal') &&
-            document.querySelector('i[title="close-icon"]')?.parentElement) ??
-        document.getElementById('main-layout-content')
-    );
+const getAvatar = (parent) =>
+    parent?.querySelector('i[data-testid="avatar"]') ||
+    parent?.querySelector('img[aria-label="avatar"]');
+
+const findPlayerNameElement = (parent) => {
+    const urlName = getPlayerUrlName();
+    const playerName = findElementRecursively([parent], (elem) => {
+        const textContent = getDirectChildTextContent(elem);
+
+        return textContent === urlName;
+    });
+
+    return playerName;
 };
 
-const getAvatar = (parent) => {
-    return (
-        parent?.querySelector('i[data-testid="avatar"]') ||
-        parent?.querySelector('img[aria-label="avatar"]')
-    );
+const getPlayerUrlName = () => {
+    const [_, profile] =
+        /players(?:-modal)?\/([^/]+)/.exec(location.pathname) ?? [];
+
+    return profile;
 };
