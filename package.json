@@ -5,9 +5,7 @@
     "type": "module",
     "scripts": {
         "build": "NODE_ENV=production bun run ./scripts/build.js",
-        "build:firefox": "NODE_ENV=production BROWSER=firefox bun run ./scripts/build.js",
         "dev": "bun run nodemon",
-        "dev:firefox": "BROWSER=firefox bun run nodemon",
         "format": "prettier --write .",
         "check-format": "prettier --check ."
     },
