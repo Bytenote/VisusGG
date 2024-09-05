@@ -1,3 +1,3 @@
 export const updateSwitchValue = (parent, isActive) => {
-	parent.checked = isActive;
+    parent.checked = isActive;
 };

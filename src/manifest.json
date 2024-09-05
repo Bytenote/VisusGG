@@ -1,64 +1,64 @@
 {
-	"manifest_version": 3,
-	"name": "VisusGG",
-	"description": "VisusGG, a browser extension by x3picF4ilx (Bytenote) & MrMaxim, aims to improve the user experience on FACEIT's platform.",
-	"version": "2.3.0",
-	"icons": {
-		"16": "icon-16.png",
-		"48": "icon-48.png",
-		"128": "icon-128.png"
-	},
-	"background": { "service_worker": "background.js" },
-	"content_scripts": [
-		{
-			"run_at": "document_end",
-			"matches": [
-				"https://www.faceit.com/*",
-				"https://beta.faceit.com/*"
-			],
-			"js": ["contentFaceIt.js"]
-		},
-		{
-			"run_at": "document_end",
-			"matches": [
-				"https://*.steamcommunity.com/profiles/*",
-				"https://*.steamcommunity.com/id/*"
-			],
-			"exclude_matches": [
-				"https://*.steamcommunity.com/id/*/allcomments",
-				"https://*.steamcommunity.com/profiles/*/allcomments"
-			],
-			"js": ["contentSteam.js"],
-			"css": ["contentSteam.css"]
-		}
-	],
-	"action": {
-		"default_icon": "icon-48.png",
-		"default_popup": "popup.html",
-		"default_title": "VisusGG"
-	},
-	"web_accessible_resources": [
-		{
-			"resources": [
-				"imgs/f00.png",
-				"imgs/f01.png",
-				"imgs/f02.png",
-				"imgs/f03.png",
-				"imgs/f04.png",
-				"imgs/f05.png",
-				"imgs/f06.png",
-				"imgs/f07.png",
-				"imgs/f08.png",
-				"imgs/f09.png",
-				"imgs/f10.png"
-			],
-			"matches": ["https://*.steamcommunity.com/*"]
-		}
-	],
-	"permissions": ["cookies", "storage"],
-	"host_permissions": [
-		"https://*.faceit.com/*",
-		"https://www.steamcommunity.com/profiles/*",
-		"https://www.steamcommunity.com/id/*"
-	]
+    "manifest_version": 3,
+    "name": "VisusGG",
+    "description": "VisusGG, a browser extension by x3picF4ilx (Bytenote) & MrMaxim, aims to improve the user experience on FACEIT's platform.",
+    "version": "2.3.0",
+    "icons": {
+        "16": "icon-16.png",
+        "48": "icon-48.png",
+        "128": "icon-128.png"
+    },
+    "background": { "service_worker": "background.js" },
+    "content_scripts": [
+        {
+            "run_at": "document_end",
+            "matches": [
+                "https://www.faceit.com/*",
+                "https://beta.faceit.com/*"
+            ],
+            "js": ["contentFaceIt.js"]
+        },
+        {
+            "run_at": "document_end",
+            "matches": [
+                "https://*.steamcommunity.com/profiles/*",
+                "https://*.steamcommunity.com/id/*"
+            ],
+            "exclude_matches": [
+                "https://*.steamcommunity.com/id/*/allcomments",
+                "https://*.steamcommunity.com/profiles/*/allcomments"
+            ],
+            "js": ["contentSteam.js"],
+            "css": ["contentSteam.css"]
+        }
+    ],
+    "action": {
+        "default_icon": "icon-48.png",
+        "default_popup": "popup.html",
+        "default_title": "VisusGG"
+    },
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "imgs/f00.png",
+                "imgs/f01.png",
+                "imgs/f02.png",
+                "imgs/f03.png",
+                "imgs/f04.png",
+                "imgs/f05.png",
+                "imgs/f06.png",
+                "imgs/f07.png",
+                "imgs/f08.png",
+                "imgs/f09.png",
+                "imgs/f10.png"
+            ],
+            "matches": ["https://*.steamcommunity.com/*"]
+        }
+    ],
+    "permissions": ["cookies", "storage"],
+    "host_permissions": [
+        "https://*.faceit.com/*",
+        "https://www.steamcommunity.com/profiles/*",
+        "https://www.steamcommunity.com/id/*"
+    ]
 }

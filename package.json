@@ -1,31 +1,35 @@
 {
-	"name": "visusgg",
-	"version": "2.3.0",
-	"description": "Browser extension aiming to improve the user experience by providing additional stats around the FACEIT platform.",
-	"type": "module",
-	"scripts": {
-		"build": "NODE_ENV=production bun run ./scripts/build.js",
-		"build:firefox": "NODE_ENV=production BROWSER=firefox bun run ./scripts/build.js",
-		"dev": "bun run nodemon",
-		"dev:firefox": "BROWSER=firefox bun run nodemon"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/Bytenote/VisusGG.git"
-	},
-	"author": "Bytenote",
-	"license": "GNU GPLv3",
-	"homepage": "https://chrome.google.com/webstore/detail/visusgg/kodlabmmaalpolkfolgpahbjehalecki",
-	"devDependencies": {
-		"bun-asset-loader": "^1.1.0",
-		"bun-css-loader": "^1.1.0",
-		"nodemon": "^3.1.4",
-		"webextension-polyfill": "^0.10.0"
-	},
-	"dependencies": {
-		"@melloware/coloris": "^0.17.1",
-		"mem": "^9.0.2",
-		"p-memoize": "^7.1.1",
-		"p-retry": "^5.1.2"
-	}
+    "name": "visusgg",
+    "version": "2.3.0",
+    "description": "Browser extension aiming to improve the user experience by providing additional stats around the FACEIT platform.",
+    "type": "module",
+    "scripts": {
+        "build": "NODE_ENV=production bun run ./scripts/build.js",
+        "build:firefox": "NODE_ENV=production BROWSER=firefox bun run ./scripts/build.js",
+        "dev": "bun run nodemon",
+        "dev:firefox": "BROWSER=firefox bun run nodemon",
+        "format": "prettier --write .",
+        "check-format": "prettier --check ."
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Bytenote/VisusGG.git"
+    },
+    "author": "Bytenote",
+    "license": "GNU GPLv3",
+    "homepage": "https://chrome.google.com/webstore/detail/visusgg/kodlabmmaalpolkfolgpahbjehalecki",
+    "prettier": "@bytenote/prettier-config",
+    "devDependencies": {
+        "@bytenote/prettier-config": "^1.0.4",
+        "bun-asset-loader": "^1.1.0",
+        "bun-css-loader": "^1.1.0",
+        "nodemon": "^3.1.4",
+        "webextension-polyfill": "^0.10.0"
+    },
+    "dependencies": {
+        "@melloware/coloris": "^0.17.1",
+        "mem": "^9.0.2",
+        "p-memoize": "^7.1.1",
+        "p-retry": "^5.1.2"
+    }
 }

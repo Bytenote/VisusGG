@@ -1,86 +1,86 @@
 #VisusGG-showcase-container {
-	display: flex;
-	flex-direction: row;
-	position: static;
-	height: 100%;
-	padding-left: 0px;
-	margin-bottom: 0px;
+    display: flex;
+    flex-direction: row;
+    position: static;
+    height: 100%;
+    padding-left: 0px;
+    margin-bottom: 0px;
 }
 
 #VisusGG-player-level {
-	height: 100px;
-	width: 100px;
-	padding-right: 20px;
+    height: 100px;
+    width: 100px;
+    padding-right: 20px;
 }
 
 #VisusGG-content-container.favoritegroup_content {
-	height: 100%;
+    height: 100%;
 }
 
 #VisusGG-level-container {
-	display: flex;
-	justify-content: center;
-	align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #VisusGG-stats-flag {
-	height: 1.1rem;
-	width: 1.65rem;
-	padding-right: 8px;
+    height: 1.1rem;
+    width: 1.65rem;
+    padding-right: 8px;
 }
 
 .VisusGG-banner.favoritegroup_description {
-	display: inline-block;
-	border-radius: 3px;
-	padding: 0px 7px;
+    display: inline-block;
+    border-radius: 3px;
+    padding: 0px 7px;
 }
 
 #VisusGG-ban-banner {
-	background: #d22b2b;
-	color: #fff;
+    background: #d22b2b;
+    color: #fff;
 }
 
 #VisusGG-temp-ban-banner {
-	background: #fff239;
-	color: #000;
+    background: #fff239;
+    color: #000;
 }
 
 #VisusGG-vip-banner {
-	background: #1fa704;
-	color: #fff;
+    background: #1fa704;
+    color: #fff;
 }
 
 #VisusGG-stats-player-body.favoritegroup_stats.showcase_stats_row {
-	display: flex;
-	position: static;
-	padding-top: 10px;
+    display: flex;
+    position: static;
+    padding-top: 10px;
 }
 
 #VisusGG-stats-player-body .VisusGG-stats-wrapper {
-	display: inline-block;
-	font-size: 1.8rem;
-	cursor: default;
-	margin-left: 0px;
+    display: inline-block;
+    font-size: 1.8rem;
+    cursor: default;
+    margin-left: 0px;
 }
 
 #VisusGG-stats-player-body .VisusGG-stats-wrapper * {
-	text-align: center;
+    text-align: center;
 }
 
 #VisusGG-stats-player-body .VisusGG-stats-group-one {
-	display: grid;
-	grid-template-columns: repeat(2, 1fr);
-	gap: 10px;
-	text-align: left;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    text-align: left;
 }
 
 #VisusGG-stats-player-body .VisusGG-stats-group-two {
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	gap: 15px;
-	padding-left: 30px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    padding-left: 30px;
 }
 
 #VisusGG-container .responsive_tab_control select#VisusGG-game-selector option {
-	background: rgba(24, 24, 24, 0.93);
+    background: rgba(24, 24, 24, 0.93);
 }

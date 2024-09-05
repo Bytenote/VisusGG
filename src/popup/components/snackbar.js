@@ -1,20 +1,20 @@
 export const displaySnackbar = (parent, message) => {
-	removeSnackbar();
+    removeSnackbar();
 
-	const feedbackElem = document.createElement('div');
-	feedbackElem.classList.add('feedback');
-	feedbackElem.textContent = message;
+    const feedbackElem = document.createElement('div');
+    feedbackElem.classList.add('feedback');
+    feedbackElem.textContent = message;
 
-	parent.append(feedbackElem);
+    parent.append(feedbackElem);
 
-	setTimeout(() => {
-		feedbackElem.remove();
-	}, 1500);
+    setTimeout(() => {
+        feedbackElem.remove();
+    }, 1500);
 };
 
 const removeSnackbar = () => {
-	const feedbackElem = document.querySelector('.feedback');
-	if (feedbackElem) {
-		feedbackElem.remove();
-	}
+    const feedbackElem = document.querySelector('.feedback');
+    if (feedbackElem) {
+        feedbackElem.remove();
+    }
 };
