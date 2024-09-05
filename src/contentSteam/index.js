@@ -3,10 +3,10 @@ const { addFaceItStats } = require('./features/addFaceItStats');
 const { initStorageChangeListener } = require('./helpers/storageChanges');
 
 (async () => {
-	await initStorage();
-	initStorageChangeListener();
+    await initStorage();
+    initStorageChangeListener();
 
-	if (getSyncStorage('usesSteam')) {
-		addFaceItStats();
-	}
+    if (getSyncStorage('usesSteam')) {
+        addFaceItStats();
+    }
 })();

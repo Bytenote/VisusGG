@@ -1,0 +1,64 @@
+env:
+    DIRECTORY: build
+    PROJECT_NAME: VisusGG
+
+name: Release
+on:
+    workflow_dispatch: null
+jobs:
+    Build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: oven-sh/setup-bun@v2
+              with:
+                  bun-version: latest
+
+            - run: bun install
+            - run: bun run build
+
+            - name: Upload build artifacts
+              uses: actions/upload-artifact@v4
+              with:
+                  path: ${{ env.DIRECTORY }}
+
+    Chrome:
+        needs: Build
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/download-artifact@v4
+
+            - name: Extract version from package.json
+              id: extract_version
+              run: echo "VERSION=$(jq -r .version package.json)" >> $GITHUB_OUTPUT
+
+            - name: Upload to Chrome Web Store
+              run: npx chrome-webstore-upload-cli@3
+              working-directory: artifact/chrome
+              env:
+                  EXTENSION_ID: ${{ secrets.EXTENSION_ID }}
+                  CLIENT_ID: ${{ secrets.CLIENT_ID }}
+                  CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+                  REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+
+    Firefox:
+        needs: Build
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/download-artifact@v4
+
+            - name: Extract version from package.json
+              id: extract_version
+              run: echo "VERSION=$(jq -r .version package.json)" >> $GITHUB_OUTPUT
+
+            - name: Create source archive
+              run: git archive --output source.zip HEAD ":!.changeset" ":!.github" && unzip -l source.zip
+
+            - name: Upload to Firefox Add-ons
+              run: npx web-ext@8 sign --channel listed --upload-source-code ../../source.zip
+              working-directory: artifact/firefox
+              env:
+                  WEB_EXT_API_KEY: ${{ secrets.WEB_EXT_API_KEY }}
+                  WEB_EXT_API_SECRET: ${{ secrets.WEB_EXT_API_SECRET }}

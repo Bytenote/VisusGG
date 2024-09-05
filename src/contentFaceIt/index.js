@@ -1,46 +1,46 @@
+import { OBSERVER_OPTIONS } from '../shared/constants';
+import { getMatchInfo } from '../shared/helpers/api';
+import { initStorage } from '../shared/storage';
 import { addCreatorBadge } from './features/addCreatorBadge';
 import { addMapStats } from './features/addMapStats';
 import { addStylingElement } from './features/addStylingElement';
 import { addTimeFrameToggle } from './features/addTimeFrameToggle';
-import { getMatchInfo } from '../shared/helpers/api';
-import { initStorage } from '../shared/storage';
 import { getContentRoot, getRoomId } from './helpers/matchroom';
-import { getBannerRoot, getCreatorProfile } from './helpers/profile';
-import { isLoggedIn } from './helpers/user';
-import { isPlayerOfMatch } from './helpers/teams';
+import { getBannerRoot, isCreatorProfile } from './helpers/profile';
 import { initStorageChangeListener } from './helpers/storageChanges';
-import { OBSERVER_OPTIONS } from '../shared/constants';
+import { isPlayerOfMatch } from './helpers/teams';
+import { isLoggedIn } from './helpers/user';
 
 const domObserver = () => {
-	const observer = new MutationObserver(async () => {
-		const roomId = getRoomId();
+    const observer = new MutationObserver(async () => {
+        const roomId = getRoomId();
 
-		if (roomId) {
-			const rootElem = getContentRoot();
-			if (rootElem) {
-				const matchInfo = (await getMatchInfo(roomId)) ?? {};
-				if (matchInfo && isPlayerOfMatch(roomId, matchInfo.teams)) {
-					addStylingElement(rootElem);
-					addTimeFrameToggle(matchInfo);
-					await addMapStats(matchInfo);
-				}
-			}
-		} else if (getCreatorProfile()) {
-			const rootElem = getBannerRoot();
-			if (rootElem) {
-				addStylingElement(rootElem);
-				addCreatorBadge(rootElem);
-			}
-		}
-	});
-	observer.observe(document.body, OBSERVER_OPTIONS);
+        if (roomId) {
+            const rootElem = getContentRoot();
+            if (rootElem) {
+                const matchInfo = (await getMatchInfo(roomId)) ?? {};
+                if (matchInfo && isPlayerOfMatch(roomId, matchInfo.teams)) {
+                    addStylingElement(rootElem);
+                    addTimeFrameToggle(matchInfo);
+                    await addMapStats(matchInfo);
+                }
+            }
+        } else if (isCreatorProfile()) {
+            const rootElem = getBannerRoot();
+            if (rootElem) {
+                addStylingElement(rootElem);
+                addCreatorBadge(rootElem);
+            }
+        }
+    });
+    observer.observe(document.body, OBSERVER_OPTIONS);
 };
 
 (async () => {
-	if (isLoggedIn()) {
-		await initStorage();
-		initStorageChangeListener();
+    if (isLoggedIn()) {
+        await initStorage();
+        initStorageChangeListener();
 
-		domObserver();
-	}
+        domObserver();
+    }
 })();

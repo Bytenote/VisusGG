@@ -1,44 +1,44 @@
 import { getSyncStorage } from '../../shared/storage';
 import { insertTimeFrameToggle } from '../components/toggle';
 import {
-	getMapElements,
-	getMatchRoomRoot,
-	getToggleGroup,
-	hasToggleElements,
+    getMapObjects,
+    getMatchRoomRoot,
+    getToggleGroup,
+    hasToggleElements,
 } from '../helpers/matchroom';
 
 export const addTimeFrameToggle = (matchInfo) => {
-	if (!getSyncStorage('usesFaceIt')) {
-		return;
-	}
+    if (!getSyncStorage('usesFaceIt')) {
+        return;
+    }
 
-	const matchRoomElem = getMatchRoomRoot();
-	const matchRoomMaps = matchInfo.matchCustom?.tree?.map?.values?.value;
-	if (matchRoomElem && matchRoomMaps?.length > 0) {
-		if (!hasToggleElements(matchRoomElem)) {
-			const mapElems = getMapElements(
-				matchRoomElem,
-				matchInfo.id,
-				matchRoomMaps
-			);
+    const matchRoomElem = getMatchRoomRoot();
+    const matchRoomMaps = matchInfo.matchCustom?.tree?.map?.values?.value;
+    if (matchRoomElem && matchRoomMaps?.length > 0) {
+        if (!hasToggleElements(matchRoomElem)) {
+            const mapElems = getMapObjects(
+                matchRoomElem,
+                matchInfo.id,
+                matchRoomMaps
+            );
 
-			if (mapElems && mapElems.length > 0) {
-				const firstMapElem = mapElems[0].mapElem;
-				insertTimeFrameToggle(firstMapElem);
-			}
-		}
-	}
+            if (mapElems && mapElems.length > 0) {
+                const firstMapElem = mapElems[0].mapElem;
+                insertTimeFrameToggle(firstMapElem);
+            }
+        }
+    }
 
-	return;
+    return;
 };
 
 export const removeTimeFrameToggle = () => {
-	const matchRoomElem = getMatchRoomRoot();
-	if (matchRoomElem) {
-		if (hasToggleElements(matchRoomElem)) {
-			const toggleGroup = getToggleGroup(matchRoomElem);
+    const matchRoomElem = getMatchRoomRoot();
+    if (matchRoomElem) {
+        if (hasToggleElements(matchRoomElem)) {
+            const toggleGroup = getToggleGroup(matchRoomElem);
 
-			toggleGroup.remove();
-		}
-	}
+            toggleGroup.remove();
+        }
+    }
 };
