@@ -30,11 +30,11 @@ export const createStylingElement = (parent) => {
 			background: #303030;
 			color: #fff;
 		}
-		div.${EXTENSION_NAME}-stats {
+	    div.${EXTENSION_NAME}-stats {
 			display: flex;
 			align-items: center;
 		}
-		span.${EXTENSION_NAME}-bar {
+	    span.${EXTENSION_NAME}-bar {
 			background:  #303030;
 			display: inline-block;
 			height: 100%;

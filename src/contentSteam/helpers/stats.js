@@ -173,6 +173,8 @@ const getAvgStats = (matches, stats, profile, game) => {
                 acc.wins += +curr?.i10 ?? 0;
                 acc.killsPerDeath += +curr?.c2 ?? 0;
                 acc.killsPerRound += +curr?.c3 ?? 0;
+                acc.headshots += +curr?.c4 ?? 0;
+                acc.damagePerRound += +curr?.c10 ?? 0;
 
                 matchAmount += 1;
             }
@@ -184,18 +186,29 @@ const getAvgStats = (matches, stats, profile, game) => {
             wins: 0,
             killsPerDeath: 0,
             killsPerRound: 0,
+            headshots: 0,
+            damagePerRound: 0,
         }
     );
 
     for (const key in totalStats) {
         const value = totalStats[key] / matchAmount || 0;
 
-        if (key !== 'wins' && value === 0) {
+        if (
+            key !== 'wins' &&
+            key !== 'damagePerRound' &&
+            key !== 'headshots' &&
+            value === 0
+        ) {
             avgStats[`avg${capitalize(key)}`] = '-';
             hasPlayed = false;
         } else {
             avgStats[`avg${capitalize(key)}`] =
-                key === 'kills' ? Math.round(value) : value.toFixed(2);
+                key === 'kills' ||
+                key === 'damagePerRound' ||
+                key === 'headshots'
+                    ? Math.round(value)
+                    : value.toFixed(2);
         }
     }
 
