@@ -2,16 +2,21 @@ import { EXTENSION_NAME } from '../../shared/constants';
 import { getMatchInfo } from '../../shared/helpers/api';
 import { getSyncStorage, setSyncStorage } from '../../shared/storage';
 import { addMapStats } from '../features/addMapStats';
-import { getContentRoot, getRoomId } from '../helpers/matchroom';
+import {
+    getContentRoot,
+    getDialogSiblingRoot,
+    getMatchRoomRoot,
+    getRoomId,
+} from '../helpers/matchroom';
 
-export const insertTimeFrameToggle = (parent) => {
+export const insertTimeFrameToggle = (idSuffix, parent) => {
     const buttonGroup = document.createElement('div');
     const toggles = getSyncStorage('toggles');
 
-    buttonGroup.setAttribute('id', `${EXTENSION_NAME}-button-group`);
+    buttonGroup.setAttribute('id', `${EXTENSION_NAME + idSuffix}-button-group`);
 
     for (const toggle of toggles) {
-        const button = createButton(toggle.label, toggle.maxAge);
+        const button = createButton(toggle.label, toggle.maxAge, idSuffix);
 
         buttonGroup.append(button);
     }
@@ -21,12 +26,12 @@ export const insertTimeFrameToggle = (parent) => {
     parent.insertAdjacentElement('beforebegin', buttonGroup);
 };
 
-const createButton = (label, maxAge) => {
+const createButton = (label, maxAge, idSuffix) => {
     const button = document.createElement('button');
 
     button.classList.add(`${EXTENSION_NAME}-toggle`);
 
-    const onClick = (e) => clickHandler(e, maxAge);
+    const onClick = (e) => clickHandler(e, maxAge, idSuffix);
     button.removeEventListener('click', onClick);
     button.addEventListener('click', onClick);
 
@@ -35,10 +40,13 @@ const createButton = (label, maxAge) => {
     return button;
 };
 
-const clickHandler = (e, maxAge) => {
-    const activeButtons = getContentRoot().querySelectorAll(
-        `.${EXTENSION_NAME}-toggle-active`
-    );
+const clickHandler = (e, maxAge, idSuffix) => {
+    const rootElem = getContentRoot();
+    const siblingRoot = getDialogSiblingRoot(rootElem);
+    const activeButtons = getMatchRoomRoot(
+        idSuffix,
+        siblingRoot
+    ).querySelectorAll(`.${EXTENSION_NAME}-toggle-active`);
 
     for (const button of activeButtons) {
         button.classList.remove(`${EXTENSION_NAME}-toggle-active`);

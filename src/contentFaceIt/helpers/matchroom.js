@@ -11,29 +11,41 @@ export const getRoomId = (path = location.pathname) =>
         path
     )?.[1] || null;
 
-export const getContentRoot = () =>
-    document.getElementById('parasite-container') ??
-    document.getElementById('main-layout-content');
+export const getContentRoot = () => document.getElementById('canvas-body');
 
-export const getMatchRoomRoot = () =>
-    document.getElementById('MATCHROOM-OVERVIEW') ??
-    getOptimizedElement('MATCHROOM-OVERVIEW', () =>
-        document.querySelector('[id*="MATCHROOM-OVERVIEW-"]')
+export const getDialogSiblingRoot = (elem) => {
+    return getOptimizedElement('canvas-dialog-root', () => {
+        const parent = elem.parentElement;
+        const siblings = [...(parent?.children ?? [])];
+
+        return siblings.find(
+            (x) =>
+                x.getAttribute('role') === 'dialog' &&
+                x.getAttribute('data-state') === 'open'
+        );
+    });
+};
+
+export const getMatchRoomRoot = (idSuffix, parent) =>
+    getOptimizedElement(`MATCHROOM-OVERVIEW${idSuffix}`, () =>
+        (parent ?? document).querySelector('[id*="MATCHROOM-OVERVIEW-"]')
     );
 
 export const getMapObjects = (
+    idSuffix,
     matchRoomElem,
     matchRoomId,
     matchRoomMaps = []
 ) => {
     const mapDict = getMapDictMemoized(matchRoomId, matchRoomMaps);
     const matchRoomInfoColumn = getOptimizedElement(
-        'matchroom-info-column',
+        `matchroom-info-column${idSuffix}`,
         () => matchRoomElem.querySelector("div > div[name='info']")
     );
 
     const knownMapObjects = getKnownMapObjects(
-        matchRoomInfoColumn ?? matchRoomElem
+        matchRoomInfoColumn ?? matchRoomElem,
+        idSuffix
     );
     if (knownMapObjects.length > 0) {
         return knownMapObjects;
@@ -78,7 +90,7 @@ export const getMapObjects = (
                 return acc;
             }, [])
             .map(({ mapElem, mapName }, i) => {
-                const attr = `${EXTENSION_NAME}-map-${i}`;
+                const attr = `${EXTENSION_NAME + idSuffix}-map-${i}`;
                 const attrType = mapElem.hasAttribute('id')
                     ? `data-${EXTENSION_NAME}`
                     : 'id';
@@ -106,18 +118,18 @@ export const getStatsElements = (parent) => [
     ...parent.querySelectorAll(`div.${EXTENSION_NAME}-stats`),
 ];
 
-export const hasToggleElements = (parent) =>
-    !!parent.querySelector(`#${EXTENSION_NAME}-button-group`);
+export const hasToggleElements = (idSuffix, parent) =>
+    !!parent.querySelector(`#${EXTENSION_NAME + idSuffix}-button-group`);
 
-export const getToggleGroup = (parent) =>
-    parent.querySelector(`#${EXTENSION_NAME}-button-group`);
+export const getToggleGroup = (idSuffix, parent) =>
+    parent.querySelector(`#${EXTENSION_NAME + idSuffix}-button-group`);
 
-const getKnownMapObjects = (container) => {
+const getKnownMapObjects = (container, idSuffix) => {
     const mapObjects = [];
 
     let i = 0;
     while (true) {
-        const attr = `${EXTENSION_NAME}-map-${i}`;
+        const attr = `${EXTENSION_NAME + idSuffix}-map-${i}`;
         const mapElem =
             document.getElementById(attr) ??
             container.querySelector(`[data-${EXTENSION_NAME}="${attr}"]`);

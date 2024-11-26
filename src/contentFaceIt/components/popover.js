@@ -1,7 +1,7 @@
 import { EXTENSION_NAME } from '../../shared/constants';
 import { getSyncStorage } from '../../shared/storage';
 import { getColorToUse } from '../helpers/colorHelper';
-import { getContentRoot } from '../helpers/matchroom';
+import { getMatchRoomRoot } from '../helpers/matchroom';
 import {
     getMapDictMemoized,
     getMapStats,
@@ -9,7 +9,7 @@ import {
 } from '../helpers/stats';
 import { setColorOfElements } from './color';
 
-export const createPopover = () => {
+export const createPopover = (idSuffix) => {
     const popoverDiv = document.createElement('div');
     const headingDiv = document.createElement('div');
     const mapDiv = document.createElement('div');
@@ -17,10 +17,10 @@ export const createPopover = () => {
     const timeFrameDiv = document.createElement('div');
     const timeFrameSpan = document.createElement('span');
 
-    const rootElem = getContentRoot();
+    const rootElem = getMatchRoomRoot(idSuffix);
 
-    popoverDiv.id = `${EXTENSION_NAME}-popover`;
-    headingDiv.id = `${EXTENSION_NAME}-popover-heading`;
+    popoverDiv.id = `${EXTENSION_NAME + idSuffix}-popover`;
+    headingDiv.id = `${EXTENSION_NAME + idSuffix}-popover-heading`;
 
     popoverDiv.classList.add(`${EXTENSION_NAME}-popover`);
     headingDiv.classList.add(`${EXTENSION_NAME}-popover-heading`);
@@ -37,12 +37,12 @@ export const createPopover = () => {
     rootElem?.append(popoverDiv);
 };
 
-export const showPopover = async (_, parent, mapName, matchInfo) => {
-    const rootElem = getContentRoot();
+export const showPopover = async (_, idSuffix, parent, mapName, matchInfo) => {
+    const rootElem = getMatchRoomRoot(idSuffix);
     const timeFrameName = getTimeFrameName();
 
     const contentContainer = rootElem.querySelector(
-        `#${EXTENSION_NAME}-popover-content`
+        `#${EXTENSION_NAME + idSuffix}-popover-content`
     );
     if (!contentContainer) {
         const matchRoomMaps = matchInfo.matchCustom?.tree?.map?.values?.value;
@@ -55,7 +55,9 @@ export const showPopover = async (_, parent, mapName, matchInfo) => {
         );
         const stats = getMapStats(mapName, maps, allStats, matchInfo);
 
-        const popoverDiv = rootElem.querySelector(`#${EXTENSION_NAME}-popover`);
+        const popoverDiv = rootElem.querySelector(
+            `#${EXTENSION_NAME + idSuffix}-popover`
+        );
         const mapSpan = rootElem.querySelector(`.${EXTENSION_NAME}-map span`);
         const timeFrameSpan = rootElem.querySelector(
             `.${EXTENSION_NAME}-time-frame span`
@@ -74,7 +76,7 @@ export const showPopover = async (_, parent, mapName, matchInfo) => {
             (usesCompareMode && Object.keys(stats?.[1] || {}).length > 1);
         const contentDiv = document.createElement('div');
 
-        contentDiv.id = `${EXTENSION_NAME}-popover-content`;
+        contentDiv.id = `${EXTENSION_NAME + idSuffix}-popover-content`;
 
         if (hasStats) {
             if (!usesCompareMode) {
@@ -93,13 +95,17 @@ export const showPopover = async (_, parent, mapName, matchInfo) => {
     }
 };
 
-export const hidePopover = () => {
-    const rootElem = getContentRoot();
-    const popover = rootElem?.querySelector(`#${EXTENSION_NAME}-popover`);
+export const hidePopover = (_, idSuffix) => {
+    const rootElem = getMatchRoomRoot(idSuffix);
+    const popover = rootElem?.querySelector(
+        `#${EXTENSION_NAME + idSuffix}-popover`
+    );
 
     popover.style.display = 'none';
 
-    popover.querySelector(`#${EXTENSION_NAME}-popover-content`)?.remove();
+    popover
+        .querySelector(`#${EXTENSION_NAME + idSuffix}-popover-content`)
+        ?.remove();
 };
 
 const getTimeFrameName = () => {
@@ -117,7 +123,7 @@ const getPopoverAnchor = ({ x, y }, stats) => {
     const playerCount = team1?.size > team2?.size ? team1?.size : team2?.size;
     const height = (playerCount * 53 + 20) / 2 + 24 - 25 ?? 20;
 
-    return { x: x + 90, y: height ? y - height : y - 32 };
+    return { x: x + 20, y: height ? y - height : y - 32 };
 };
 
 const setPopoverActive = (element, x, y) => {
