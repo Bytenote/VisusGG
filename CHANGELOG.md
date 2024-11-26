@@ -1,5 +1,11 @@
 # visusgg
 
+## 2.3.2
+
+### Patch Changes
+
+-   1093750: Fixed matchroom elements not being displayed after FACEIT 2.0 update
+
 ## 2.3.1
 
 ### Patch Changes
