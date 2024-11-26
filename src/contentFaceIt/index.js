@@ -1,11 +1,15 @@
 import { OBSERVER_OPTIONS } from '../shared/constants';
 import { getMatchInfo } from '../shared/helpers/api';
-import { initStorage } from '../shared/storage';
+import { getSyncStorage, initStorage } from '../shared/storage';
 import { addCreatorBadge } from './features/addCreatorBadge';
 import { addMapStats } from './features/addMapStats';
 import { addStylingElement } from './features/addStylingElement';
 import { addTimeFrameToggle } from './features/addTimeFrameToggle';
-import { getContentRoot, getRoomId } from './helpers/matchroom';
+import {
+    getContentRoot,
+    getDialogSiblingRoot,
+    getRoomId,
+} from './helpers/matchroom';
 import { getBannerRoot, isCreatorProfile } from './helpers/profile';
 import { initStorageChangeListener } from './helpers/storageChanges';
 import { isPlayerOfMatch } from './helpers/teams';
@@ -18,11 +22,12 @@ const domObserver = () => {
         if (roomId) {
             const rootElem = getContentRoot();
             if (rootElem) {
+                const siblingRoot = getDialogSiblingRoot(rootElem);
                 const matchInfo = (await getMatchInfo(roomId)) ?? {};
                 if (matchInfo && isPlayerOfMatch(roomId, matchInfo.teams)) {
                     addStylingElement(rootElem);
-                    addTimeFrameToggle(matchInfo);
-                    await addMapStats(matchInfo);
+                    addTimeFrameToggle(matchInfo, siblingRoot);
+                    await addMapStats(matchInfo, siblingRoot);
                 }
             }
         } else if (isCreatorProfile()) {

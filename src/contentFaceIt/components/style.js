@@ -5,13 +5,16 @@ export const createStylingElement = (parent) => {
 
     rootStyling.setAttribute('id', `${EXTENSION_NAME}-styling`);
     rootStyling.textContent = `
-		div#${EXTENSION_NAME}-button-group {
+		div#${EXTENSION_NAME}-0-button-group,
+		div#${EXTENSION_NAME}-1-button-group {
 			text-align: start;
 		}
-		div#${EXTENSION_NAME}-button-group > button.${EXTENSION_NAME}-toggle:first-child {
+		div#${EXTENSION_NAME}-0-button-group > button.${EXTENSION_NAME}-toggle:first-child,
+		div#${EXTENSION_NAME}-1-button-group > button.${EXTENSION_NAME}-toggle:first-child {
 			border-radius: 4px 0 0 4px;
 		}
-		div#${EXTENSION_NAME}-button-group > button.${EXTENSION_NAME}-toggle:last-child {
+		div#${EXTENSION_NAME}-0-button-group > button.${EXTENSION_NAME}-toggle:last-child,
+		div#${EXTENSION_NAME}-1-button-group > button.${EXTENSION_NAME}-toggle:last-child {
 			border-radius: 0 4px 4px 0;
 		}
 		button.${EXTENSION_NAME}-toggle {

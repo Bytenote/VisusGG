@@ -9,7 +9,9 @@ export const getOptimizedElement = (attr, cb) => {
         const rootElemOnce = cb();
         if (rootElemOnce) {
             if (rootElemOnce.hasAttribute('id')) {
-                rootElemOnce.setAttribute(`data-${EXTENSION_NAME}`, attr);
+                if (!rootElemOnce.hasAttribute(`data-${EXTENSION_NAME}`)) {
+                    rootElemOnce.setAttribute(`data-${EXTENSION_NAME}`, attr);
+                }
             } else {
                 rootElemOnce.setAttribute('id', idAttr);
             }

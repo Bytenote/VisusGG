@@ -11,7 +11,7 @@ import {
     addTimeFrameToggle,
     removeTimeFrameToggle,
 } from '../features/addTimeFrameToggle';
-import { getContentRoot, getRoomId } from './matchroom';
+import { getContentRoot, getDialogSiblingRoot, getRoomId } from './matchroom';
 import { isPlayerOfMatch } from './teams';
 
 const UPDATE_FUNC = {
@@ -42,6 +42,7 @@ const DOMUpdater = async (key, toggles) => {
         if (rootElem) {
             const matchInfo = (await getMatchInfo(roomId)) ?? {};
             if (matchInfo && isPlayerOfMatch(roomId, matchInfo.teams)) {
+                const siblingRoot = getDialogSiblingRoot(rootElem);
                 const timeFrame = await getStorage('timeFrame');
                 const foundToggle =
                     (await toggles.find(
@@ -53,13 +54,18 @@ const DOMUpdater = async (key, toggles) => {
                 }
                 setSyncStorage('toggles', toggles);
 
-                removeTimeFrameToggle();
+                const idSuffixes = ['-0', '-1'];
+                for (const idSuffix of idSuffixes) {
+                    removeTimeFrameToggle(idSuffix);
+                }
                 if (key === 'usesFaceIt' && !getSyncStorage(key)) {
-                    removeMapStats();
+                    for (const idSuffix of idSuffixes) {
+                        removeMapStats(idSuffix);
+                    }
                 }
 
-                addTimeFrameToggle(matchInfo);
-                await addMapStats(matchInfo);
+                addTimeFrameToggle(matchInfo, siblingRoot);
+                await addMapStats(matchInfo, siblingRoot);
             }
         }
     }

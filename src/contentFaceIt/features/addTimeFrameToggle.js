@@ -1,3 +1,4 @@
+import { EXTENSION_NAME } from '../../shared/constants';
 import { getSyncStorage } from '../../shared/storage';
 import { insertTimeFrameToggle } from '../components/toggle';
 import {
@@ -7,24 +8,25 @@ import {
     hasToggleElements,
 } from '../helpers/matchroom';
 
-export const addTimeFrameToggle = (matchInfo) => {
+export const addTimeFrameToggle = (matchInfo, siblingRoot) => {
     if (!getSyncStorage('usesFaceIt')) {
         return;
     }
 
-    const matchRoomElem = getMatchRoomRoot();
+    const idSuffix = siblingRoot ? '-1' : '-0';
+    const matchRoomElem = getMatchRoomRoot(idSuffix, siblingRoot);
     const matchRoomMaps = matchInfo.matchCustom?.tree?.map?.values?.value;
     if (matchRoomElem && matchRoomMaps?.length > 0) {
-        if (!hasToggleElements(matchRoomElem)) {
+        if (!hasToggleElements(idSuffix, matchRoomElem)) {
             const mapElems = getMapObjects(
+                idSuffix,
                 matchRoomElem,
                 matchInfo.id,
                 matchRoomMaps
             );
-
             if (mapElems && mapElems.length > 0) {
                 const firstMapElem = mapElems[0].mapElem;
-                insertTimeFrameToggle(firstMapElem);
+                insertTimeFrameToggle(idSuffix, firstMapElem);
             }
         }
     }
@@ -32,11 +34,11 @@ export const addTimeFrameToggle = (matchInfo) => {
     return;
 };
 
-export const removeTimeFrameToggle = () => {
-    const matchRoomElem = getMatchRoomRoot();
+export const removeTimeFrameToggle = (idSuffix) => {
+    const matchRoomElem = getMatchRoomRoot(idSuffix);
     if (matchRoomElem) {
-        if (hasToggleElements(matchRoomElem)) {
-            const toggleGroup = getToggleGroup(matchRoomElem);
+        if (hasToggleElements(idSuffix, matchRoomElem)) {
+            const toggleGroup = getToggleGroup(idSuffix, matchRoomElem);
 
             toggleGroup.remove();
         }

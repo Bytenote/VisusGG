@@ -3,7 +3,7 @@ import { getColorToUse } from '../helpers/colorHelper';
 import { setColorOfElements } from './color';
 import { hidePopover, showPopover } from './popover';
 
-export const insertStats = (mapElement, mapName, matchInfo) => {
+export const insertStats = (idSuffix, mapElement, mapName, matchInfo) => {
     const statsDiv = document.createElement('div');
     const bar = document.createElement('span');
     const winRateDiv = document.createElement('div');
@@ -17,10 +17,10 @@ export const insertStats = (mapElement, mapName, matchInfo) => {
     winRateText.textContent = '...%';
 
     function onMouseOver(e) {
-        showPopover(e, statsDiv, mapName, matchInfo);
+        showPopover(e, idSuffix, statsDiv, mapName, matchInfo);
     }
     function onMouseOut(e) {
-        hidePopover(e, statsDiv);
+        hidePopover(e, idSuffix, statsDiv);
     }
 
     winRateInfo.style.fontSize = '0.57rem';

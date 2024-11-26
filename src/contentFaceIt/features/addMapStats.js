@@ -13,15 +13,17 @@ import {
     loadMapStatsMemoized,
 } from '../helpers/stats';
 
-export const addMapStats = async (matchInfo) => {
+export const addMapStats = async (matchInfo, siblingRoot) => {
     if (!getSyncStorage('usesFaceIt')) {
         return;
     }
 
-    const matchRoomElem = getMatchRoomRoot();
+    const idSuffix = siblingRoot ? '-1' : '-0';
+    const matchRoomElem = getMatchRoomRoot(idSuffix, siblingRoot);
     const matchRoomMaps = matchInfo.matchCustom?.tree?.map?.values?.value;
     if (matchRoomElem && matchRoomMaps?.length > 0) {
         const mapElems = getMapObjects(
+            idSuffix,
             matchRoomElem,
             matchInfo.id,
             matchRoomMaps
@@ -30,9 +32,9 @@ export const addMapStats = async (matchInfo) => {
         if (mapElems && mapElems.length > 0) {
             if (!hasStatsElements(matchRoomElem)) {
                 mapElems.forEach(({ mapElem, mapName }) =>
-                    insertStats(mapElem, mapName, matchInfo)
+                    insertStats(idSuffix, mapElem, mapName, matchInfo)
                 );
-                createPopover();
+                createPopover(idSuffix);
             }
 
             const timeFrame = getSyncStorage('timeFrame');
@@ -53,8 +55,8 @@ export const addMapStats = async (matchInfo) => {
     return;
 };
 
-export const removeMapStats = () => {
-    const matchRoomElem = getMatchRoomRoot();
+export const removeMapStats = (idSuffix) => {
+    const matchRoomElem = getMatchRoomRoot(idSuffix);
     if (matchRoomElem) {
         const statsElems = getStatsElements(matchRoomElem);
         if (statsElems?.length > 0) {
