@@ -1,5 +1,11 @@
 # visusgg
 
+## 2.3.3
+
+### Patch Changes
+
+-   18a1744: Fixed matchroom not being detected
+
 ## 2.3.2
 
 ### Patch Changes

@@ -27,9 +27,20 @@ export const getDialogSiblingRoot = (elem) => {
 };
 
 export const getMatchRoomRoot = (idSuffix, parent) =>
-    getOptimizedElement(`MATCHROOM-OVERVIEW${idSuffix}`, () =>
-        (parent ?? document).querySelector('[id*="MATCHROOM-OVERVIEW-"]')
-    );
+    getOptimizedElement(`matchroom-overview${idSuffix}`, () => {
+        const infoCol = (parent ?? document).querySelector('div[name="info"]');
+        if (infoCol) {
+            const infoSiblings = [...(infoCol.parentElement.children ?? [])];
+            const hasSiblings = infoSiblings.filter(
+                (x) =>
+                    x.getAttribute('name') === 'roster1' ||
+                    x.getAttribute('name') === 'roster2'
+            );
+            if (hasSiblings.length > 0) {
+                return infoCol.parentElement;
+            }
+        }
+    });
 
 export const getMapObjects = (
     idSuffix,
