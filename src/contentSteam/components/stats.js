@@ -84,8 +84,8 @@ export const hydrateStats = (stats, selectedGame) => {
         nicknameElem.href = `https://www.faceit.com/en/players/${stats.nickname}`;
         nicknameElem.target = '_blank';
 
-        if (stats.banReason) {
-            addBanBanner(stats);
+        if (stats.ban?.reason) {
+            addBanBanner(stats.ban);
         }
 
         if (stats.steamId in VIP_STEAM_IDS) {
@@ -299,14 +299,12 @@ const addStats = (statsContainer) => {
     }
 };
 
-const addBanBanner = ({ membership, banReason }) => {
-    let label = `Temp banned for ${banReason}`;
-    let bannerId = `${EXTENSION_NAME}-temp-ban-banner`;
-
-    if (membership === 'Banned') {
-        label = `Banned for ${banReason}`;
-        bannerId = `${EXTENSION_NAME}-ban-banner`;
-    }
+const addBanBanner = (ban) => {
+    let label = ban.value;
+    let bannerId =
+        ban.type === 'permanent'
+            ? `${EXTENSION_NAME}-ban-banner`
+            : `${EXTENSION_NAME}-temp-ban-banner`;
 
     addBanner(label, bannerId);
 };

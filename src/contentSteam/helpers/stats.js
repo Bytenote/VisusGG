@@ -8,11 +8,11 @@ import {
 
 export const getStats = async (steamId, selectedGame) => {
     try {
-        const accountRes = await getProfileBySteamId(steamId);
+        const accountRes = await getProfileBySteamId(steamId, 'csgo');
         let playerInfo = {};
 
         if (accountRes) {
-            const csAccounts = accountRes?.players?.results?.filter((player) =>
+            const csAccounts = accountRes?.filter((player) =>
                 player?.games?.some((game) =>
                     ['cs2', 'csgo'].includes(game?.name?.toLowerCase())
                 )
@@ -22,32 +22,14 @@ export const getStats = async (steamId, selectedGame) => {
             }
 
             const orderedAccounts = getOrderedAccountsByPriority(csAccounts);
-            for (const {
-                country,
-                guid,
-                id,
-                nickname,
-                status,
-                verified,
-            } of orderedAccounts) {
-                if (guid || id) {
-                    const csgoStatsPromise = getLifeTimeStats(
-                        'csgo',
-                        guid || id
-                    );
-                    const cs2StatsPromise = getLifeTimeStats('cs2', guid || id);
-                    const banPromise = getPlayerBans(guid || id);
+            for (const { country, id, nickname } of orderedAccounts) {
+                if (id) {
+                    const csgoStatsPromise = getLifeTimeStats('csgo', id);
+                    const cs2StatsPromise = getLifeTimeStats('cs2', id);
+                    const banPromise = getPlayerBans(id);
                     const profilePromise = getPlayerInfo(nickname);
-                    const csgoMatchesPromise = getPlayerMatches(
-                        'csgo',
-                        guid || id,
-                        20
-                    );
-                    const cs2MatchesPromise = getPlayerMatches(
-                        'cs2',
-                        guid || id,
-                        20
-                    );
+                    const csgoMatchesPromise = getPlayerMatches('csgo', id, 20);
+                    const cs2MatchesPromise = getPlayerMatches('cs2', id, 20);
 
                     const [
                         csgoStats,
@@ -88,8 +70,7 @@ export const getStats = async (steamId, selectedGame) => {
                             : getSelectedGame(cs2Matches);
 
                         playerInfo.membership = getMembershipStatus(
-                            profile?.memberships,
-                            status
+                            profile?.memberships
                         );
                         playerInfo.createdAt = getAccountCreationDate(
                             profile?.created_at ??
@@ -101,18 +82,28 @@ export const getStats = async (steamId, selectedGame) => {
                             playerInfo.createdAt
                         );
 
-                        if (bans?.[0]?.reason) {
-                            playerInfo.banReason =
-                                bans[0].reason?.toLowerCase();
+                        const reason = bans?.[0]?.reason?.toLowerCase();
+                        if (reason) {
+                            const banType =
+                                bans[0]?.ends_at === null
+                                    ? 'permanent'
+                                    : 'temporary';
+                            const banValue =
+                                banType === 'permanent'
+                                    ? 'Banned'
+                                    : 'Temp banned';
+
+                            playerInfo.ban = {
+                                type: banType,
+                                reason,
+                                value: `${banValue} for ${reason}`,
+                            };
                         }
 
                         playerInfo.country = country;
-                        playerInfo.guid = guid;
                         playerInfo.id = id;
                         playerInfo.nickname = nickname;
-                        playerInfo.status = status;
                         playerInfo.steamId = steamId;
-                        playerInfo.verified = verified;
 
                         break;
                     }
@@ -132,15 +123,8 @@ const getOrderedAccountsByPriority = (accounts) => {
     return accounts.sort((a, b) => {
         const getOrderPriority = (account) => {
             const games = account?.games ?? [];
-            const status = account?.status ?? '';
 
             const priority = games.reduce((acc, curr) => {
-                if (status === 'AVAILABLE' && curr.name === 'cs2') {
-                    return Math.min(acc, 1);
-                }
-                if (status === 'AVAILABLE' && curr.name === 'csgo') {
-                    return Math.min(acc, 2);
-                }
                 if (curr.name === 'cs2') {
                     return Math.min(acc, 3);
                 }
@@ -224,15 +208,7 @@ const getAvgStats = (matches, stats, profile, game) => {
     return avgStats;
 };
 
-const getMembershipStatus = (membership, status) => {
-    if (status === 'banned') {
-        return 'Banned';
-    }
-
-    if (status === 'deactivated') {
-        return 'Deactivated';
-    }
-
+const getMembershipStatus = (membership) => {
     const premiumMemberShips = ['cs2', 'csgo', 'plus', 'premium'];
     return membership.some((membership) =>
         premiumMemberShips.includes(membership)
