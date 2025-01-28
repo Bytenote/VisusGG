@@ -1,5 +1,11 @@
 # visusgg
 
+## 2.3.4
+
+### Patch Changes
+
+-   1809010: Updated to use latest FACEIT API
+
 ## 2.3.3
 
 ### Patch Changes
