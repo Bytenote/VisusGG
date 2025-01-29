@@ -1,7 +1,7 @@
-import pRetry from 'p-retry';
+import pRetry, { AbortError } from 'p-retry';
 import browser from 'webextension-polyfill';
 
-const BASE_URL = 'https://api.faceit.com';
+const BASE_URL = 'https://www.faceit.com';
 
 export const faceitAPI = async function (path, token = null) {
     try {
@@ -20,7 +20,7 @@ export const faceitAPI = async function (path, token = null) {
             () =>
                 fetch(`${BASE_URL}${path}`, options).then((res) => {
                     if (res.status === 404) {
-                        throw new pRetry.AbortError(res.statusText);
+                        throw new AbortError(res.statusText);
                     } else if (!res.ok) {
                         throw new Error(res.statusText);
                     }
