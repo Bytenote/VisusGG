@@ -1,3 +1,5 @@
+import { isJson } from './utils';
+
 export const getCurrentUserId = () => {
     const legacyId = JSON.parse(
         localStorage.getItem('C_UCURRENT_USER.data.CURRENT_USER')
@@ -30,9 +32,9 @@ export const getCurrentUserId = () => {
         }
     }
 
-    const betaId = _getBetaUserId();
-    if (betaId) {
-        return betaId;
+    const cookieUserId = _getUserIdFromCookies();
+    if (cookieUserId) {
+        return cookieUserId;
     }
 
     return null;
@@ -41,14 +43,23 @@ export const getCurrentUserId = () => {
 export const isLoggedIn = () =>
     document.cookie.includes(' ab.storage.userId.') || !!getCurrentUserId();
 
-const _getBetaUserId = () => {
+const _getUserIdFromCookies = () => {
     const cookies = document.cookie.split(';');
     const cookieContent = cookies
         .find((cookie) => cookie?.trim()?.startsWith('ab.storage.userId'))
         ?.split('=')?.[1];
     if (cookieContent) {
-        const userId = JSON.parse(decodeURIComponent(cookieContent))?.g;
+        if (isJson(cookieContent)) {
+            return JSON.parse(decodeURIComponent(cookieContent))?.g;
+        }
 
-        return userId;
+        const cookieValue = decodeURIComponent(cookieContent);
+        const cookieValueParts = cookieValue.split('|');
+        const userIdValue = cookieValueParts.find((part) =>
+            part.startsWith('g:')
+        );
+        if (userIdValue) {
+            return userIdValue.split(':')[1];
+        }
     }
 };

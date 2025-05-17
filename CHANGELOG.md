@@ -1,5 +1,11 @@
 # visusgg
 
+## 2.3.5
+
+### Patch Changes
+
+-   Fixed FACEIT user ID detection
+
 ## 2.3.4
 
 ### Patch Changes
