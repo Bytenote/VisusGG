@@ -59,6 +59,18 @@ export const getDirectChildTextContent = (elem) =>
         ''
     );
 
+export const isJson = (item) => {
+    let value = typeof item !== 'string' ? JSON.stringify(item) : item;
+
+    try {
+        value = JSON.parse(value);
+    } catch (e) {
+        return false;
+    }
+
+    return typeof value === 'object' && value !== null;
+};
+
 const getExtensionDataAttributeElement = (attr) =>
     document.querySelector(`[data-${EXTENSION_NAME}="${attr}"]`);
 
