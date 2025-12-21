@@ -1,5 +1,11 @@
 # visusgg
 
+## 2.3.6
+
+### Patch Changes
+
+-   Increased match history length to 30 in accordance to FACEIT's stats tracking
+
 ## 2.3.5
 
 ### Patch Changes
