@@ -28,8 +28,8 @@ export const getStats = async (steamId, selectedGame) => {
                     const cs2StatsPromise = getLifeTimeStats('cs2', id);
                     const banPromise = getPlayerBans(id);
                     const profilePromise = getPlayerInfo(nickname);
-                    const csgoMatchesPromise = getPlayerMatches('csgo', id, 20);
-                    const cs2MatchesPromise = getPlayerMatches('cs2', id, 20);
+                    const csgoMatchesPromise = getPlayerMatches('csgo', id, 30);
+                    const cs2MatchesPromise = getPlayerMatches('cs2', id, 30);
 
                     const [
                         csgoStats,
