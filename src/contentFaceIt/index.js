@@ -42,8 +42,10 @@ const domObserver = () => {
 };
 
 (async () => {
-    if (isLoggedIn()) {
-        await initStorage();
+    await initStorage();
+
+    const loggedIn = await isLoggedIn();
+    if (loggedIn) {
         initStorageChangeListener();
 
         domObserver();

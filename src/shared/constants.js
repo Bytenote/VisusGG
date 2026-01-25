@@ -33,6 +33,7 @@ export const DEFAULT_TOGGLES = [
     },
 ];
 export const DEFAULT_STORAGE = [
+    { key: 'userId', value: null },
     { key: 'timeFrame', value: DEFAULT_AGE },
     { key: 'toggles', value: DEFAULT_TOGGLES },
     { key: 'usesCompareMode', value: DEFAULT_COMPARE_MODE },

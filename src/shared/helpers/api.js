@@ -5,6 +5,9 @@ import { CACHE_TIME } from '../constants';
 export const getMatchInfo = (matchId) =>
     fetchAPIMemoized(`/api/match/v2/match/${matchId}`);
 
+export const getLoggedInUserInfo = () =>
+    fetchAPIMemoized('/api/users/v1/sessions/me');
+
 export const getLifeTimeStats = (game, playerId, roomId) => {
     if (Array.isArray(playerId)) {
         return fetchAPIMemoized(
