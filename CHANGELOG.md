@@ -1,5 +1,11 @@
 # visusgg
 
+## 2.3.7
+
+### Patch Changes
+
+-   Updated logic to detect logged in user in response to changes made on FACEIT
+
 ## 2.3.6
 
 ### Patch Changes
